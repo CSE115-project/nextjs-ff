@@ -30,7 +30,7 @@ yarn next lint
 
 Run formatter on VSCode:
 ```
-ctrl + shift + f
+option + shift + f
 ```
 
 ### To stop the Next.js app in Docker:
