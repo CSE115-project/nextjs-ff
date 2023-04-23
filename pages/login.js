@@ -8,6 +8,60 @@ import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 
+const containerStyle = {
+  width: 300,
+  mx: "auto", // margin left & right
+  my: 4, // margin top & bottom
+  py: 3, // padding top & bottom
+  px: 2, // padding left & right
+  display: "flex",
+  flexDirection: "column",
+  gap: 2,
+  borderRadius: "sm",
+  boxShadow: "md",
+};
+
+export default function Component() {
+  return (
+    <CssVarsProvider>
+      <Sheet sx={containerStyle} variant="outlined">
+        <div style={{ textAlign: "center" }}>
+          <Typography level="h4" component="h1">
+            FridayFinder
+          </Typography>
+          <Typography level="body2">Sign In</Typography>
+        </div>
+        <ModeToggle />
+
+        <FormControl>
+          <FormLabel>Email</FormLabel>
+          <Input name="email" type="email" placeholder="jackmihoff@email.com" />
+        </FormControl>
+
+        <FormControl>
+          <FormLabel>Password</FormLabel>
+          <Input
+            name="password"
+            type="password"
+            placeholder="jackmihoff@email.com"
+          />
+        </FormControl>
+
+        <Button sx={{ mt: 1 }}>Log In</Button>
+        <Button sx={{ mt: 1 }}>Google</Button>
+
+        <Typography
+          fontSize="sm"
+          sx={{ alignSelf: "center" }}
+          endDecorator={<Link href="/signup">Sign Up</Link>}
+        >
+          Don&apos;t have an account?
+        </Typography>
+      </Sheet>
+    </CssVarsProvider>
+  );
+}
+
 function ModeToggle() {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
@@ -30,65 +84,5 @@ function ModeToggle() {
     >
       {mode === "light" ? "Turn dark" : "Turn light"}
     </Button>
-  );
-}
-
-export default function Login() {
-  return (
-    <CssVarsProvider>
-      <main>
-        <ModeToggle />
-        <Sheet
-          sx={{
-            width: 300,
-            mx: "auto", // margin left & right
-            my: 4, // margin top & bottom
-            py: 3, // padding top & bottom
-            px: 2, // padding left & right
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            borderRadius: "sm",
-            boxShadow: "md",
-          }}
-          variant="outlined"
-        >
-          <div>
-            <Typography level="h4" component="h1">
-              <b>FridayFinder</b>
-            </Typography>
-            <Typography level="body2">Sign in to continue.</Typography>
-          </div>
-          <FormControl>
-            <FormLabel>Email</FormLabel>
-            <Input
-              // html input attribute
-              name="email"
-              type="email"
-              placeholder="johndoe@email.com"
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Password</FormLabel>
-            <Input
-              // html input attribute
-              name="password"
-              type="password"
-              placeholder="password"
-            />
-          </FormControl>
-
-          <Button sx={{ mt: 1 /* margin top */ }}>Log in</Button>
-          <Button sx={{ mt: 1 /* margin top */ }}>Google</Button>
-          <Typography
-            endDecorator={<Link href="/sign-up">Sign up</Link>}
-            fontSize="sm"
-            sx={{ alignSelf: "center" }}
-          >
-            Don&apos;t have an account?
-          </Typography>
-        </Sheet>
-      </main>
-    </CssVarsProvider>
   );
 }
