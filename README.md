@@ -9,8 +9,7 @@ git clone https://github.com/kainoabrabo/nextjs-ff.git
 cd nextjs-ff
 ```
 
-### Install [Docker Desktop](https://www.docker.com/)
-### then open Docker Desktop
+### Install [Docker Desktop](https://www.docker.com/) then open Docker Desktop
 
 ### To start the Next.js app in Docker:
 ```bash
