@@ -26,6 +26,13 @@ Run every time you make changes before and after testing, and before commit.
 yarn next lint
 ```
 
+### Code formatter: [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+
+Run formatter on VSCode:
+```
+ctrl + shift + f
+```
+
 ### To stop the Next.js app in Docker:
 ```bash
 ctrl + c
