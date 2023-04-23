@@ -1,10 +1,33 @@
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "next/font/google";
-// import styles from '@/styles/Home.module.css'
 
-import '@fontsource/public-sans';
+import "@fontsource/public-sans";
 import Login from "./Login";
+
+import { initializeApp } from "firebase/app";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+const firebaseConfig = {
+  apiKey: "AIzaSyDfJowBQSMx16JMwZWKgNBd5IgxFnkKcdM",
+  authDomain: "nextjs-ff.firebaseapp.com",
+  projectId: "nextjs-ff",
+  storageBucket: "nextjs-ff.appspot.com",
+  messagingSenderId: "239096580979",
+  appId: "1:239096580979:web:ea4db5ea4c06e3f8635306",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// detect auth state changes
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("Logged in");
+  } else {
+    console.log("No User");
+  }
+});
 
 const inter = Inter({ subsets: ["latin"] });
 
