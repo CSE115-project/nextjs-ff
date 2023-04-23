@@ -55,7 +55,7 @@ export default function Login() {
         >
           <div>
             <Typography level="h4" component="h1">
-              <b>Welcome!</b>
+              <b>FridayFinder</b>
             </Typography>
             <Typography level="body2">Sign in to continue.</Typography>
           </div>
@@ -79,6 +79,7 @@ export default function Login() {
           </FormControl>
 
           <Button sx={{ mt: 1 /* margin top */ }}>Log in</Button>
+          <Button sx={{ mt: 1 /* margin top */ }}>Google</Button>
           <Typography
             endDecorator={<Link href="/sign-up">Sign up</Link>}
             fontSize="sm"
