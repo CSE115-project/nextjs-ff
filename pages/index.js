@@ -1,14 +1,14 @@
 import Head from "next/head";
 import { Roboto } from "next/font/google";
 import "@fontsource/public-sans";
-import Login from "./login";
+import Login from "./Login";
 
 const inter = Roboto({
   subsets: ["latin"],
   weight: ["100", "300", "400", "500", "700", "900"],
 });
 
-export default function Home({ user }) {
+export default function index({ user }) {
   return (
     <>
       <Head>

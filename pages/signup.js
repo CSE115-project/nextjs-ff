@@ -8,22 +8,7 @@ import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
-import App from "./_app";
-
-import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-const firebaseConfig = {
-  apiKey: "AIzaSyDfJowBQSMx16JMwZWKgNBd5IgxFnkKcdM",
-  authDomain: "nextjs-ff.firebaseapp.com",
-  projectId: "nextjs-ff",
-  storageBucket: "nextjs-ff.appspot.com",
-  messagingSenderId: "239096580979",
-  appId: "1:239096580979:web:ea4db5ea4c06e3f8635306",
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const containerStyle = {
   width: 300,
@@ -38,7 +23,7 @@ const containerStyle = {
   boxShadow: "md",
 };
 
-export default function Component({ app }) {
+export default function Component({ user, auth }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -66,7 +51,7 @@ export default function Component({ app }) {
           <Input
             name="email"
             type="email"
-            placeholder="jackmihoff@email.com"
+            placeholder="user@mail.com"
             onChange={onChangeHandlerEmail}
           />
         </FormControl>
@@ -76,7 +61,7 @@ export default function Component({ app }) {
           <Input
             name="password"
             type="password"
-            placeholder="jackmihoff@email.com"
+            placeholder="password"
             onChange={onChangeHandlerPassword}
           />
         </FormControl>
@@ -87,16 +72,12 @@ export default function Component({ app }) {
               .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
-                console.log("Account created.");
+                console.log("Logged in Successfully.");
                 // ...
               })
               .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                // ..
-                if (errorCode == "email-already-in-use") {
-                  window.alert("Email already in use. Try Again.");
-                }
               });
           }}
           sx={{ mt: 1 }}
@@ -105,12 +86,32 @@ export default function Component({ app }) {
         </Button>
         <Button sx={{ mt: 1 }}>Google</Button>
 
+        {user ? (
+          <Button
+            onClick={() => {
+              signOut(auth)
+                .then(() => {
+                  console.log("Signed out.");
+                  // Sign-out successful.
+                })
+                .catch((error) => {
+                  // An error happened.
+                });
+            }}
+            sx={{ mt: 1 }}
+          >
+            Sign Out
+          </Button>
+        ) : (
+          <></>
+        )}
+
         <Typography
           fontSize="sm"
           sx={{ alignSelf: "center" }}
-          endDecorator={<Link href="/login">Login</Link>}
+          endDecorator={<Link href="/">Log In</Link>}
         >
-          Already have an account?
+          Have an account?
         </Typography>
       </Sheet>
     </CssVarsProvider>

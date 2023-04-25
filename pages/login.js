@@ -8,6 +8,7 @@ import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 const containerStyle = {
   width: 300,
@@ -22,17 +23,35 @@ const containerStyle = {
   boxShadow: "md",
 };
 
-export default function Component({ user, auth }) {
+export default function Component({ user }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const auth = getAuth();
 
   const onChangeHandlerEmail = (e) => {
     setEmail(e.target.value);
   };
 
-  const onChangeHandlerPassword = (p) => {
-    setPassword(p.target.value);
+  const onChangeHandlerPassword = (e) => {
+    setPassword(e.target.value);
   };
+
+  const handleSubmit = (event) => {
+    console.log("Sign In Clicked");
+    event.preventDefault();
+    signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in 
+      const user = userCredential.user;
+      console.log(user);
+      // ...
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+    });
+
+  }
 
   return (
     <CssVarsProvider>
@@ -50,7 +69,7 @@ export default function Component({ user, auth }) {
           <Input
             name="email"
             type="email"
-            placeholder="jackmihoff@email.com"
+            placeholder="user@mail.com"
             onChange={onChangeHandlerEmail}
           />
         </FormControl>
@@ -60,29 +79,12 @@ export default function Component({ user, auth }) {
           <Input
             name="password"
             type="password"
-            placeholder="jackmihoff@email.com"
+            placeholder="password"
             onChange={onChangeHandlerPassword}
           />
         </FormControl>
 
-        <Button
-          onClick={() => {
-            signInWithEmailAndPassword(auth, email, password)
-              .then((userCredential) => {
-                // Signed in
-                const user = userCredential.user;
-                console.log("Logged in Successfully.");
-                // ...
-              })
-              .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-              });
-          }}
-          // onClick={() => {
-          //   onAuthStateChanged }}
-          sx={{ mt: 1 }}
-        >
+        <Button onClick={handleSubmit} sx={{ mt: 1 }} >
           Log In
         </Button>
         <Button sx={{ mt: 1 }}>Google</Button>
