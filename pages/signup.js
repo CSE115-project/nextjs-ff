@@ -8,9 +8,10 @@ import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
+import App from "./_app";
 
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 const firebaseConfig = {
   apiKey: "AIzaSyDfJowBQSMx16JMwZWKgNBd5IgxFnkKcdM",
   authDomain: "nextjs-ff.firebaseapp.com",
@@ -19,6 +20,10 @@ const firebaseConfig = {
   messagingSenderId: "239096580979",
   appId: "1:239096580979:web:ea4db5ea4c06e3f8635306",
 };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 const containerStyle = {
   width: 300,
@@ -33,12 +38,9 @@ const containerStyle = {
   boxShadow: "md",
 };
 
-export default function Component() {
+export default function Component({ app }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
 
   const onChangeHandlerEmail = (e) => {
     setEmail(e.target.value);
@@ -55,7 +57,7 @@ export default function Component() {
           <Typography level="h4" component="h1">
             FridayFinder
           </Typography>
-          <Typography level="body2">Sign In</Typography>
+          <Typography level="body2">Sign Up</Typography>
         </div>
         <ModeToggle />
 
@@ -81,48 +83,34 @@ export default function Component() {
 
         <Button
           onClick={() => {
-            signInWithEmailAndPassword(auth, email, password)
+            createUserWithEmailAndPassword(auth, email, password)
               .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
-                console.log("Logged in Successfully.");
+                console.log("Account created.");
                 // ...
               })
               .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
+                // ..
+                if (errorCode == "email-already-in-use") {
+                  window.alert("Email already in use. Try Again.");
+                }
               });
           }}
-          // onClick={() => {
-          //   onAuthStateChanged }}
           sx={{ mt: 1 }}
         >
-          Log In
+          Sign Up
         </Button>
         <Button sx={{ mt: 1 }}>Google</Button>
-
-        <Button
-          onClick={() => {
-            signOut(auth)
-              .then(() => {
-                console.log("Signed out.");
-                // Sign-out successful.
-              })
-              .catch((error) => {
-                // An error happened.
-              });
-          }}
-          sx={{ mt: 1 }}
-        >
-          Sign Out
-        </Button>
 
         <Typography
           fontSize="sm"
           sx={{ alignSelf: "center" }}
-          endDecorator={<Link href="/signup">Sign Up</Link>}
+          endDecorator={<Link href="/login">Login</Link>}
         >
-          Don&apos;t have an account?
+          Already have an account?
         </Typography>
       </Sheet>
     </CssVarsProvider>

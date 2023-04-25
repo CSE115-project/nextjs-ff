@@ -2,7 +2,7 @@ import Head from "next/head";
 import { Roboto } from "next/font/google";
 
 import "@fontsource/public-sans";
-import Login from "./Login";
+import Login from "./login";
 
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
