@@ -1,39 +1,32 @@
 import Head from "next/head";
 import { Roboto } from "next/font/google";
-
 import "@fontsource/public-sans";
-import Login from "./login";
-
-import { initializeApp } from "firebase/app";
+import Login from "./Login";
+import App from "./firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-const firebaseConfig = {
-  apiKey: "AIzaSyDfJowBQSMx16JMwZWKgNBd5IgxFnkKcdM",
-  authDomain: "nextjs-ff.firebaseapp.com",
-  projectId: "nextjs-ff",
-  storageBucket: "nextjs-ff.appspot.com",
-  messagingSenderId: "239096580979",
-  appId: "1:239096580979:web:ea4db5ea4c06e3f8635306",
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-// detect auth state changes
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log("Logged in");
-  } else {
-    console.log("No User");
-  }
-});
+import { useState } from "react";
 
 const inter = Roboto({
   subsets: ["latin"],
   weight: ["100", "300", "400", "500", "700", "900"],
 });
 
+// Firebase Authentication
+const auth = getAuth(App);
+
 export default function Home() {
+  const [user, setUser] = useState(null);
+
+  // detect auth state changes
+  onAuthStateChanged(auth, (userLoggedIn) => {
+    if (userLoggedIn) {
+      console.log("Logged in");
+      setUser(user);
+    } else {
+      console.log("No User");
+    }
+  });
+
   return (
     <>
       <Head>
@@ -43,7 +36,12 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Login></Login>
+        {
+          user ?
+          <h3>Authenticated</h3>
+          :
+          <Login></Login>
+        }
       </main>
     </>
   );

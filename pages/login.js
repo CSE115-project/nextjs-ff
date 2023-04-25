@@ -19,6 +19,8 @@ const firebaseConfig = {
   messagingSenderId: "239096580979",
   appId: "1:239096580979:web:ea4db5ea4c06e3f8635306",
 };
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 const containerStyle = {
   width: 300,
@@ -37,8 +39,6 @@ export default function Component() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
 
   const onChangeHandlerEmail = (e) => {
     setEmail(e.target.value);
