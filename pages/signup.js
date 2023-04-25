@@ -8,7 +8,7 @@ import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const containerStyle = {
   width: 300,
@@ -23,9 +23,10 @@ const containerStyle = {
   boxShadow: "md",
 };
 
-export default function Component({ user, auth }) {
+export default function Component({ user }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const auth = getAuth();
 
   const onChangeHandlerEmail = (e) => {
     setEmail(e.target.value);
@@ -33,6 +34,22 @@ export default function Component({ user, auth }) {
 
   const onChangeHandlerPassword = (p) => {
     setPassword(p.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    console.log("Account created.");
+    event.preventDefault();
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log("Logged in Successfully.");
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
   };
 
   return (
@@ -66,27 +83,12 @@ export default function Component({ user, auth }) {
           />
         </FormControl>
 
-        <Button
-          onClick={() => {
-            createUserWithEmailAndPassword(auth, email, password)
-              .then((userCredential) => {
-                // Signed in
-                const user = userCredential.user;
-                console.log("Logged in Successfully.");
-                // ...
-              })
-              .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-              });
-          }}
-          sx={{ mt: 1 }}
-        >
+        <Button onClick={handleSubmit} sx={{ mt: 1 }}>
           Sign Up
         </Button>
         <Button sx={{ mt: 1 }}>Google</Button>
 
-        {user ? (
+        {/* {user ? (
           <Button
             onClick={() => {
               signOut(auth)
@@ -104,7 +106,7 @@ export default function Component({ user, auth }) {
           </Button>
         ) : (
           <></>
-        )}
+        )} */}
 
         <Typography
           fontSize="sm"
