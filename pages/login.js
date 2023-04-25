@@ -9,19 +9,6 @@ import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 
-import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
-const firebaseConfig = {
-  apiKey: "AIzaSyDfJowBQSMx16JMwZWKgNBd5IgxFnkKcdM",
-  authDomain: "nextjs-ff.firebaseapp.com",
-  projectId: "nextjs-ff",
-  storageBucket: "nextjs-ff.appspot.com",
-  messagingSenderId: "239096580979",
-  appId: "1:239096580979:web:ea4db5ea4c06e3f8635306",
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
 const containerStyle = {
   width: 300,
   mx: "auto", // margin left & right
@@ -35,10 +22,9 @@ const containerStyle = {
   boxShadow: "md",
 };
 
-export default function Component() {
+export default function Component({ user, auth }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
 
   const onChangeHandlerEmail = (e) => {
     setEmail(e.target.value);
@@ -101,21 +87,25 @@ export default function Component() {
         </Button>
         <Button sx={{ mt: 1 }}>Google</Button>
 
-        <Button
-          onClick={() => {
-            signOut(auth)
-              .then(() => {
-                console.log("Signed out.");
-                // Sign-out successful.
-              })
-              .catch((error) => {
-                // An error happened.
-              });
-          }}
-          sx={{ mt: 1 }}
-        >
-          Sign Out
-        </Button>
+        {user ? (
+          <Button
+            onClick={() => {
+              signOut(auth)
+                .then(() => {
+                  console.log("Signed out.");
+                  // Sign-out successful.
+                })
+                .catch((error) => {
+                  // An error happened.
+                });
+            }}
+            sx={{ mt: 1 }}
+          >
+            Sign Out
+          </Button>
+        ) : (
+          <></>
+        )}
 
         <Typography
           fontSize="sm"

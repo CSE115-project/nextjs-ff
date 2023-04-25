@@ -1,32 +1,14 @@
 import Head from "next/head";
 import { Roboto } from "next/font/google";
 import "@fontsource/public-sans";
-import Login from "./Login";
-import App from "./firebase";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useState } from "react";
+import Login from "./login";
 
 const inter = Roboto({
   subsets: ["latin"],
   weight: ["100", "300", "400", "500", "700", "900"],
 });
 
-// Firebase Authentication
-const auth = getAuth(App);
-
-export default function Home() {
-  const [user, setUser] = useState(null);
-
-  // detect auth state changes
-  onAuthStateChanged(auth, (userLoggedIn) => {
-    if (userLoggedIn) {
-      console.log("Logged in");
-      setUser(user);
-    } else {
-      console.log("No User");
-    }
-  });
-
+export default function Home({ user }) {
   return (
     <>
       <Head>
@@ -35,14 +17,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        {
-          user ?
-          <h3>Authenticated</h3>
-          :
-          <Login></Login>
-        }
-      </main>
+      <main>{user ? <h3>Authenticated</h3> : <Login></Login>}</main>
     </>
   );
 }
