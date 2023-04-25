@@ -15,5 +15,5 @@ export default function App({ Component, pageProps }) {
     return () => unsubscribe();
   }, [auth]);
 
-  return <Component {...pageProps}  user={user}/>;
+  return <Component {...pageProps} user={user} />;
 }

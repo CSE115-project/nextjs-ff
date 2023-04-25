@@ -8,7 +8,7 @@ import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const containerStyle = {
   width: 300,
@@ -40,18 +40,17 @@ export default function Component({ user }) {
     console.log("Sign In Clicked");
     event.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed in 
-      const user = userCredential.user;
-      console.log(user);
-      // ...
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-    });
-
-  }
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log(user);
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+  };
 
   return (
     <CssVarsProvider>
@@ -84,7 +83,7 @@ export default function Component({ user }) {
           />
         </FormControl>
 
-        <Button onClick={handleSubmit} sx={{ mt: 1 }} >
+        <Button onClick={handleSubmit} sx={{ mt: 1 }}>
           Log In
         </Button>
         <Button sx={{ mt: 1 }}>Google</Button>
