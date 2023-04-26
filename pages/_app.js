@@ -6,8 +6,6 @@ import { useState, useEffect } from "react";
 export default function App({ Component, pageProps }) {
   const [user, setUser] = useState(null);
   const auth = getAuth(firebase);
-  let center = {lat: 37.7749, lng: -122.4194};
-  let zoom = 11;
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -17,6 +15,6 @@ export default function App({ Component, pageProps }) {
     return () => unsubscribe();
   }, [auth]);
 
-  return <Component {...pageProps} user={user} center={center} zoom={zoom} />;
+  return <Component {...pageProps} user={user} />;
 
 }
