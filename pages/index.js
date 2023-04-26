@@ -2,7 +2,7 @@ import Head from "next/head";
 import { Roboto } from "next/font/google";
 import "@fontsource/public-sans";
 import Login from "./Login";
-import Authentication from "./Authentication";
+import Authentication from "./authentication";
 
 const inter = Roboto({
   subsets: ["latin"],
