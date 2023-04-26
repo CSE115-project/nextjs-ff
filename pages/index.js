@@ -2,6 +2,7 @@ import Head from "next/head";
 import { Roboto } from "next/font/google";
 import "@fontsource/public-sans";
 import Login from "./Login";
+import Authentication from "./Authentication";
 
 const inter = Roboto({
   subsets: ["latin"],
@@ -17,7 +18,7 @@ export default function index({ user }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>{user ? <h3>Authenticated</h3> : <Login></Login>}</main>
+      <main>{user ? <Authentication></Authentication> : <Login></Login>}</main>
     </>
   );
 }
