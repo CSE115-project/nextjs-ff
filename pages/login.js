@@ -86,27 +86,6 @@ export default function Component({ user }) {
         <Button onClick={handleSubmit} sx={{ mt: 1 }}>
           Log In
         </Button>
-        <Button sx={{ mt: 1 }}>Google</Button>
-
-        {user ? (
-          <Button
-            onClick={() => {
-              signOut(auth)
-                .then(() => {
-                  console.log("Signed out.");
-                  // Sign-out successful.
-                })
-                .catch((error) => {
-                  // An error happened.
-                });
-            }}
-            sx={{ mt: 1 }}
-          >
-            Sign Out
-          </Button>
-        ) : (
-          <></>
-        )}
 
         <Typography
           fontSize="sm"
