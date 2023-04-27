@@ -6,7 +6,7 @@ export default function Map() {
     return (
         <div style={{ height: '100vh', width: '100%' }}>
             <GoogleMapReact
-                bootstrapURLKeys={{ key: 'AIzaSyDNaHy8OohFxqN8IUOO2vdAjS3VgmQs3TQ' }}
+                bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAP_API }}
                 defaultCenter={center}
                 defaultZoom={zoom}
             ></GoogleMapReact>
