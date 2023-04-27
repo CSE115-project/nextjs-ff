@@ -38,6 +38,29 @@ option + shift + f
 ctrl + c
 ```
 
+# Before you start a new feature:
+
+0. Initial Status and Pull
+1. Create a new feature or bugfix branch
+2. ~ DEV ~
+3. When commiting changes, make sure to follow the steps in 'How to Commit' to make merging easy
+
+## Status and Pull
+- check for uncommitted or staged commits
+```bash
+git status 
+```
+
+- OPTIONAL: clear all uncommited or unstaged code to clean
+```bash
+git reset HEAD --hard
+```
+
+- pull from the repo. pull until you get "Already up to date."
+```bash
+git pull
+```
+
 ## How to Branch
 ```bash
 git checkout -b <branch name>
