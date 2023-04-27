@@ -73,9 +73,18 @@ git checkout -b bugfix/maps-component
 ## How to Commit
 - The Commit message should reflect the issue on the project board
 ```bash
-git commit -m "<user story>"
+git status
+git branch #this will be the branch you merge
+git add .
 
-ex.
-git commit -m "set user location (#23)"
-git commit -m "fix - update for Next 13 (#23)"
+git commit -m "<user story>"
+# ex.
+# git commit -m "set user location (#23)"
+# git commit -m "fix - update for Next 13 (#23)"
+
+git push
+git checkout main
+git pull
+git merge <branch>
+git status
 ```
