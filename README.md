@@ -37,3 +37,22 @@ option + shift + f
 ```bash
 ctrl + c
 ```
+
+## How to Branch
+```bash
+git checkout -b <branch name>
+
+ex.
+git checkout -b feature/user-authentication
+git checkout -b bugfix/maps-component
+```
+
+## How to Commit
+- The Commit message should reflect the issue on the project board
+```bash
+git commit -m "<user story>"
+
+ex.
+git commit -m "set user location (#23)"
+git commit -m "fix - update for Next 13 (#23)"
+```

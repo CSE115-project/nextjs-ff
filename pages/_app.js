@@ -16,5 +16,4 @@ export default function App({ Component, pageProps }) {
   }, [auth]);
 
   return <Component {...pageProps} user={user} />;
-
 }
