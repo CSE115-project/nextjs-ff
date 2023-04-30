@@ -1,4 +1,4 @@
-import GoogleMapReact from "google-map-react";
+import GoogleMapReact, { Marker } from "google-map-react";
 
 export default function Map({ location }) {
   let center = { lat: location.lat, lng: location.lng };
@@ -9,7 +9,8 @@ export default function Map({ location }) {
         bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAP_API }}
         center={center}
         zoom={zoom}
-      ></GoogleMapReact>
+      >
+      </GoogleMapReact>
     </div>
   );
 }

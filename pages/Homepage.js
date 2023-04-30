@@ -24,15 +24,12 @@ export default function Homepage({ user }) {
   // Sets current location - chat.openai.com
   useEffect(() => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setLocation({ lat: latitude, lng: longitude });
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+      navigator.geolocation.getCurrentPosition((position) => {
+        setLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      });
     }
   }, []);
 
