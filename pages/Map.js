@@ -1,7 +1,7 @@
 import GoogleMapReact, { Marker } from "google-map-react";
 
 export default function Map({ location }) {
-  const AnyReactComponent = ({ text }) => <div>{text}</div>;
+  const CurrentLocationMarker = ({ text }) => <div>{text}</div>;
 
   let center = { lat: location.lat, lng: location.lng };
   let zoom = 11;
@@ -14,8 +14,7 @@ export default function Map({ location }) {
         center={center}
         zoom={zoom}
       >
-        <AnyReactComponent lat={location.lat} lng={location.lng} text="CURRENT LOCATION" />
-        {/* {location && <Marker postion={location} />} */}
+        <CurrentLocationMarker lat={location.lat} lng={location.lng} text="CURRENT LOCATION" />
       </GoogleMapReact>
     </div>
   );
