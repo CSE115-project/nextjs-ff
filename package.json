@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.10.6",
     "@fontsource/public-sans": "^4.5.12",
     "@mui/joy": "^5.0.0-alpha.76",
+    "@react-google-maps/api": "^2.18.1",
     "eslint": "8.39.0",
     "eslint-config-next": "13.3.1",
     "firebase": "^9.20.0",
