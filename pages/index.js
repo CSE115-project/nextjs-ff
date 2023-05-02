@@ -1,8 +1,9 @@
 import Head from "next/head";
 import { Roboto } from "next/font/google";
 import "@fontsource/public-sans";
-import Login from "./Login";
+import Login from "./login";
 import Homepage from "./Homepage";
+import Profile from "./profile";
 
 const inter = Roboto({
   subsets: ["latin"],
