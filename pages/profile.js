@@ -1,10 +1,8 @@
-import { Button } from "@mui/joy";
-
 export default function Profile() 
 {
     return (
-        <div>
-            <Button>User</Button>
+        <div className="userProfile">
+            <h1>user profile</h1>
         </div>
     )
 }
