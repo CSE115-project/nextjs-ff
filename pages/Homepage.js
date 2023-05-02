@@ -2,6 +2,7 @@ import * as React from "react";
 import Button from "@mui/joy/Button";
 import { getAuth, signOut } from "firebase/auth";
 import Map from "./Map";
+import Profile from "./Profile";
 import { useState, useEffect } from "react";
 
 export default function Homepage({ user }) {
@@ -38,6 +39,7 @@ export default function Homepage({ user }) {
       <Button onClick={handleSignOut} sx={{ mt: 1 }}>
         Sign Out
       </Button>
+      <Profile />
       <Map location={location}></Map>
     </div>
   );
