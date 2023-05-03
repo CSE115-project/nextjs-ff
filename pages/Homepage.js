@@ -3,6 +3,8 @@ import Button from "@mui/joy/Button";
 import { getAuth, signOut } from "firebase/auth";
 import Map from "./Map";
 import { useState, useEffect } from "react";
+import Link from 'next/link';
+
 
 export default function Homepage({ user }) {
   // Authentication
@@ -39,6 +41,11 @@ export default function Homepage({ user }) {
         Sign Out
       </Button>
       {/* Add Profile button here, then we need to create an API route */}
+
+      <Link href = "/profile">
+        <button classname ="button ">Profile</button>
+      </Link>
+
       <Map location={location}></Map>
     </div>
   );
