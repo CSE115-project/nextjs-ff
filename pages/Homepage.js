@@ -41,8 +41,8 @@ export default function Homepage({ user }) {
         Sign Out
       </Button>
 
-      <Link href = "/profile">
-        <Button>Profile</Button>
+      <Link href="/profile">
+        <Button>profile</Button>
       </Link>
 
       <Map location={location}></Map>
