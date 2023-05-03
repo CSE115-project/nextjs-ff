@@ -43,7 +43,7 @@ export default function Homepage({ user }) {
       {/* Add Profile button here, then we need to create an API route */}
 
       <Link href = "/profile">
-        <Button classname ="button ">Profile</Button>
+        <Button>Profile</Button>
       </Link>
 
       <Map location={location}></Map>
