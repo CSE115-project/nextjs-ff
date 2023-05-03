@@ -5,7 +5,6 @@ import Map from "./Map";
 import { useState, useEffect } from "react";
 import Link from 'next/link';
 
-
 export default function Homepage({ user }) {
   // Authentication
   const auth = getAuth();
@@ -41,8 +40,8 @@ export default function Homepage({ user }) {
         Sign Out
       </Button>
 
-      <Link href="/profile">
-        <Button>profile</Button>
+      <Link href = "/profile">
+        <Button>Profile</Button>
       </Link>
 
       <Map location={location}></Map>
