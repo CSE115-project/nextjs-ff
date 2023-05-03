@@ -41,7 +41,7 @@ export default function Homepage({ user }) {
       </Button>
 
       <Link href = "/profile">
-        <Button>Profile</Button>
+        <Button>profile</Button>
       </Link>
 
       <Map location={location}></Map>
