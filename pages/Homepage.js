@@ -40,7 +40,6 @@ export default function Homepage({ user }) {
       <Button onClick={handleSignOut} sx={{ mt: 1 }}>
         Sign Out
       </Button>
-      {/* Add Profile button here, then we need to create an API route */}
 
       <Link href = "/profile">
         <Button>Profile</Button>
