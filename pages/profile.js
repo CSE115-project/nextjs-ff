@@ -12,11 +12,6 @@ import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import Link from "next/link";
-import Select from "@mui/joy/Select";
-import Option from "@mui/joy/Option";
-import Tabs from "@mui/joy/Tabs";
-import CssBaseline from "@mui/joy/CssBaseline";
-import { CssVarsProvider } from "@mui/joy/styles";
 
 export default function MyProfile() {
   return (
@@ -32,31 +27,13 @@ export default function MyProfile() {
       </Stack>
       <Sheet
         sx={{
-        //   bgcolor: "background.body",
-        //   flex: 1,
           maxWidth: 1200,
           width: "100%",
           mx: "auto",
         }}
       >
-        {/* <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          flexWrap: "wrap",
-        }}
-      >
-        <Link href="/Homepage">
-          <Button sx={{marginRight: 5}}>Home</Button>
-        </Link>
-
-        <Typography level="h1" fontSize="xl2" sx={{ mb: 1 }}>
-          My profile
-        </Typography>
-
-      </div> */}
-
         <Divider sx={{ paddingBottom: 0.5, bgcolor: "gray" }} />
+
         <Box
           sx={{
             pt: 3,
@@ -81,8 +58,9 @@ export default function MyProfile() {
           <Box sx={{ display: { xs: "contents", sm: "flex" }, gap: 2 }}>
             <FormControl sx={{ flex: 1 }}>
               <FormLabel sx={{ display: { sm: "none" } }}>First name</FormLabel>
-              <Input placeholder="First Name"  />
+              <Input placeholder="First Name" />
             </FormControl>
+
             <FormControl sx={{ flex: 1 }}>
               <FormLabel sx={{ display: { sm: "none" } }}>Last name</FormLabel>
               <Input placeholder="Last Name" />
@@ -97,7 +75,6 @@ export default function MyProfile() {
               type="email"
               startDecorator={<i data-feather="mail" />}
               placeholder="user@mail.com"
-            //   defaultValue="user@mail.com"
             />
           </FormControl>
 
@@ -123,7 +100,7 @@ export default function MyProfile() {
               src="/images/default_image.png"
               sx={{ "--Avatar-size": "64px" }}
             />
-            {/* Add upload functionality */}
+            {/* TODO: Add upload functionality */}
             <Button sx={{ marginTop: 3 }}>Upload</Button>
           </Box>
 
@@ -136,7 +113,7 @@ export default function MyProfile() {
 
           <Box>
             <Textarea minRows={4} sx={{ mt: 1.5 }} />
-            {/* Add limit to Bio */}
+            {/* TODO: Add limit to Bio */}
             <FormHelperText sx={{ mt: 0.75, fontSize: "xs" }}>
               160 characters left
             </FormHelperText>
@@ -152,18 +129,16 @@ export default function MyProfile() {
               gap: 1,
             }}
           >
-            {/* Add cancel functionality */}
+            {/* TODO: Add cancel functionality */}
             <Button variant="outlined" color="neutral" size="sm">
               Cancel
             </Button>
 
-            {/* Add save functionality */}
+            {/* TODO: Add save functionality */}
             <Button size="sm">Save</Button>
-
           </Box>
         </Box>
       </Sheet>
     </Sheet>
-    // </CssVarsProvider>
   );
-} 
+}
