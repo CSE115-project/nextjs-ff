@@ -20,12 +20,25 @@ export default function MyProfile() {
     const [bio, setBio] = React.useState("");
 
     const handleCancel = () => {
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setBio("");
-    // close the sheet component
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setBio("");
+        // close the sheet component
     };
+    
+    const maxChar = 160;
+
+    const handleBioChange = (event) => {
+        const inputVal = event.target.value;
+
+        if (inputVal.length <= maxChar) {
+            setBio(inputVal);
+        }
+    };
+
+    const remainingChar = maxChar - bio.length;
+
   return (
     <Sheet>
       <Stack direction="row" alignItems="center" spacing={8}>
@@ -124,10 +137,10 @@ export default function MyProfile() {
           </Box>
 
           <Box>
-            <Textarea minRows={4} sx={{ mt: 1.5 }} />
+            <Textarea minRows={4} value={bio} onChange={handleBioChange}maxLength={maxChar} sx={{ mt: 1.5 }} />
             {/* TODO: Add limit to Bio */}
             <FormHelperText sx={{ mt: 0.75, fontSize: "xs" }}>
-              160 characters left
+                {remainingChar} characters left
             </FormHelperText>
           </Box>
 
