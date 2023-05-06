@@ -14,6 +14,18 @@ import Typography from "@mui/joy/Typography";
 import Link from "next/link";
 
 export default function MyProfile() {
+    const [firstName, setFirstName] = React.useState("");
+    const [lastName, setLastName] = React.useState("");
+    const [email, setEmail] = React.useState("");
+    const [bio, setBio] = React.useState("");
+
+    const handleCancel = () => {
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setBio("");
+    // close the sheet component
+    };
   return (
     <Sheet>
       <Stack direction="row" alignItems="center" spacing={8}>
@@ -130,7 +142,7 @@ export default function MyProfile() {
             }}
           >
             {/* TODO: Add cancel functionality */}
-            <Button variant="outlined" color="neutral" size="sm">
+            <Button variant="outlined" color="neutral" size="sm" onClick={handleCancel}>
               Cancel
             </Button>
 
