@@ -1,5 +1,5 @@
 // import '@/styles/globals.css'
-import firebase from "./firebase";
+import firebase from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from "react";
 

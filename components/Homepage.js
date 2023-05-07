@@ -2,10 +2,9 @@ import * as React from "react";
 import Button from "@mui/joy/Button";
 import { getAuth, signOut } from "firebase/auth";
 import Map from "./Map";
-import { useState, useEffect } from "react";
 import Link from 'next/link';
 
-export default function Homepage({ user }) {
+const Homepage = () => {
   // Authentication
   const auth = getAuth();
   const handleSignOut = (event) => {
@@ -28,3 +27,5 @@ export default function Homepage({ user }) {
     </div>
   );
 }
+
+export default Homepage;
