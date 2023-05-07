@@ -17,7 +17,7 @@ export default function MyProfile() {
   return (
     <Sheet>
       <Stack direction="row" alignItems="center" spacing={8}>
-        <Link href="/Homepage">
+        <Link href="/">
           <Button sx={{ ml: 3 }}>Home</Button>
         </Link>
 

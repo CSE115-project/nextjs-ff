@@ -2,15 +2,24 @@ import Head from "next/head";
 import { Roboto } from "next/font/google";
 import "@fontsource/public-sans";
 import HomePage from "../components/Homepage";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import {getAuth, onAuthStateChanged } from "firebase/auth";
 
 const inter = Roboto({
   subsets: ["latin"],
   weight: ["100", "300", "400", "500", "700", "900"],
 });
 
-export default function index({ user }) {
+export default function index() {
+  // const auth = getAuth();
+  // onAuthStateChanged(auth, (user) => {
+  //   if (user) {
+  //     // User is signed in, set currentUser
+  //   } else {
+  //     // User is signed out, clear currentUser
+  //   }
+  //   // Unsubscribe from onAuthStateChanged listener when component unmounts
+  //   return;
+  // });
 
   return (
     <>

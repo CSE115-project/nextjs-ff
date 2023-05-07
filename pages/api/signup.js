@@ -5,14 +5,9 @@ export default async function handler(req, res) {
   const { email, password } = req.body;
 
   try {
-    const userCred = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-
-    res.status(201).json({ user: userCredential.user });
+    const {user} = await createUserWithEmailAndPassword(auth, email, password);
+    return res.status(200).json({ email: user.email, uid: user.uid, message: "Successful Authentication", ok: 200});
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    return res.status(401).json({ message: "Invalid Email or Password" });
   }
 }

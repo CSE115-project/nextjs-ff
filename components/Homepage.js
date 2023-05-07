@@ -2,15 +2,20 @@ import * as React from "react";
 import Button from "@mui/joy/Button";
 import { getAuth, signOut } from "firebase/auth";
 import Map from "./Map";
-import Link from 'next/link';
+import Link from "next/link";
+import {useRouter} from "next/router";
 
-const Homepage = () => {
+const Homepage = ({user}) => {
+  console.log("USER:", user);
+
   // Authentication
   const auth = getAuth();
+  const router = useRouter();
   const handleSignOut = (event) => {
     console.log("Signed Out.");
     event.preventDefault();
     signOut(auth);
+    router.push("/login");
   };
 
   return (
@@ -19,13 +24,13 @@ const Homepage = () => {
         Sign Out
       </Button>
 
-      <Link href = "/profile">
+      <Link href="/profile">
         <Button>Profile</Button>
       </Link>
 
       <Map />
     </div>
   );
-}
+};
 
 export default Homepage;

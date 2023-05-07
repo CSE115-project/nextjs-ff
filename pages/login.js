@@ -9,6 +9,7 @@ import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {useRouter} from "next/router";
 
 const containerStyle = {
   width: 300,
@@ -27,6 +28,7 @@ export default function Component({ user }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const auth = getAuth();
+  const router = useRouter();
 
   const onChangeHandlerEmail = (e) => {
     setEmail(e.target.value);
@@ -36,9 +38,29 @@ export default function Component({ user }) {
     setPassword(e.target.value);
   };
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
+    event.preventDefault();
     try {
-      console.log();
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      console.log("RESPONSE:", response);
+      
+      const data = await response.json();
+      
+      console.log("DATA:", data);
+
+      if (response.ok) {
+        console.log("RESPONSE.OK");
+        router.push("/"); // Redirect to index after successful login
+        console.log("Response OK AFTER /");
+      } 
+      
     } catch (error) {
       console.error(error);
     }
