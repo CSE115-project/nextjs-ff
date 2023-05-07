@@ -36,20 +36,12 @@ export default function Component({ user }) {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (event) => {
-    console.log("Sign In Clicked");
-    event.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log(user);
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
+  const handleLogin = (event) => {
+    try {
+      console.log();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -61,6 +53,7 @@ export default function Component({ user }) {
           </Typography>
           <Typography level="body2">Sign In</Typography>
         </div>
+
         <ModeToggle />
 
         <FormControl>
@@ -83,7 +76,7 @@ export default function Component({ user }) {
           />
         </FormControl>
 
-        <Button onClick={handleSubmit} sx={{ mt: 1 }}>
+        <Button onClick={handleLogin} sx={{ mt: 1 }}>
           Log In
         </Button>
 

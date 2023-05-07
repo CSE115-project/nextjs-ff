@@ -2,6 +2,8 @@ import Head from "next/head";
 import { Roboto } from "next/font/google";
 import "@fontsource/public-sans";
 import HomePage from "../components/Homepage";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const inter = Roboto({
   subsets: ["latin"],
@@ -9,6 +11,7 @@ const inter = Roboto({
 });
 
 export default function index({ user }) {
+
   return (
     <>
       <Head>
