@@ -9,6 +9,7 @@ import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from "next/router";
 
 const containerStyle = {
   width: 300,
@@ -27,6 +28,7 @@ export default function Component({ user }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const auth = getAuth();
+  const router = useRouter();
 
   const onChangeHandlerEmail = (e) => {
     setEmail(e.target.value);
@@ -36,22 +38,27 @@ export default function Component({ user }) {
     setPassword(p.target.value);
   };
 
-  const handleSubmit = (event) => {
-    console.log("Account created.");
+  const handleSignup = async (event) => {
     event.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log("Logged in Successfully.");
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
+    try {
+      const response = await fetch("/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
       });
-  };
 
+      const data = await response.json();
+
+      if (response.ok) {
+        router.push("/login"); // Redirect to index after successful login
+      } 
+      
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <CssVarsProvider>
       <Sheet sx={containerStyle} variant="outlined">
@@ -83,7 +90,7 @@ export default function Component({ user }) {
           />
         </FormControl>
 
-        <Button onClick={handleSubmit} sx={{ mt: 1 }}>
+        <Button onClick={handleSignup} sx={{ mt: 1 }}>
           Sign Up
         </Button>
 
