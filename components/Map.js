@@ -1,8 +1,9 @@
+import { Avatar } from "@mui/joy";
 import GoogleMapReact, { Marker } from "google-map-react";
 import {useState, useEffect} from 'react';
 
 export default function Map() {
-  const CurrentLocationMarker = ({ text }) => <div>{text}</div>;
+  const CurrentLocationMarker = () => <Avatar color="danger">ff</Avatar>;
 
   // Google Maps
   // default: San Francisco
@@ -37,9 +38,8 @@ export default function Map() {
       >
         <CurrentLocationMarker
           lat={location.lat}
-          lng={location.lng}
-          text="CURRENT LOCATION"
-        />
+          lng={location.lng} >
+          </CurrentLocationMarker>
       </GoogleMapReact>
     </div>
   );

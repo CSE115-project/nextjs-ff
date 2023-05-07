@@ -49,16 +49,10 @@ export default function Component({ user }) {
         body: JSON.stringify({ email, password }),
       });
 
-      console.log("RESPONSE:", response);
-      
       const data = await response.json();
-      
-      console.log("DATA:", data);
 
       if (response.ok) {
-        console.log("RESPONSE.OK");
         router.push("/login"); // Redirect to index after successful login
-        console.log("Response OK AFTER /");
       } 
       
     } catch (error) {
