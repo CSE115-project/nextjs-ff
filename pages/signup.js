@@ -51,6 +51,8 @@ export default function Component({ user }) {
 
       const data = await response.json();
 
+      console.log("DATA:", data);
+
       if (response.ok) {
         router.push("/login"); // Redirect to index after successful login
       } 
