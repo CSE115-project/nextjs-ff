@@ -14,31 +14,48 @@ import Typography from "@mui/joy/Typography";
 import Link from "next/link";
 
 export default function MyProfile() {
-    const [firstName, setFirstName] = React.useState("");
-    const [lastName, setLastName] = React.useState("");
-    const [email, setEmail] = React.useState("");
-    const [bio, setBio] = React.useState("");
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [bio, setBio] = React.useState("");
+  const [selectedFile, setSelectedFile] = React.useState(null);
 
-    const handleCancel = () => {
-        setFirstName("");
-        setLastName("");
-        setEmail("");
-        setBio("");
-        // close the sheet component
-    };
+  //cancel function
+  const handleCancel = () => {
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setBio("");
+    setSelectedFile(null);
+    // close the sheet component
+  };
+  //set max characters
+  const maxChar = 160;
+
+  const handleBioChange = (event) => {
+      const inputVal = event.target.value;
+
+      if (inputVal.length <= maxChar) {
+          setBio(inputVal);
+      }
+  };
+  
+  //set remaining characters
+  const remainingChar = maxChar - bio.length;
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+  };
+  
+  //upload function
+  const handleUpload = () => {
+      if (selectedFile) {
+          // Perform the upload logic here
+          console.log("Uploading file:", selectedFile);
+      }
+  };
     
-    const maxChar = 160;
-
-    const handleBioChange = (event) => {
-        const inputVal = event.target.value;
-
-        if (inputVal.length <= maxChar) {
-            setBio(inputVal);
-        }
-    };
-
-    const remainingChar = maxChar - bio.length;
-
   return (
     <Sheet>
       <Stack direction="row" alignItems="center" spacing={8}>
@@ -126,7 +143,10 @@ export default function MyProfile() {
               sx={{ "--Avatar-size": "64px" }}
             />
             {/* TODO: Add upload functionality */}
-            <Button sx={{ marginTop: 3 }}>Upload</Button>
+            <Box sx={{ marginTop: 3 }}>
+                <input type="file" accept="image/*" onChange={handleFileChange} />
+                <Button onClick={handleUpload}>Upload</Button>
+            </Box>
           </Box>
 
           <Divider role="presentation" />
