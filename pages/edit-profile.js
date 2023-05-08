@@ -13,6 +13,13 @@ import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import Link from "next/link";
 
+function addInputUntiLimit(inputVal, setField, limit)
+{
+    if(inputVal.length <= limit) {
+      setField(inputVal);
+    }
+}
+
 export default function MyProfile() {
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
@@ -21,8 +28,9 @@ export default function MyProfile() {
   const [selectedFile, setSelectedFile] = React.useState(null);
 
   //cancel function
+  //TODO: change default values from Firestore
   const handleCancel = () => {
-    setFirstName("");
+    setFirstName(""); 
     setLastName("");
     setEmail("");
     setBio("");
@@ -30,18 +38,33 @@ export default function MyProfile() {
     // close the sheet component
   };
   //set max characters
-  const maxChar = 160;
+  const maxFirstNameChar = 50;
+  const maxLastNameChar = 50;
+  const maxEmailChar = 70;
+  const maxBioChar = 160;
+
+  const handleFirstNameChange = (event) => {
+    const inputVal = event.target.value;
+    addInputUntiLimit(inputVal, setFirstName, maxFirstNameChar);
+  }
+
+  const handleLastNameChange = (event) => {
+    const inputVal = event.target.value;
+    addInputUntiLimit(inputVal, setLastName, maxLastNameChar);
+  }
+
+  const handleEmailChange = (event) => {
+    const inputVal = event.target.value;
+    addInputUntiLimit(inputVal, setEmail, maxEmailChar);
+  }
 
   const handleBioChange = (event) => {
       const inputVal = event.target.value;
-
-      if (inputVal.length <= maxChar) {
-          setBio(inputVal);
-      }
+      addInputUntiLimit(inputVal, setBio, maxBioChar);
   };
   
-  //set remaining characters
-  const remainingChar = maxChar - bio.length;
+  //set remaining bio characters
+  const remainingChar = maxBioChar - bio.length;
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -58,9 +81,15 @@ export default function MyProfile() {
     
   return (
     <Sheet>
-      <Stack direction="row" alignItems="center" spacing={8}>
+      <Stack direction="row" alignItems="center" spacing={0}>
+        {/* Home Button */}
         <Link href="/">
           <Button sx={{ ml: 3 }}>Home</Button>
+        </Link>
+
+        {/* Profile Button */}
+        <Link href = "/profile">
+          <Button>Profile</Button>
         </Link>
 
         <Typography level="h1" fontSize="xl2">
@@ -100,12 +129,12 @@ export default function MyProfile() {
           <Box sx={{ display: { xs: "contents", sm: "flex" }, gap: 2 }}>
             <FormControl sx={{ flex: 1 }}>
               <FormLabel sx={{ display: { sm: "none" } }}>First name</FormLabel>
-              <Input placeholder="First Name" />
+              <Input value={firstName} onChange={handleFirstNameChange} placeholder="First Name" />
             </FormControl>
 
             <FormControl sx={{ flex: 1 }}>
               <FormLabel sx={{ display: { sm: "none" } }}>Last name</FormLabel>
-              <Input placeholder="Last Name" />
+              <Input value={lastName} onChange={handleLastNameChange} placeholder="Last Name" />
             </FormControl>
           </Box>
 
@@ -114,6 +143,8 @@ export default function MyProfile() {
           <FormControl sx={{ display: { sm: "contents" } }}>
             <FormLabel>Email</FormLabel>
             <Input
+              value={email}
+              onChange={handleEmailChange}
               type="email"
               startDecorator={<i data-feather="mail" />}
               placeholder="user@mail.com"
@@ -142,7 +173,6 @@ export default function MyProfile() {
               src="/images/default_image.png"
               sx={{ "--Avatar-size": "64px" }}
             />
-            {/* TODO: Add upload functionality */}
             <Box sx={{ marginTop: 3 }}>
                 <input type="file" accept="image/*" onChange={handleFileChange} />
                 <Button onClick={handleUpload}>Upload</Button>
@@ -157,8 +187,7 @@ export default function MyProfile() {
           </Box>
 
           <Box>
-            <Textarea minRows={4} value={bio} onChange={handleBioChange}maxLength={maxChar} sx={{ mt: 1.5 }} />
-            {/* TODO: Add limit to Bio */}
+            <Textarea minRows={4} value={bio} onChange={handleBioChange} maxLength={maxBioChar} sx={{ mt: 1.5 }} />
             <FormHelperText sx={{ mt: 0.75, fontSize: "xs" }}>
                 {remainingChar} characters left
             </FormHelperText>
@@ -174,7 +203,7 @@ export default function MyProfile() {
               gap: 1,
             }}
           >
-            {/* TODO: Add cancel functionality */}
+            {/* TODO: Add cancel functionality for files*/}
             <Button variant="outlined" color="neutral" size="sm" onClick={handleCancel}>
               Cancel
             </Button>
