@@ -13,7 +13,7 @@ cd nextjs-ff
 
 ### To start the Next.js app in Docker:
 ```bash
-docker compose up
+docker compose up -build --force-recreate
 ```
 - This will build the image in Docker
 ***Warning: you shouldn't need to run*** `npm install`, ***Docker takes care of that.***
@@ -23,7 +23,7 @@ docker compose up
 ### ESlint
 Run every time you make changes before and after testing, and before commit.
 ```
-yarn next lint
+npm run lint
 ```
 
 ### Code formatter: [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
