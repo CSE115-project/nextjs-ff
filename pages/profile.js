@@ -2,42 +2,72 @@ import Link from 'next/link';
 import Button from "@mui/joy/Button";
 import Avatar from '@mui/joy/Avatar';
 import { useRouter } from "next/router";
-import { db } from "../firebase.js";
-import { doc, getDoc } from "firebase/firestore";
 import { useState } from "react";
 
 export default function Profile() 
 {
 
     const router = useRouter();
-    const { userData } = router.query;
-    const userDataString = userData ? JSON.parse(userData) : null;
-    const parsedUserData = userDataString ? JSON.parse(userDataString) : null;
+    // userData is a string that contains the UID
+    const { userData }  = router.query;
+    console.log("uid:", userData);
 
-    const [retrievedData, setRetrievedData] = useState(null);
+    const [userName, setUserName] = useState("");
 
-    if (parsedUserData != null){
-        const usersRef = doc(db, "users", parsedUserData?.uid);
-        getDoc(usersRef).then((docSnap) => {
-            const data = docSnap.data();
-            setRetrievedData(data);
+    const fetchData = async () => {
+        try {
+          const response = await fetch("/api/getUser", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ uid: userData }),
           });
+    
+          console.log("RESPONSE", response);
+    
+          const data = await response.json();
+    
+          console.log("DATA:", data);
+
+          const useData = data.data;
+          // do something with the data here
+          setUserName(useData.name);
+        } catch (error) {
+          console.error(error);
+        }
     };
+    fetchData();
+
+    const handleHome= (event) => {
+        event.preventDefault();
+        router.push({
+            pathname: "/",
+            query: { userData }
+        });
+    }
+
+    const handleEditProfile = (event) => {
+        event.preventDefault();
+        router.push({
+            pathname: "/edit-profile",
+            query: { userData }
+        });
+    }
+      
 
     return (
         <div className="userProfile">
-            {/* Home button */}
-            <Link href = "/">
-                <Button>Home</Button>
-            </Link>
+            <Button onClick={handleHome} sx={{ mt: 1 }}>
+                Home
+            </Button>
 
-            {/* Edit button */}
-            <Link href = "/edit-profile">
-                <Button>Edit Profile</Button>
-            </Link>
+            <Button onClick={handleEditProfile} sx={{ mt: 1}}>
+                Edit Profile
+            </Button>
 
             <h1>User Profile</h1>
-            {retrievedData && <h2>name: {retrievedData.name} </h2>}
+            <h2> { userName } </h2>
 
             <Avatar />
             {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}

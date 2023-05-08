@@ -61,7 +61,7 @@ export default function Component({ user, setUser }) {
         console.log("RESPONSE.OK");
         router.push({
           pathname: "/",
-          query: { userData: JSON.stringify(data.user) }
+          query: { userData: JSON.stringify(data.user.uid) }
         }); // Redirect to index after successful login
         console.log("PUSHED FINE");
       } 

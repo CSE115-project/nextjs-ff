@@ -8,9 +8,9 @@ import { useRouter } from "next/router";
 const Homepage = () => {
   // console.log("USER:", user);
   const router = useRouter();
-  const { userData } = router.query;
-  const parsedUserData = userData ? JSON.parse(userData) : null;
-  console.log("UID is:", parsedUserData?.uid)
+  // userData is a string that contains the UID
+  const { userData }  = router.query;
+  console.log("uid:", userData);
 
   // Authentication
   const auth = getAuth();
@@ -25,9 +25,10 @@ const Homepage = () => {
     event.preventDefault();
     router.push({
       pathname: "/profile",
-      query: { userData: JSON.stringify(userData) }
+      query: { userData }
     });
   }
+
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
@@ -35,11 +36,9 @@ const Homepage = () => {
         Sign Out
       </Button>
 
-      <Link href="/profile">
-        <Button onClick={handleProfile} sx={{ mt: 1}}>
-          Profile
-        </Button>
-      </Link>
+      <Button onClick={handleProfile} sx={{ mt: 1}}>
+        Profile
+      </Button>
 
       <Map />
     </div>
