@@ -55,6 +55,8 @@ export default function Component({ user, setUser }) {
       
       console.log("DATA:", data);
 
+      console.log("USER:", data.user);
+
       if (response.ok) {
         console.log("RESPONSE.OK");
         router.push("/"); // Redirect to index after successful login
