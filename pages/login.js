@@ -59,8 +59,11 @@ export default function Component({ user, setUser }) {
 
       if (response.ok) {
         console.log("RESPONSE.OK");
-        router.push("/"); // Redirect to index after successful login
-        console.log("Response OK AFTER /");
+        router.push({
+          pathname: "/",
+          query: { userData: JSON.stringify(data.user) }
+        }); // Redirect to index after successful login
+        console.log("PUSHED FINE");
       } 
       
     } catch (error) {
