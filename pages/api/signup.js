@@ -16,7 +16,9 @@ export default async function handler(req, res) {
       pictureLink: null, // user's picture link
       bio: null, // user's bio
       email: user.email, // user's email
-      favoritePlaces : [] // list of favorite places (can be links to the place?)
+      favoritePlaces : [], // list of favorite places (can be links to the place?)
+      wantToGo : [], // list of want to go places (can be links to the place?)
+      friendsRecc : [] // list of friends favorite places (can be links to the place?)
     };
     await setDoc(usersRef, userData);
 

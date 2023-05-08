@@ -12,6 +12,7 @@ import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 function addInputUntiLimit(inputVal, setField, limit)
 {
@@ -21,11 +22,36 @@ function addInputUntiLimit(inputVal, setField, limit)
 }
 
 export default function MyProfile() {
+
+  const router = useRouter();
+  // userData is a string that contains the UID
+  const { userData }  = router.query;
+
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [bio, setBio] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState(null);
+  const [field, setField] = React.useState("");
+  const [content, setContent] = React.useState("");
+
+  // just a test to see if it works for setting the bio
+
+  const editData = async () => {
+    try {
+      const response = await fetch("/api/editUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ uid: userData, field, content}),
+      });
+
+      console.log("RESPONSE", response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   //cancel function
   //TODO: change default values from Firestore
@@ -61,6 +87,9 @@ export default function MyProfile() {
   const handleBioChange = (event) => {
       const inputVal = event.target.value;
       addInputUntiLimit(inputVal, setBio, maxBioChar);
+      setField("bio");
+      setContent(bio);
+      console.log("bio is:", bio);
   };
   
   //set remaining bio characters
@@ -209,7 +238,10 @@ export default function MyProfile() {
             </Button>
 
             {/* TODO: Add save functionality */}
-            <Button size="sm">Save</Button>
+            <Button 
+            size="sm"
+            onClick={editData}
+            >Save</Button>
           </Box>
         </Box>
       </Sheet>
