@@ -35,8 +35,8 @@ export default function MyProfile() {
   const [field, setField] = React.useState("");
   const [content, setContent] = React.useState("");
 
-  // just a test to see if it works for setting the bio
-
+  // function to edit the database, this function can even serve as to adding
+  // to the database; althought I'm not 100% sure on if it'll work for adding lists
   const editData = async () => {
     try {
       const response = await fetch("/api/editUser", {
@@ -89,7 +89,7 @@ export default function MyProfile() {
       addInputUntiLimit(inputVal, setBio, maxBioChar);
       setField("bio");
       setContent(bio);
-      console.log("bio is:", bio);
+      // console.log("bio is:", bio);
   };
   
   //set remaining bio characters
@@ -107,19 +107,33 @@ export default function MyProfile() {
           console.log("Uploading file:", selectedFile);
       }
   };
+
+  const handleHome= (event) => {
+    event.preventDefault();
+    router.push({
+        pathname: "/",
+        query: { userData }
+    });
+}
+
+const handleProfile = (event) => {
+    event.preventDefault();
+    router.push({
+        pathname: "/profile",
+        query: { userData }
+    });
+}
     
   return (
     <Sheet>
       <Stack direction="row" alignItems="center" spacing={0}>
-        {/* Home Button */}
-        <Link href="/">
-          <Button sx={{ ml: 3 }}>Home</Button>
-        </Link>
+        <Button onClick={handleHome} sx={{ mt: 1 }}>
+            Home
+        </Button>
 
-        {/* Profile Button */}
-        <Link href = "/profile">
-          <Button>Profile</Button>
-        </Link>
+        <Button onClick={handleProfile} sx={{ mt: 1}}>
+            Profile
+        </Button>
 
         <Typography level="h1" fontSize="xl2">
           My profile

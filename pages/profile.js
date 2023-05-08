@@ -14,6 +14,8 @@ export default function Profile()
 
     const [userName, setUserName] = useState("");
 
+    // this function fetches the data from the database...
+    // need to set variables according to what is needed to be displayed
     const fetchData = async () => {
         try {
           const response = await fetch("/api/getUser", {
@@ -33,6 +35,7 @@ export default function Profile()
           const useData = data.data;
           // do something with the data here
           setUserName(useData.name);
+          // add additional variables being set here depending on what will be displayed
         } catch (error) {
           console.error(error);
         }

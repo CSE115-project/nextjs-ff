@@ -1,6 +1,8 @@
 import { db } from "../../firebase.js";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
+// edit the contents of the user in our database
+
 export default async function handler(req, res) {
     // uid is user's id, field is the field to update, content is the updated contents
     const { uid, field, content } = req.body

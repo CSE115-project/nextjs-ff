@@ -1,6 +1,8 @@
 import { db } from "../../firebase.js";
 import { doc, getDoc } from "firebase/firestore";
 
+// get the contents of our user in the database
+
 export default async function handler(req, res) {
     const { uid } = req.body
     const cleanedUID = uid.replace(/"/g, '');
