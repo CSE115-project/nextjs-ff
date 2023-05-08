@@ -133,13 +133,13 @@ export default function MyProfile() {
           Profile
         </Button>
 
-        <Typography level="h1" fontSize="xl2">
+        <Typography level="h1" fontSize="xl2" sx={{ ml: 5 }}>
           My profile
         </Typography>
       </Stack>
       <Sheet
         sx={{
-          maxWidth: 1200,
+          maxWidth: "75%",
           width: "100%",
           mx: "auto",
         }}
