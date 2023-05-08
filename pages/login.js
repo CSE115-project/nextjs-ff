@@ -24,7 +24,7 @@ const containerStyle = {
   boxShadow: "md",
 };
 
-export default function Component({ user }) {
+export default function Component({ user, setUser }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const auth = getAuth();
