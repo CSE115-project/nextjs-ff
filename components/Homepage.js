@@ -5,12 +5,26 @@ import Map from "./Map";
 import Link from "next/link";
 import {useRouter} from "next/router";
 
-const Homepage = ({user}) => {
-  console.log("USER:", user);
+const Homepage = () => {
+  // console.log("USER:", user);
 
   // Authentication
   const auth = getAuth();
+
+  console.log("AUTH:", auth);
+
+  const user = auth.currentUser;
+
+  if (user) {
+    console.log("USER UID:", user.uid);
+    console.log("But we are signed in?")
+  }
+  else {
+    console.log("No user signed in");
+  }
+
   const router = useRouter();
+
   const handleSignOut = (event) => {
     console.log("Signed Out.");
     event.preventDefault();
