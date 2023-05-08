@@ -9,7 +9,7 @@ import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 
 const containerStyle = {
   width: 300,
@@ -50,9 +50,9 @@ export default function Component({ user, setUser }) {
       });
 
       console.log("RESPONSE:", response);
-      
+
       const data = await response.json();
-      
+
       console.log("DATA:", data);
 
       console.log("USER:", data.user);
@@ -61,11 +61,10 @@ export default function Component({ user, setUser }) {
         console.log("RESPONSE.OK");
         router.push({
           pathname: "/",
-          query: { userData: JSON.stringify(data.user.uid) }
+          query: { userData: JSON.stringify(data.user.uid) },
         }); // Redirect to index after successful login
         console.log("PUSHED FINE");
-      } 
-      
+      }
     } catch (error) {
       console.error(error);
     }

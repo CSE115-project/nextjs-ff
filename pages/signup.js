@@ -55,8 +55,7 @@ export default function Component({ user }) {
 
       if (response.ok) {
         router.push("/login"); // Redirect to index after successful login
-      } 
-      
+      }
     } catch (error) {
       console.error(error);
     }

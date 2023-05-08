@@ -5,9 +5,11 @@ export default async function handler(req, res) {
   const { email, password } = req.body;
 
   try {
-    const {user} = await signInWithEmailAndPassword(auth, email, password);
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
     // this is where we set our current user
-    return res.status(200).json({ user, message: "Successful Authentication", ok: 200});
+    return res
+      .status(200)
+      .json({ user, message: "Successful Authentication", ok: 200 });
   } catch (error) {
     return res.status(401).json({ message: "Invalid Email or Password" });
   }
