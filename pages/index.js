@@ -25,30 +25,64 @@ export default function index({user}) {
   );
 }
 
-// This gets called on every request
+
 export async function getServerSideProps(context) {
   const { req, res } = context;
-  const sessionCookie = req.cookies.session || "";
-
+  const sessionCookie = req.cookies.session || '';
+  
   try {
-    const decodedClaims = await firebase
-      .auth()
-      .verifySessionCookie(sessionCookie);
+    // Verify the session cookie and get the user's authentication information
+    const decodedClaims = await firebase.auth().verifySessionCookie(sessionCookie);
     const uid = decodedClaims.uid;
 
-    // calls the user table in firestore
-    const user = await firebase.firestore().collection("users").doc(uid).get();
+    // Retrieve the user's data from Firestore
+    const userRef = firebase.firestore().collection('users').doc(uid);
+    const userDoc = await userRef.get();
+    const userData = userDoc.data();
 
-    if (user.exists) {
-      return { props: { user: user.data() } };
-    }
-
+    return {
+      props: {
+        user: {
+          uid,
+          ...userData
+        }
+      }
+    };
   } catch (error) {
     // User not authenticated, redirect to login page
-    res.setHeader("location", "/login");
+    res.setHeader('location', '/login');
     res.statusCode = 302;
     res.end();
+    return { props: {} };
   }
-
-  return { props: {} };
 }
+
+
+
+// This gets called on every request
+// export async function getServerSideProps(context) {
+//   const { req, res } = context;
+//   const sessionCookie = req.cookies.session || "";
+
+//   try {
+//     const decodedClaims = await firebase
+//       .auth()
+//       .verifySessionCookie(sessionCookie);
+//     const uid = decodedClaims.uid;
+
+//     // calls the user table in firestore
+//     const user = await firebase.firestore().collection("users").doc(uid).get();
+
+//     if (user.exists) {
+//       return { props: { user: user.data() } };
+//     }
+
+//   } catch (error) {
+//     // User not authenticated, redirect to login page
+//     res.setHeader("location", "/login");
+//     res.statusCode = 302;
+//     res.end();
+//   }
+
+//   return { props: {} };
+// }
