@@ -9,7 +9,7 @@ const Homepage = () => {
   // console.log("USER:", user);
   const router = useRouter();
   // userData is a string that contains the UID
-  const { userData }  = router.query;
+  const { userData } = router.query;
   console.log("uid:", userData);
 
   // Authentication
@@ -25,10 +25,9 @@ const Homepage = () => {
     event.preventDefault();
     router.push({
       pathname: "/profile",
-      query: { userData }
+      query: { userData },
     });
-  }
-
+  };
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
@@ -36,7 +35,7 @@ const Homepage = () => {
         Sign Out
       </Button>
 
-      <Button onClick={handleProfile} sx={{ mt: 1}}>
+      <Button onClick={handleProfile} sx={{ mt: 1 }}>
         Profile
       </Button>
 

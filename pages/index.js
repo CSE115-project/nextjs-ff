@@ -2,25 +2,14 @@ import Head from "next/head";
 import { Roboto } from "next/font/google";
 import "@fontsource/public-sans";
 import HomePage from "../components/Homepage";
-import {getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const inter = Roboto({
   subsets: ["latin"],
   weight: ["100", "300", "400", "500", "700", "900"],
 });
 
-export default function index() {
-  // const auth = getAuth();
-  // onAuthStateChanged(auth, (user) => {
-  //   if (user) {
-  //     // User is signed in, set currentUser
-  //   } else {
-  //     // User is signed out, clear currentUser
-  //   }
-  //   // Unsubscribe from onAuthStateChanged listener when component unmounts
-  //   return;
-  // });
-
+export default function index({user}) {
   return (
     <>
       <Head>
@@ -30,8 +19,36 @@ export default function index() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <HomePage></HomePage>
+        <HomePage user={user}></HomePage>
       </main>
     </>
   );
+}
+
+// This gets called on every request
+export async function getServerSideProps(context) {
+  const { req, res } = context;
+  const sessionCookie = req.cookies.session || "";
+
+  try {
+    const decodedClaims = await firebase
+      .auth()
+      .verifySessionCookie(sessionCookie);
+    const uid = decodedClaims.uid;
+
+    // calls the user table in firestore
+    const user = await firebase.firestore().collection("users").doc(uid).get();
+
+    if (user.exists) {
+      return { props: { user: user.data() } };
+    }
+
+  } catch (error) {
+    // User not authenticated, redirect to login page
+    res.setHeader("location", "/login");
+    res.statusCode = 302;
+    res.end();
+  }
+
+  return { props: {} };
 }
