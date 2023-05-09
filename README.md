@@ -13,7 +13,7 @@ cd nextjs-ff
 
 ### To start the Next.js app in Docker:
 ```bash
-docker compose up -build --force-recreate
+docker compose up -build --force-recreate 
 ```
 - This will build the image in Docker
 ***Warning: you shouldn't need to run*** `npm install`, ***Docker takes care of that.***
