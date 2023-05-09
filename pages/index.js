@@ -10,7 +10,6 @@ const inter = Roboto({
 });
 
 export default function index() {
-
   return (
     <>
       <Head>
@@ -24,4 +23,28 @@ export default function index() {
       </main>
     </>
   );
+}
+
+// This gets called on every request
+export async function getServerSideProps(context) {
+  const { req, res } = context;
+  const sessionCookie = req.cookies.session || "";
+
+  try {
+    const decodedClaims = await firebase
+      .auth()
+      .verifySessionCookie(sessionCookie);
+    const uid = decodedClaims.uid;
+    const user = await firebase.firestore().collection("users").doc(uid).get();
+    if (user.exists) {
+      return { props: { user: user.data() } };
+    }
+  } catch (error) {
+    // User not authenticated, redirect to login page
+    res.setHeader("location", "/login");
+    res.statusCode = 302;
+    res.end();
+  }
+
+  return { props: {} };
 }
