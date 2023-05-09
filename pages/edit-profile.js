@@ -125,6 +125,22 @@ export default function MyProfile() {
     
   };
 
+  const handleSave = async () => {
+    try {
+      
+      //waits for editData to complete
+      await editData();
+
+      // Redirects to the profile page after saving
+      router.push({
+        pathname: "/profile",
+        query: { userData },
+      });
+    } catch (error) {
+      console.error("Error saving data:", error);
+    }
+  };
+
   const handleHome = (event) => {
     event.preventDefault();
     router.push({
@@ -288,7 +304,7 @@ export default function MyProfile() {
             </Button>
 
             {/* TODO: Add save functionality */}
-            <Button size="sm" onClick={editData}>
+            <Button size="sm" onClick={handleSave}>
               Save
             </Button>
           </Box>
