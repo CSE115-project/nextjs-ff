@@ -6,29 +6,24 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 const Homepage = () => {
-  // console.log("USER:", user);
   const router = useRouter();
-  // userData is a string that contains the UID
-  const { userData }  = router.query;
-  console.log("uid:", userData);
 
   // Authentication
-  const auth = getAuth();
+  // const auth = getAuth();
   const handleSignOut = (event) => {
-    console.log("Signed Out.");
     event.preventDefault();
-    signOut(auth);
-    router.push("/login");
+    console.log("Signed Out.");
+  //   signOut(auth);
+  //   router.push("/login");
   };
 
   const handleProfile = (event) => {
     event.preventDefault();
     router.push({
       pathname: "/profile",
-      query: { userData }
+      query: { userData },
     });
-  }
-
+  };
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
@@ -36,7 +31,7 @@ const Homepage = () => {
         Sign Out
       </Button>
 
-      <Button onClick={handleProfile} sx={{ mt: 1}}>
+      <Button onClick={handleProfile} sx={{ mt: 1 }}>
         Profile
       </Button>
 
