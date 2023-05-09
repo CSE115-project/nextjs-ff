@@ -27,7 +27,6 @@ const containerStyle = {
 export default function Component({ user }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const auth = getAuth();
   const router = useRouter();
 
   const onChangeHandlerEmail = (e) => {
@@ -40,24 +39,20 @@ export default function Component({ user }) {
 
   const handleSignup = async (event) => {
     event.preventDefault();
-    try {
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+    const response = await fetch("/api/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      console.log("DATA:", data);
-
-      if (response.ok) {
-        router.push("/login"); // Redirect to index after successful login
-      }
-    } catch (error) {
-      console.error(error);
+    if (response.ok) {
+      router.push("/login"); // Redirect to index after successful login
+    } else {
+      console.error(data.message);
     }
   };
   return (

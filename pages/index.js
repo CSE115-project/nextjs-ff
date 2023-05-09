@@ -9,7 +9,7 @@ const inter = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
 });
 
-export default function index() {
+export default function index({user}) {
   return (
     <>
       <Head>
@@ -19,7 +19,7 @@ export default function index() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <HomePage></HomePage>
+        <HomePage user={user}></HomePage>
       </main>
     </>
   );
@@ -35,10 +35,14 @@ export async function getServerSideProps(context) {
       .auth()
       .verifySessionCookie(sessionCookie);
     const uid = decodedClaims.uid;
+
+    // calls the user table in firestore
     const user = await firebase.firestore().collection("users").doc(uid).get();
+
     if (user.exists) {
       return { props: { user: user.data() } };
     }
+
   } catch (error) {
     // User not authenticated, redirect to login page
     res.setHeader("location", "/login");

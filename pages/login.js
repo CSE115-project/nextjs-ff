@@ -24,10 +24,9 @@ const containerStyle = {
   boxShadow: "md",
 };
 
-export default function Component({ user, setUser }) {
+export default function Component() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const auth = getAuth();
   const router = useRouter();
 
   const onChangeHandlerEmail = (e) => {
@@ -40,30 +39,24 @@ export default function Component({ user, setUser }) {
 
   const handleLogin = async (event) => {
     event.preventDefault();
+
     try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
-      console.log("RESPONSE:", response);
-
-      const data = await response.json();
-
-      console.log("DATA:", data);
-
-      console.log("USER:", data.user);
+      console.log("login: Response:", response);
 
       if (response.ok) {
-        console.log("RESPONSE.OK");
-        router.push({
-          pathname: "/",
-          query: { userData: JSON.stringify(data.user.uid) },
-        }); // Redirect to index after successful login
-        console.log("PUSHED FINE");
+        const data = await response.json();
+        console.log("login: User:", data.user); // logged in user data
+        // redirect to homepage or some other protected route
+        router.push('/');
+      } else {
+        const data = await response.json();
+        console.log(data.error); // login error message
       }
     } catch (error) {
       console.error(error);
