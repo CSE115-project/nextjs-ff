@@ -49,6 +49,10 @@ export default function Component() {
 
     const data = await response.json();
 
+    console.log("p/login data", data.user);
+
+    // do a document fetch using user.uid
+
     if (response.ok) {
       router.push("/"); // Redirect to index after successful login
     } else {
