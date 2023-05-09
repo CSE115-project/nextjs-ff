@@ -98,7 +98,7 @@ export default function MyProfile() {
     setSelectedFile(file);
   };
 
-  //If someone could help to fix or modify my upload function that will be great : ) 
+  //If someone could help to fix or modify or fix my upload function that will be great : ) 
   //upload function
   const handleUpload = () => {
     if (selectedFile) {
@@ -128,7 +128,6 @@ export default function MyProfile() {
   const handleSave = async () => {
     try {
       
-      //waits for editData to complete
       await editData();
 
       // Redirects to the profile page after saving
