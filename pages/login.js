@@ -39,27 +39,20 @@ export default function Component() {
 
   const handleLogin = async (event) => {
     event.preventDefault();
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-    try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+    const data = await response.json();
 
-      console.log("login: Response:", response);
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("login: User:", data.user); // logged in user data
-        // redirect to homepage or some other protected route
-        router.push('/');
-      } else {
-        const data = await response.json();
-        console.log(data.error); // login error message
-      }
-    } catch (error) {
-      console.error(error);
+    if (response.ok) {
+      router.push("/"); // Redirect to index after successful login
+    } else {
+      console.error(data.message);
     }
   };
 

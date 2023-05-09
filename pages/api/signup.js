@@ -17,6 +17,7 @@ export default async function handler(req, res) {
     const usersRef = doc(db, "users", user.uid);
     const userData = {
       name: null, // user's name
+      uid: user.uid,
       pictureLink: null, // user's picture link
       bio: null, // user's bio
       email: user.email, // user's email
