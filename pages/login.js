@@ -72,29 +72,31 @@ export default function Component() {
 
         <ModeToggle />
 
-        <FormControl>
-          <FormLabel>Email</FormLabel>
-          <Input
-            name="email"
-            type="email"
-            placeholder="user@mail.com"
-            onChange={onChangeHandlerEmail}
-          />
-        </FormControl>
+        <form onSubmit={handleLogin}>
+          <FormControl>
+            <FormLabel>Email</FormLabel>
+            <Input
+              name="email"
+              type="email"
+              placeholder="user@mail.com"
+              onChange={onChangeHandlerEmail}
+            />
+          </FormControl>
 
-        <FormControl>
-          <FormLabel>Password</FormLabel>
-          <Input
-            name="password"
-            type="password"
-            placeholder="password"
-            onChange={onChangeHandlerPassword}
-          />
-        </FormControl>
+          <FormControl>
+            <FormLabel>Password</FormLabel>
+            <Input
+              name="password"
+              type="password"
+              placeholder="password"
+              onChange={onChangeHandlerPassword}
+            />
+          </FormControl>
 
-        <Button onClick={handleLogin} sx={{ mt: 1 }}>
-          Log In
-        </Button>
+          <Button type="submit" sx={{ mt: 1, width: "100%" }}>
+            Log In
+          </Button>
+        </form>
 
         <Typography
           fontSize="sm"
