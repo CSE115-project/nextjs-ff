@@ -40,14 +40,26 @@ export default function Component() {
   const handleSignup = async (event) => {
     event.preventDefault();
     const auth = getAuth();
-    
+
     try {
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       console.log("p/signup user:", user);
       router.push("/");
-    } catch(error) {
+    } catch (error) {
       console.error(error);
+      alert("Email already in use");
     }
+  };
+
+  const handleLoginRedirect = () => {
+    return router.push("/login");
+  };
+
+
   //   const response = await fetch("/api/signup", {
   //     method: "POST",
   //     headers: {
@@ -63,7 +75,8 @@ export default function Component() {
   //   } else {
   //     console.error(data.message);
   //   }
-  };
+  
+  
   return (
     <CssVarsProvider>
       <Sheet sx={containerStyle} variant="outlined">
@@ -75,34 +88,36 @@ export default function Component() {
         </div>
         <ModeToggle />
 
-        <FormControl>
-          <FormLabel>Email</FormLabel>
-          <Input
-            name="email"
-            type="email"
-            placeholder="user@mail.com"
-            onChange={onChangeHandlerEmail}
-          />
-        </FormControl>
+        <form onSubmit={handleSignup}>
+          <FormControl>
+            <FormLabel>Email</FormLabel>
+            <Input
+              name="email"
+              type="email"
+              placeholder="user@mail.com"
+              onChange={onChangeHandlerEmail}
+            />
+          </FormControl>
 
-        <FormControl>
-          <FormLabel>Password</FormLabel>
-          <Input
-            name="password"
-            type="password"
-            placeholder="password"
-            onChange={onChangeHandlerPassword}
-          />
-        </FormControl>
+          <FormControl>
+            <FormLabel>Password</FormLabel>
+            <Input
+              name="password"
+              type="password"
+              placeholder="password"
+              onChange={onChangeHandlerPassword}
+            />
+          </FormControl>
 
-        <Button onClick={handleSignup} sx={{ mt: 1 }}>
-          Sign Up
-        </Button>
+          <Button type="submit" sx={{ mt: 1, width: "100%" }}>
+            Sign Up
+          </Button>
+        </form>
 
         <Typography
           fontSize="sm"
           sx={{ alignSelf: "center" }}
-          endDecorator={<Link href="/">Log In</Link>}
+          endDecorator={<Link onClick={handleLoginRedirect}>Log In</Link>}
         >
           Have an account?
         </Typography>

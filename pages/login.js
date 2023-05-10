@@ -48,6 +48,7 @@ export default function Component() {
       router.push("/");
     } catch (error) {
       console.error(error);
+      alert("Incorrect Email or Password");
     }
   };
 
