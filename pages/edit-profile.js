@@ -164,7 +164,7 @@ export default function MyProfile() {
         </Button>
 
         <Typography level="h1" fontSize="xl2" sx={{ ml: 5 }}>
-          My profile
+          Edit profile
         </Typography>
       </Stack>
       <Sheet
