@@ -68,7 +68,7 @@ export default function Profile() {
               Test User
             </Typography>
             <Typography
-              component="subtitle1"
+              className="bio"
               sx={{ mt: 1, color: "white" }}
               align="center"
             >
