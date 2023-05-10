@@ -4,6 +4,11 @@ import Avatar from "@mui/joy/Avatar";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
+import Box from "@mui/joy/Box";
+import Sheet from "@mui/joy/Sheet";
+import Stack from "@mui/joy/Stack";
+import Typography from "@mui/joy/Typography";
+
 export default function Profile() {
   const router = useRouter();
 
@@ -23,7 +28,7 @@ export default function Profile() {
     });
   };
   
-  
+
   return (
     <div className="userProfile">
       <Sheet>
