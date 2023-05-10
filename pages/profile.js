@@ -9,8 +9,10 @@ import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 
-export default function Profile() {
+export default function Profile({user}) {
   const router = useRouter();
+
+  console.log("/profile user:", user);
 
   const handleHome = (event) => {
     event.preventDefault();
