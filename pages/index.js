@@ -2,7 +2,6 @@ import Head from "next/head";
 import { Roboto } from "next/font/google";
 import "@fontsource/public-sans";
 import HomePage from "../components/Homepage";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const inter = Roboto({
   subsets: ["latin"],
