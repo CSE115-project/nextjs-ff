@@ -1,28 +1,24 @@
 import * as React from "react";
 import Button from "@mui/joy/Button";
-import { getAuth, signOut } from "firebase/auth";
 import Map from "./Map";
-import Link from "next/link";
+import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 
 const Homepage = () => {
   const router = useRouter();
+  const auth = getAuth();
 
   // Authentication
-  // const auth = getAuth();
   const handleSignOut = (event) => {
     event.preventDefault();
     console.log("Signed Out.");
-  //   signOut(auth);
-  //   router.push("/login");
+    signOut(auth);
+    router.push("/login");
   };
 
   const handleProfile = (event) => {
     event.preventDefault();
-    router.push({
-      pathname: "/profile",
-      query: { userData },
-    });
+    router.push("/profile");
   };
 
   return (

@@ -24,7 +24,7 @@ const containerStyle = {
   boxShadow: "md",
 };
 
-export default function Component({ user }) {
+export default function Component() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -39,21 +39,30 @@ export default function Component({ user }) {
 
   const handleSignup = async (event) => {
     event.preventDefault();
-    const response = await fetch("/api/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      router.push("/login"); // Redirect to index after successful login
-    } else {
-      console.error(data.message);
+    const auth = getAuth();
+    
+    try {
+      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      console.log("p/signup user:", user);
+      router.push("/");
+    } catch(error) {
+      console.error(error);
     }
+  //   const response = await fetch("/api/signup", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ email, password }),
+  //   });
+
+  //   const data = await response.json();
+
+  //   if (response.ok) {
+  //     router.push("/login"); // Redirect to index after successful login
+  //   } else {
+  //     console.error(data.message);
+  //   }
   };
   return (
     <CssVarsProvider>

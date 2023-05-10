@@ -16,24 +16,24 @@ export default function Profile() {
   // need to set variables according to what is needed to be displayed
   const fetchData = async () => {
     try {
-      const response = await fetch("/api/getUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ uid: userData }),
-      });
+      // const response = await fetch("/api/getUser", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({ uid: userData }),
+      // });
 
-      console.log("RESPONSE", response);
+      // console.log("RESPONSE", response);
 
-      const data = await response.json();
+      // const data = await response.json();
 
-      console.log("DATA:", data);
+      // console.log("DATA:", data);
 
-      const useData = data.data;
-      // do something with the data here
-      setUserName(useData.name);
-      // add additional variables being set here depending on what will be displayed
+      // const useData = data.data;
+      // // do something with the data here
+      // setUserName(useData.name);
+      // // add additional variables being set here depending on what will be displayed
     } catch (error) {
       console.error(error);
     }

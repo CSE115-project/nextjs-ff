@@ -86,7 +86,7 @@ export default function MyProfile() {
     setField("bio");
     setContent(bio);
     // console.log("bio:", bio);
-  });
+  }, [bio]);
 
   //set remaining bio characters
   const remainingChar = maxBioChar - bio.length;

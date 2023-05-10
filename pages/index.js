@@ -8,7 +8,8 @@ const inter = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
 });
 
-export default function index({user}) {
+export default function index({ user, router }) {
+
   return (
     <>
       <Head>
@@ -18,70 +19,8 @@ export default function index({user}) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <HomePage user={user}></HomePage>
+        <HomePage />
       </main>
     </>
   );
 }
-
-
-export async function getServerSideProps(context) {
-  const { req, res } = context;
-  const sessionCookie = req.cookies.session || '';
-  
-  try {
-    // Verify the session cookie and get the user's authentication information
-    const decodedClaims = await firebase.auth().verifySessionCookie(sessionCookie);
-    const uid = decodedClaims.uid;
-
-    // Retrieve the user's data from Firestore
-    const userRef = firebase.firestore().collection('users').doc(uid);
-    const userDoc = await userRef.get();
-    const userData = userDoc.data();
-
-    return {
-      props: {
-        user: {
-          uid,
-          ...userData
-        }
-      }
-    };
-  } catch (error) {
-    // User not authenticated, redirect to login page
-    res.setHeader('location', '/login');
-    res.statusCode = 302;
-    res.end();
-    return { props: {} };
-  }
-}
-
-
-
-// This gets called on every request
-// export async function getServerSideProps(context) {
-//   const { req, res } = context;
-//   const sessionCookie = req.cookies.session || "";
-
-//   try {
-//     const decodedClaims = await firebase
-//       .auth()
-//       .verifySessionCookie(sessionCookie);
-//     const uid = decodedClaims.uid;
-
-//     // calls the user table in firestore
-//     const user = await firebase.firestore().collection("users").doc(uid).get();
-
-//     if (user.exists) {
-//       return { props: { user: user.data() } };
-//     }
-
-//   } catch (error) {
-//     // User not authenticated, redirect to login page
-//     res.setHeader("location", "/login");
-//     res.statusCode = 302;
-//     res.end();
-//   }
-
-//   return { props: {} };
-// }

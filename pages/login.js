@@ -9,6 +9,7 @@ import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import firebase from "../firebase";
 import { useRouter } from "next/router";
 
 const containerStyle = {
@@ -39,26 +40,20 @@ export default function Component() {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    const response = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    const auth = getAuth(firebase);
 
-    const data = await response.json();
-
-    console.log("p/login data", data.user);
-
-    // do a document fetch using user.uid
-
-    if (response.ok) {
-      router.push("/"); // Redirect to index after successful login
-    } else {
-      console.error(data.message);
+    try {
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
+      console.log("p/login user:", user);
+      router.push("/");
+    } catch (error) {
+      console.error(error);
     }
   };
+
+  const handleSignUpRedirect = () => {
+    router.push("/signup");
+  }
 
   return (
     <CssVarsProvider>
@@ -101,7 +96,7 @@ export default function Component() {
         <Typography
           fontSize="sm"
           sx={{ alignSelf: "center" }}
-          endDecorator={<Link href="/signup">Sign Up</Link>}
+          endDecorator={<Link onClick={handleSignUpRedirect}>Sign Up</Link>}
         >
           Don&apos;t have an account?
         </Typography>
