@@ -62,6 +62,7 @@ export default function Profile() {
     });
   };
 
+  
   return (
     <div className="userProfile">
       <Sheet>
@@ -70,13 +71,17 @@ export default function Profile() {
             Home
           </Button>
 
-          <Button onClick={handleEditProfile} sx={{ mt: 1 }}>
-            Edit Profile
-          </Button>
-
-          <Typography level="h1" fontSize="xl2">
+          <Typography 
+            level="h1" fontSize="xl2"
+          >
             My profile
           </Typography>
+
+          <Button 
+            onClick={handleEditProfile} sx={{ marginLeft: "auto" }}
+          >
+            Edit Profile
+          </Button>
         </Stack>
 
         <Sheet
@@ -94,7 +99,7 @@ export default function Profile() {
               display: "block",
             }}
           >
-            <Avatar sx={{ height: "64px", width: "64px", margin: "auto" }} />
+            <Avatar sx={{ height: "128px", width: "128px", margin: "auto" }} />
             <Typography
               component="h6"
               sx={{ mt: 1, color: "white" }}
@@ -107,24 +112,35 @@ export default function Profile() {
               sx={{ mt: 1, color: "white" }}
               align="center"
             >
-              {bio}
+              Bio: Describe yourself
             </Typography>
           </Box>
 
           <Box
             sx={{
-              // bgcolor: "black",
+              //bgcolor: "red",
               pt: 3,
-              pb: 25,
+              pb: 3,
               display: "flex",
             }}
           >
             <Typography component="h6" sx={{ color: "black" }}>
               My Folders
             </Typography>
-            <Typography align="right">
-              <Button>+</Button>
-            </Typography>
+            
+            <Button
+              sx={{ marginLeft: "auto" }}
+            >
+              +
+            </Button>
+          </Box>
+          <Box>
+          <Button 
+            style={{maxWidth: '200px', maxHeight: '200px', minWidth: '200px', minHeight: '200px'}}
+            variant="outlined"
+          >
+            Liked Place
+          </Button>
           </Box>
         </Sheet>
       </Sheet>
