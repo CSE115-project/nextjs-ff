@@ -23,8 +23,8 @@ export default function App({ Component, pageProps }) {
     console.log("AuthStateChanged");
 
     return unsubscribe();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
 
-  return <Component {...pageProps} router={router} user={user}/>;
+  return <Component {...pageProps} router={router} user={user} />;
 }

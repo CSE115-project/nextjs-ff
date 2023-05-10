@@ -54,7 +54,7 @@ export default function Component() {
 
   const handleSignUpRedirect = () => {
     router.push("/signup");
-  }
+  };
 
   return (
     <CssVarsProvider>

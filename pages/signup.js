@@ -9,7 +9,9 @@ import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { db } from "../firebase";
 import { useRouter } from "next/router";
+import { collection, addDoc } from "firebase/firestore";
 
 const containerStyle = {
   width: 300,
@@ -42,16 +44,33 @@ export default function Component() {
     const auth = getAuth();
 
     try {
+      // Create Authenticated User: email, password
       const { user } = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
-      console.log("p/signup user:", user);
+      console.log("p/signup user:", user.uid);
+
+      // Add User data to Firestore
+      const userDetails = {
+        name: null, // user's name
+        uid: user.uid,
+        pictureLink: null, // user's picture link
+        bio: null, // user's bio
+        email: user.email, // user's email
+        favoritePlaces: [], // list of favorite places (can be links to the place?)
+        wantToGo: [], // list of want to go places (can be links to the place?)
+        friendsRecc: [], // list of friends favorite places (can be links to the place?)
+      };
+      const docRef = await addDoc(collection(db, "users"), { userDetails });
+
+      console.log("p/signup docRef:", docRef);
+
       router.push("/");
     } catch (error) {
       console.error(error);
-      alert("Email already in use");
+      alert(error);
     }
   };
 
@@ -59,24 +78,6 @@ export default function Component() {
     return router.push("/login");
   };
 
-
-  //   const response = await fetch("/api/signup", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ email, password }),
-  //   });
-
-  //   const data = await response.json();
-
-  //   if (response.ok) {
-  //     router.push("/login"); // Redirect to index after successful login
-  //   } else {
-  //     console.error(data.message);
-  //   }
-  
-  
   return (
     <CssVarsProvider>
       <Sheet sx={containerStyle} variant="outlined">

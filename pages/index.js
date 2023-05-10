@@ -8,8 +8,7 @@ const inter = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
 });
 
-export default function index({ user, router }) {
-
+export default function index() {
   return (
     <>
       <Head>

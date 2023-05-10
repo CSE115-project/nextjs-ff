@@ -9,18 +9,12 @@ export default function Profile() {
 
   const handleHome = (event) => {
     event.preventDefault();
-    router.push({
-      pathname: "/",
-      query: { userData },
-    });
+    router.push("/");
   };
 
   const handleEditProfile = (event) => {
     event.preventDefault();
-    router.push({
-      pathname: "/edit-profile",
-      query: { userData },
-    });
+    router.push("/edit-profile");
   };
 
   return (
