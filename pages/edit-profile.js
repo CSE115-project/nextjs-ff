@@ -61,6 +61,7 @@ export default function MyProfile() {
   const maxEmailChar = 70;
   const maxBioChar = 160;
 
+  //event handlers 
   const handleFirstNameChange = (event) => {
     const inputVal = event.target.value;
     addInputUntiLimit(inputVal, setFirstName, maxFirstNameChar);
@@ -96,7 +97,7 @@ export default function MyProfile() {
     setSelectedFile(file);
   };
 
-  //If someone could help to fix or modify or fix my upload function that will be great : ) 
+  //may need some more changes for upload functionality
   //upload function
   const handleUpload = () => {
     if (selectedFile) {
@@ -123,6 +124,7 @@ export default function MyProfile() {
     
   };
 
+  //save function
   const handleSave = async () => {
     try {
       //waits for editData to complete
@@ -156,11 +158,13 @@ export default function MyProfile() {
 
   return (
     <Sheet>
+      {/* home button */}
       <Stack direction="row" alignItems="center" spacing={0}>
         <Button onClick={handleHome} sx={{ mt: 1 }}>
           Home
         </Button>
 
+        {/* profile button */}
         <Button onClick={handleProfile} sx={{ mt: 1 }}>
           Profile
         </Button>
@@ -251,7 +255,7 @@ export default function MyProfile() {
           >
             <Avatar
               size="lg"
-              src="/images/default_image.png"
+              src="/images/default_image.png" //default image 
               sx={{ "--Avatar-size": "64px" }}
             />
             <Box sx={{ marginTop: 3 }}>
@@ -310,6 +314,7 @@ export default function MyProfile() {
   );
 }
 
+//word limit function
 function addInputUntiLimit(inputVal, updateField, limit) {
   if (inputVal.length <= limit) {
     updateField(inputVal);
