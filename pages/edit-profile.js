@@ -97,7 +97,7 @@ export default function MyProfile() {
     setSelectedFile(file);
   };
 
-  //may need some more changes for upload functionality
+  //might need some more changes for upload functionality
   //upload function
   const handleUpload = () => {
     if (selectedFile) {
