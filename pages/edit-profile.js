@@ -98,11 +98,45 @@ export default function MyProfile() {
     setSelectedFile(file);
   };
 
+  //If someone could help to fix or modify or fix my upload function that will be great : ) 
   //upload function
   const handleUpload = () => {
     if (selectedFile) {
-      // Perform the upload logic here
-      console.log("Uploading file:", selectedFile);
+
+      //create form object
+      const dataForm = new FormData();
+
+      // Append the selected file to the FormData object
+      dataForm.append("file", selectedFile);
+
+      // Send the FormData object to the server
+      fetch("/api/upload", {
+        method: "POST",
+        body: dataForm,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Upload response:", data);
+        })
+        .catch((error) => {
+          console.error("Error uploading file:", error);
+        });
+    }
+    
+  };
+
+  const handleSave = async () => {
+    try {
+      
+      await editData();
+
+      // Redirects to the profile page after saving
+      router.push({
+        pathname: "/profile",
+        query: { userData },
+      });
+    } catch (error) {
+      console.error("Error saving data:", error);
     }
   };
 
@@ -269,7 +303,7 @@ export default function MyProfile() {
             </Button>
 
             {/* TODO: Add save functionality */}
-            <Button size="sm" onClick={editData}>
+            <Button size="sm" onClick={handleSave}>
               Save
             </Button>
           </Box>
