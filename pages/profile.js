@@ -29,6 +29,7 @@ export default function Profile({user}) {
     <div className="userProfile">
       <Sheet>
         <Stack direction="row" alignItems="center" spacing={0}>
+          {/* Home Button */}
           <Button onClick={handleHome} sx={{ mt: 1 }}>
             Home
           </Button>
@@ -39,6 +40,8 @@ export default function Profile({user}) {
             My profile
           </Typography>
 
+
+          {/* Edit Profile Button */}
           <Button 
             onClick={handleEditProfile} sx={{ marginLeft: "auto" }}
           >
@@ -62,6 +65,8 @@ export default function Profile({user}) {
             }}
           >
             <Avatar sx={{ height: "128px", width: "128px", margin: "auto" }} />
+            
+            {/* Name of User */}
             <Typography
               component="h6"
               sx={{ mt: 1, color: "white" }}
@@ -69,6 +74,8 @@ export default function Profile({user}) {
             >
               Test User
             </Typography>
+            
+            {/* User's bio */}
             <Typography
               className="bio"
               sx={{ mt: 1, color: "white" }}
@@ -90,12 +97,15 @@ export default function Profile({user}) {
               My Folders
             </Typography>
             
+            {/* Button to add new list */}
             <Button
               sx={{ marginLeft: "auto" }}
             >
               +
             </Button>
           </Box>
+        
+          {/* Liked Place (need to route to list of places) */}
           <Box>
           <Button 
             style={{maxWidth: '200px', maxHeight: '200px', minWidth: '200px', minHeight: '200px'}}
