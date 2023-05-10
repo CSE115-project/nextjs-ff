@@ -1,11 +1,12 @@
 import "@/styles/globals.css";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+import { firebase } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
-  const auth = getAuth();
+  const auth = getAuth(firebase);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
