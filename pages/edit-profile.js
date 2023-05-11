@@ -13,12 +13,7 @@ import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import Link from "next/link";
 import { useRouter } from "next/router";
-
-function addInputUntiLimit(inputVal, setField, limit) {
-  if (inputVal.length <= limit) {
-    setField(inputVal);
-  }
-}
+import { useEffect } from "react";
 
 export default function MyProfile() {
   const router = useRouter();
@@ -50,17 +45,16 @@ export default function MyProfile() {
       console.error(error);
     }
   };
-
+  
   //cancel function
-  //TODO: change default values from Firestore
   const handleCancel = () => {
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setBio("");
-    setSelectedFile(null);
-    // close the sheet component
+    // Redirects to the profile page after cancelling
+    router.push({
+      pathname: "/profile",
+      query: { userData },
+    });
   };
+
   //set max characters
   const maxFirstNameChar = 50;
   const maxLastNameChar = 50;
@@ -85,10 +79,14 @@ export default function MyProfile() {
   const handleBioChange = (event) => {
     const inputVal = event.target.value;
     addInputUntiLimit(inputVal, setBio, maxBioChar);
+  };
+
+  //updates the bio content every time the page gets updated
+  useEffect(() => {
     setField("bio");
     setContent(bio);
-    // console.log("bio is:", bio);
-  };
+    // console.log("bio:", bio);
+  });
 
   //set remaining bio characters
   const remainingChar = maxBioChar - bio.length;
@@ -98,11 +96,10 @@ export default function MyProfile() {
     setSelectedFile(file);
   };
 
-  //If someone could help to fix or modify or fix my upload function that will be great : ) 
+  //If someone could help to fix or modify my upload function that will be great : )
   //upload function
   const handleUpload = () => {
     if (selectedFile) {
-
       //create form object
       const dataForm = new FormData();
 
@@ -122,12 +119,11 @@ export default function MyProfile() {
           console.error("Error uploading file:", error);
         });
     }
-    
   };
 
   const handleSave = async () => {
     try {
-      
+      //waits for editData to complete
       await editData();
 
       // Redirects to the profile page after saving
@@ -168,7 +164,7 @@ export default function MyProfile() {
         </Button>
 
         <Typography level="h1" fontSize="xl2" sx={{ ml: 5 }}>
-          My profile
+          Edit profile
         </Typography>
       </Stack>
       <Sheet
@@ -292,7 +288,6 @@ export default function MyProfile() {
               gap: 1,
             }}
           >
-            {/* TODO: Add cancel functionality for files*/}
             <Button
               variant="outlined"
               color="neutral"
@@ -302,7 +297,6 @@ export default function MyProfile() {
               Cancel
             </Button>
 
-            {/* TODO: Add save functionality */}
             <Button size="sm" onClick={handleSave}>
               Save
             </Button>
@@ -311,4 +305,10 @@ export default function MyProfile() {
       </Sheet>
     </Sheet>
   );
+}
+
+function addInputUntiLimit(inputVal, updateField, limit) {
+  if (inputVal.length <= limit) {
+    updateField(inputVal);
+  }
 }
