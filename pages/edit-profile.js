@@ -15,29 +15,79 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-export default function MyProfile() {
+export default function MyProfile({ user }) {
   const router = useRouter();
-  // userData is a string that contains the UID
-  const { userData } = router.query;
 
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [bio, setBio] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState(null);
-  const [field, setField] = React.useState("");
-  const [content, setContent] = React.useState("");
 
-  // function to edit the database, this function can even serve as to adding
-  // to the database; althought I'm not 100% sure on if it'll work for adding lists
-  const editData = async () => {
+  console.log("/p UID:", user.uid);
+
+  // functions to edit the database fields
+
+  // first name
+  const editFirstName = async () => {
     try {
       const response = await fetch("/api/editUser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ uid: userData, field, content }),
+        body: JSON.stringify({ uid: user.uid, field: "firstName", content: firstName }),
+      });
+
+      console.log("RESPONSE", response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // last name
+  const editLastName = async () => {
+    try {
+      const response = await fetch("/api/editUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ uid: user.uid, field: "lastName", content: lastName }),
+      });
+
+      console.log("RESPONSE", response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // email
+  const editEmail = async () => {
+    try {
+      const response = await fetch("/api/editUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ uid: user.uid, field: "email", content: email }),
+      });
+
+      console.log("RESPONSE", response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // bio
+  const editBio = async () => {
+    try {
+      const response = await fetch("/api/editUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ uid: user.uid, field: "bio", content: bio }),
       });
 
       console.log("RESPONSE", response);
@@ -51,7 +101,6 @@ export default function MyProfile() {
     // Redirects to the profile page after cancelling
     router.push({
       pathname: "/profile",
-      query: { userData },
     });
   };
 
@@ -84,9 +133,22 @@ export default function MyProfile() {
 
   //updates the bio content every time the page gets updated
   useEffect(() => {
-    setField("bio");
-    setContent(bio);
-    // console.log("bio:", bio);
+    console.log("/p firstName:", firstName);
+  }, [firstName]);
+
+  //updates the bio content every time the page gets updated
+  useEffect(() => {
+    console.log("/p lastName:", lastName);
+  }, [lastName]);
+
+  //updates the bio content every time the page gets updated
+  useEffect(() => {
+    console.log("/p email:", email);
+  }, [email]);
+
+  //updates the bio content every time the page gets updated
+  useEffect(() => {
+    console.log("/p bio:", bio);
   }, [bio]);
 
   //set remaining bio characters
@@ -128,12 +190,14 @@ export default function MyProfile() {
   const handleSave = async () => {
     try {
       //waits for editData to complete
-      await editData();
+      await editFirstName();
+      await editLastName();
+      await editEmail();
+      await editBio();
 
       // Redirects to the profile page after saving
       router.push({
         pathname: "/profile",
-        query: { userData },
       });
     } catch (error) {
       console.error("Error saving data:", error);
@@ -144,7 +208,6 @@ export default function MyProfile() {
     event.preventDefault();
     router.push({
       pathname: "/",
-      query: { userData },
     });
   };
 
@@ -152,7 +215,6 @@ export default function MyProfile() {
     event.preventDefault();
     router.push({
       pathname: "/profile",
-      query: { userData },
     });
   };
 
