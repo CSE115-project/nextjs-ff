@@ -47,6 +47,9 @@ export default function Profile({ user }) {
   };
   fetchData();
 
+  // console.log("name:", name);
+  // console.log("bio:", bio);
+
   const handleHome = (event) => {
     event.preventDefault();
     router.push("/");
