@@ -11,7 +11,7 @@ import Link from "@mui/joy/Link";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { db } from "../firebase";
 import { useRouter } from "next/router";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 const containerStyle = {
   width: 300,
@@ -54,7 +54,8 @@ export default function Component() {
 
       // Add User data to Firestore
       const userDetails = {
-        name: null, // user's name
+        firstName: null, // user's first name
+        lastName: null, // user's last name
         uid: user.uid,
         pictureLink: null, // user's picture link
         bio: null, // user's bio
@@ -63,9 +64,7 @@ export default function Component() {
         wantToGo: [], // list of want to go places (can be links to the place?)
         friendsRecc: [], // list of friends favorite places (can be links to the place?)
       };
-      const docRef = await addDoc(collection(db, "users"), { userDetails });
-
-      console.log("p/signup docRef:", docRef);
+      await setDoc(doc(db, "users", user.uid), { userDetails });
 
       router.push("/");
     } catch (error) {
