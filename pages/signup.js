@@ -52,8 +52,7 @@ export default function Component() {
       );
       console.log("p/signup user:", user.uid);
 
-      // Add User data to Firestore
-      const userDetails = {
+      await setDoc(doc(db, "users", user.uid), { 
         firstName: null, // user's first name
         lastName: null, // user's last name
         uid: user.uid,
@@ -63,8 +62,7 @@ export default function Component() {
         favoritePlaces: [], // list of favorite places (can be links to the place?)
         wantToGo: [], // list of want to go places (can be links to the place?)
         friendsRecc: [], // list of friends favorite places (can be links to the place?)
-      };
-      await setDoc(doc(db, "users", user.uid), { userDetails });
+        });
 
       router.push("/");
     } catch (error) {

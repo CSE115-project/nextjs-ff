@@ -13,7 +13,8 @@ export default function Profile({ user }) {
   const router = useRouter();
   
   // initialize all fields and their according set methods
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [bio, setBio] = useState("");
   const [pictureLink, setPictureLink] = useState("");
   
@@ -37,7 +38,8 @@ export default function Profile({ user }) {
       const useData = data.data;
       
       // do something with the data here
-      setName(useData.name);
+      setFirstName(useData.firstName);
+      setLastName(useData.lastName);
       setBio(useData.bio);
       setPictureLink(useData.pictureLink);
 
@@ -103,7 +105,7 @@ export default function Profile({ user }) {
               sx={{ mt: 1, color: "white" }}
               align="center"
             >
-              {name}
+              { firstName.concat(" ").concat(lastName) }
             </Typography>
 
             {/* User's bio */}
@@ -112,7 +114,7 @@ export default function Profile({ user }) {
               sx={{ mt: 1, color: "white" }}
               align="center"
             >
-              {bio}
+              { bio }
             </Typography>
           </Box>
 

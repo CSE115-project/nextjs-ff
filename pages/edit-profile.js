@@ -24,8 +24,6 @@ export default function MyProfile({ user }) {
   const [bio, setBio] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState(null);
 
-  console.log("/p UID:", user.uid);
-
   // functions to edit the database fields
 
   // first name
