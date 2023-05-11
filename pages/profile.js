@@ -15,6 +15,7 @@ export default function Profile({ user }) {
   // initialize all fields and their according set methods
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
+  const [pictureLink, setPictureLink] = useState("");
   
   // function to retrieve the user's data from the database
   const fetchData = async () => {
@@ -34,9 +35,12 @@ export default function Profile({ user }) {
       //   console.log("DATA:", data);
 
       const useData = data.data;
+      
       // do something with the data here
       setName(useData.name);
       setBio(useData.bio);
+      setPictureLink(useData.pictureLink);
+
     } catch (error) {
       console.error(error);
     }
@@ -87,7 +91,8 @@ export default function Profile({ user }) {
               display: "block",
             }}
           >
-            <Avatar sx={{ height: "128px", width: "128px", margin: "auto" }} />
+            {/* need to test with real avatar */}
+            <Avatar sx={{ height: "128px", width: "128px", margin: "auto" }} src="${pictureLink}" />
 
             {/* Name of User */}
             <Typography
@@ -104,7 +109,7 @@ export default function Profile({ user }) {
               sx={{ mt: 1, color: "white" }}
               align="center"
             >
-              Bio: Describe yourself
+              {bio}
             </Typography>
           </Box>
 
