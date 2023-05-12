@@ -1,298 +1,187 @@
-import * as React from "react";
-import Avatar from "@mui/joy/Avatar";
-import Box from "@mui/joy/Box";
-import Button from "@mui/joy/Button";
-import Divider from "@mui/joy/Divider";
-import FormControl from "@mui/joy/FormControl";
-import FormLabel from "@mui/joy/FormLabel";
-import FormHelperText from "@mui/joy/FormHelperText";
-import Input from "@mui/joy/Input";
-import Textarea from "@mui/joy/Textarea";
-import Sheet from "@mui/joy/Sheet";
-import Stack from "@mui/joy/Stack";
-import Typography from "@mui/joy/Typography";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import * as React from 'react';
+import Avatar from '@mui/joy/Avatar';
+import Box from '@mui/joy/Box';
+import Button from '@mui/joy/Button';
+import Chip, { chipClasses } from '@mui/joy/Chip';
+import Divider from '@mui/joy/Divider';
+import FormControl from '@mui/joy/FormControl';
+import FormLabel from '@mui/joy/FormLabel';
+import FormHelperText from '@mui/joy/FormHelperText';
+import Input from '@mui/joy/Input';
+import Textarea from '@mui/joy/Textarea';
+import Stack from '@mui/joy/Stack';
+import Sheet from '@mui/joy/Sheet';
+import Select from '@mui/joy/Select';
+import Option from '@mui/joy/Option';
+import Typography from '@mui/joy/Typography';
+import Tabs from '@mui/joy/Tabs';
+import TabList from '@mui/joy/TabList';
+import Tab, { tabClasses } from '@mui/joy/Tab';
+import DropZone from '../components/DropZone';
+import FileUpload from '../components/FileUpload';
+import CountrySelector from '../components/CountrySelector';
+import EditorToolbar from '../components/EditorToolbar';
 
-export default function MyProfile({ user }) {
-  const router = useRouter();
-
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [bio, setBio] = React.useState("");
-  const [selectedFile, setSelectedFile] = React.useState(null);
-
-  // functions to edit the database fields
-
-  // first name
-  const editFirstName = async () => {
-    try {
-      const response = await fetch("/api/editUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ uid: user.uid, field: "firstName", content: firstName }),
-      });
-
-      console.log("RESPONSE", response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  // last name
-  const editLastName = async () => {
-    try {
-      const response = await fetch("/api/editUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ uid: user.uid, field: "lastName", content: lastName }),
-      });
-
-      console.log("RESPONSE", response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  // email
-  const editEmail = async () => {
-    try {
-      const response = await fetch("/api/editUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ uid: user.uid, field: "email", content: email }),
-      });
-
-      console.log("RESPONSE", response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  // bio
-  const editBio = async () => {
-    try {
-      const response = await fetch("/api/editUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ uid: user.uid, field: "bio", content: bio }),
-      });
-
-      console.log("RESPONSE", response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  
-  //cancel function
-  const handleCancel = () => {
-    // Redirects to the profile page after cancelling
-    router.push({
-      pathname: "/profile",
-    });
-  };
-
-  //set max characters
-  const maxFirstNameChar = 50;
-  const maxLastNameChar = 50;
-  const maxEmailChar = 70;
-  const maxBioChar = 160;
-
-  //event handlers 
-  const handleFirstNameChange = (event) => {
-    const inputVal = event.target.value;
-    addInputUntiLimit(inputVal, setFirstName, maxFirstNameChar);
-  };
-
-  const handleLastNameChange = (event) => {
-    const inputVal = event.target.value;
-    addInputUntiLimit(inputVal, setLastName, maxLastNameChar);
-  };
-
-  const handleEmailChange = (event) => {
-    const inputVal = event.target.value;
-    addInputUntiLimit(inputVal, setEmail, maxEmailChar);
-  };
-
-  const handleBioChange = (event) => {
-    const inputVal = event.target.value;
-    addInputUntiLimit(inputVal, setBio, maxBioChar);
-  };
-
-  //updates the bio content every time the page gets updated
-  useEffect(() => {
-    console.log("/p firstName:", firstName);
-  }, [firstName]);
-
-  //updates the bio content every time the page gets updated
-  useEffect(() => {
-    console.log("/p lastName:", lastName);
-  }, [lastName]);
-
-  //updates the bio content every time the page gets updated
-  useEffect(() => {
-    console.log("/p email:", email);
-  }, [email]);
-
-  //updates the bio content every time the page gets updated
-  useEffect(() => {
-    console.log("/p bio:", bio);
-  }, [bio]);
-
-  //set remaining bio characters
-  const remainingChar = maxBioChar - bio.length;
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
-  };
-
-  //might need some more changes for upload functionality
-  //upload function
-  const handleUpload = () => {
-    if (selectedFile) {
-
-      //create form object
-      const dataForm = new FormData();
-
-      // Append the selected file to the FormData object
-      dataForm.append("file", selectedFile);
-
-      // Send the FormData object to the server
-      fetch("/api/upload", {
-        method: "POST",
-        body: dataForm,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Upload response:", data);
-        })
-        .catch((error) => {
-          console.error("Error uploading file:", error);
-        });
-    }
-    
-  };
-
-  //save function
-  const handleSave = async () => {
-    try {
-      //waits for editData to complete
-      await editFirstName();
-      await editLastName();
-      await editEmail();
-      await editBio();
-
-      // Redirects to the profile page after saving
-      router.push({
-        pathname: "/profile",
-      });
-    } catch (error) {
-      console.error("Error saving data:", error);
-    }
-  };
-
-  const handleHome = (event) => {
-    event.preventDefault();
-    router.push({
-      pathname: "/",
-    });
-  };
-
-  const handleProfile = (event) => {
-    event.preventDefault();
-    router.push({
-      pathname: "/profile",
-    });
-  };
-
+export default function MyProfile() {
   return (
-    <Sheet>
-      {/* home button */}
-      <Stack direction="row" alignItems="center" spacing={0}>
-        <Button onClick={handleHome} sx={{ mt: 1 }}>
-          Home
-        </Button>
-
-        {/* profile button */}
-        <Button onClick={handleProfile} sx={{ mt: 1 }}>
-          Profile
-        </Button>
-
-        <Typography level="h1" fontSize="xl2" sx={{ ml: 5 }}>
-          Edit profile
-        </Typography>
-      </Stack>
-      <Sheet
+    <Sheet
+      sx={{
+        bgcolor: 'background.body',
+        flex: 1,
+        maxWidth: 1200,
+        width: '100%',
+        mx: 'auto',
+      }}
+    >
+      <Typography level="h1" fontSize="xl2" sx={{ mb: 1 }}>
+        My profile
+      </Typography>
+      <Tabs
+        defaultValue={0}
         sx={{
-          maxWidth: "75%",
-          width: "100%",
-          mx: "auto",
+          bgcolor: 'background.body',
+          '--Tab-height': '48px',
         }}
       >
-        <Divider sx={{ paddingBottom: 0.5, bgcolor: "gray" }} />
-
+        <Box
+          sx={{
+            '--_shadow-height': '16px',
+            height: 0,
+            position: 'sticky',
+            top: 'calc(var(--Tab-height) - var(--main-paddingTop, 0px) + var(--Header-height, 0px) - (var(--_shadow-height) / 2))',
+            zIndex: 1,
+            '&::before': {
+              content: '""',
+              display: 'block',
+              position: 'relative',
+              zIndex: 1,
+              height: 'var(--_shadow-height)',
+              background:
+                'radial-gradient(closest-side, rgba(0 0 0 / 0.12), transparent 100%)',
+            },
+          }}
+        />
+        <TabList
+          variant="plain"
+          size="sm"
+          sx={(theme) => ({
+            '--List-padding': '0px',
+            '--ListItem-minHeight': 'var(--Tab-height)',
+            '--Chip-minHeight': '20px',
+            '--_TabList-bg': theme.vars.palette.background.body,
+            backgroundColor: 'var(--_TabList-bg)',
+            boxShadow: `inset 0 -1px 0 0 ${theme.vars.palette.divider}`,
+            position: 'sticky',
+            top: 'calc(-1 * (var(--main-paddingTop, 0px) - var(--Header-height, 0px)))',
+            zIndex: 10,
+            width: '100%',
+            overflow: 'auto hidden',
+            alignSelf: 'flex-start',
+            borderRadius: 0,
+            scrollSnapType: 'inline',
+            '&::after': {
+              pointerEvents: 'none',
+              display: { xs: 'block', sm: 'none' },
+              content: '""',
+              position: 'sticky',
+              top: 0,
+              width: 40,
+              flex: 'none',
+              zIndex: 1,
+              right: 0,
+              borderBottom: '1px solid transparent',
+              background: `linear-gradient(to left, var(--_TabList-bg), rgb(0 0 0 / 0))`,
+              backgroundClip: 'content-box',
+            },
+            '&::-webkit-scrollbar': {
+              width: 0,
+              display: 'none',
+            },
+            [`& .${tabClasses.root}`]: {
+              '&:first-of-type': {
+                ml: 'calc(-1 * var(--ListItem-paddingX))',
+              },
+              scrollSnapAlign: 'start',
+              bgcolor: 'transparent',
+              boxShadow: 'none',
+              flex: 'none',
+              '&:hover': {
+                bgcolor: 'transparent',
+              },
+              [`&.${tabClasses.selected}`]: {
+                color: 'primary.plainColor',
+                '&:before': {
+                  content: '""',
+                  display: 'block',
+                  position: 'absolute',
+                  zIndex: 1,
+                  bottom: 0,
+                  left: 'var(--ListItem-paddingLeft)',
+                  right: 'var(--ListItem-paddingRight)',
+                  height: '2px',
+                  bgcolor: 'primary.500',
+                },
+                [`& .${chipClasses.root}`]: theme.variants.solid.primary,
+              },
+            },
+          })}
+        >
+          <Tab value={0}>Account settings</Tab>
+          <Tab value={1}>
+            Team{' '}
+            <Chip size="sm" variant="soft" color="neutral" sx={{ ml: 1 }}>
+              2
+            </Chip>
+          </Tab>
+          <Tab value={2}>Plan</Tab>
+          <Tab value={3}>
+            Billing{' '}
+            <Chip size="sm" variant="soft" color="neutral" sx={{ ml: 1 }}>
+              4
+            </Chip>
+          </Tab>
+          <Tab value={4}>Notifications</Tab>
+          <Tab value={5}>Integrations</Tab>
+          <Tab value={6}>API</Tab>
+        </TabList>
         <Box
           sx={{
             pt: 3,
             pb: 10,
-            display: "grid",
+            display: 'grid',
             gridTemplateColumns: {
-              xs: "100%",
-              sm: "minmax(120px, 30%) 1fr",
-              lg: "280px 1fr minmax(120px, 208px)",
+              xs: '100%',
+              sm: 'minmax(120px, 30%) 1fr',
+              lg: '280px 1fr minmax(120px, 208px)',
             },
             columnGap: { xs: 2, sm: 3, md: 4 },
             rowGap: { xs: 2, sm: 2.5 },
-            "& > hr": {
-              gridColumn: "1/-1",
+            '& > hr': {
+              gridColumn: '1/-1',
             },
           }}
         >
-          <FormLabel sx={{ display: { xs: "none", sm: "block" } }}>
-            Name
-          </FormLabel>
-
-          <Box sx={{ display: { xs: "contents", sm: "flex" }, gap: 2 }}>
+          <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Name</FormLabel>
+          <Box sx={{ display: { xs: 'contents', sm: 'flex' }, gap: 2 }}>
             <FormControl sx={{ flex: 1 }}>
-              <FormLabel sx={{ display: { sm: "none" } }}>First name</FormLabel>
-              <Input
-                value={firstName}
-                onChange={handleFirstNameChange}
-                placeholder="First Name"
-              />
+              <FormLabel sx={{ display: { sm: 'none' } }}>First name</FormLabel>
+              <Input placeholder="first name" defaultValue="Siriwat" />
             </FormControl>
-
             <FormControl sx={{ flex: 1 }}>
-              <FormLabel sx={{ display: { sm: "none" } }}>Last name</FormLabel>
-              <Input
-                value={lastName}
-                onChange={handleLastNameChange}
-                placeholder="Last Name"
-              />
+              <FormLabel sx={{ display: { sm: 'none' } }}>Last name</FormLabel>
+              <Input placeholder="last name" defaultValue="K." />
             </FormControl>
           </Box>
 
           <Divider role="presentation" />
 
-          <FormControl sx={{ display: { sm: "contents" } }}>
+          <FormControl sx={{ display: { sm: 'contents' } }}>
             <FormLabel>Email</FormLabel>
             <Input
-              value={email}
-              onChange={handleEmailChange}
               type="email"
               startDecorator={<i data-feather="mail" />}
-              placeholder="user@mail.com"
+              placeholder="email"
+              defaultValue="siriwatk@test.com"
             />
           </FormControl>
 
@@ -300,29 +189,54 @@ export default function MyProfile({ user }) {
 
           <Box>
             <FormLabel>Your photo</FormLabel>
-            <FormHelperText>
-              This will be displayed on your profile.
-            </FormHelperText>
+            <FormHelperText>This will be displayed on your profile.</FormHelperText>
           </Box>
-
           <Box
             sx={{
-              display: "flex",
-              alignItems: "flex-start",
-              flexWrap: "wrap",
+              display: 'flex',
+              alignItems: 'flex-start',
+              flexWrap: 'wrap',
               gap: 2.5,
             }}
           >
             <Avatar
               size="lg"
-              src="/images/default_image.png" //default image 
-              sx={{ "--Avatar-size": "64px" }}
+              src=""
+              sx={{ '--Avatar-size': '64px' }}
             />
-            <Box sx={{ marginTop: 3 }}>
-              <input type="file" accept="image/*" onChange={handleFileChange} />
-              <Button onClick={handleUpload}>Upload</Button>
-            </Box>
+            <DropZone />
           </Box>
+
+          <Divider role="presentation" />
+
+          <FormControl sx={{ display: { sm: 'contents' } }}>
+            <FormLabel>Role</FormLabel>
+            <Input defaultValue="UI Developer" />
+          </FormControl>
+
+          <Divider role="presentation" />
+
+          <CountrySelector />
+
+          <Divider role="presentation" />
+
+          <FormControl sx={{ display: { sm: 'contents' } }}>
+            <FormLabel>Timezone</FormLabel>
+            <Select startDecorator={<i data-feather="clock" />} defaultValue="1">
+              <Option value="1">
+                Indochina Time (Bangkok){' '}
+                <Typography textColor="text.tertiary" ml={0.5}>
+                  — GMT+07:00
+                </Typography>
+              </Option>
+              <Option value="2">
+                Indochina Time (Ho Chi Minh City){' '}
+                <Typography textColor="text.tertiary" ml={0.5}>
+                  — GMT+07:00
+                </Typography>
+              </Option>
+            </Select>
+          </FormControl>
 
           <Divider role="presentation" />
 
@@ -330,53 +244,65 @@ export default function MyProfile({ user }) {
             <FormLabel>Bio</FormLabel>
             <FormHelperText>Write a short introduction.</FormHelperText>
           </Box>
-
           <Box>
+            <EditorToolbar />
             <Textarea
               minRows={4}
-              value={bio}
-              onChange={handleBioChange}
-              maxLength={maxBioChar}
               sx={{ mt: 1.5 }}
+              defaultValue="I'm a software developer based in Bangkok, Thailand. My goal is to solve UI problems with neat CSS without using too much JavaScript."
             />
-            <FormHelperText sx={{ mt: 0.75, fontSize: "xs" }}>
-              {remainingChar} characters left
+            <FormHelperText sx={{ mt: 0.75, fontSize: 'xs' }}>
+              275 characters left
             </FormHelperText>
           </Box>
 
           <Divider role="presentation" />
 
+          <Box>
+            <FormLabel>Portfolio projects</FormLabel>
+            <FormHelperText>Share a few snippets of your work.</FormHelperText>
+          </Box>
+          <Stack useFlexGap spacing={1.5}>
+            <DropZone />
+
+            <FileUpload
+              fileName="Tech design requirements.pdf"
+              fileSize="200 KB"
+              progress={100}
+            />
+
+            <FileUpload
+              icon={<i data-feather="film" />}
+              fileName="Dashboard prototype recording.mp4"
+              fileSize="16 MB"
+              progress={40}
+            />
+
+            <FileUpload
+              icon={<i data-feather="upload-cloud" />}
+              fileName="Dashboard prototype FINAL.fig"
+              fileSize="4.2 MB"
+              progress={80}
+            />
+          </Stack>
+
+          <Divider role="presentation" />
+
           <Box
             sx={{
-              gridColumn: "1/-1",
-              justifySelf: "flex-end",
-              display: "flex",
+              gridColumn: '1/-1',
+              justifySelf: 'flex-end',
+              display: 'flex',
               gap: 1,
             }}
           >
-            <Button
-              variant="outlined"
-              color="neutral"
-              size="sm"
-              onClick={handleCancel}
-            >
+            <Button variant="outlined" color="neutral" size="sm">
               Cancel
             </Button>
-
-            {/* TODO: Add save functionality */}
-            <Button size="sm" onClick={handleSave}>
-              Save
-            </Button>
+            <Button size="sm">Save</Button>
           </Box>
         </Box>
-      </Sheet>
+      </Tabs>
     </Sheet>
   );
-}
-
-//word limit function
-function addInputUntiLimit(inputVal, updateField, limit) {
-  if (inputVal.length <= limit) {
-    updateField(inputVal);
-  }
 }
