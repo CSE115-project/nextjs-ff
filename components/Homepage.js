@@ -4,7 +4,7 @@ import Map from "./Map";
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 
-const Homepage = () => {
+const Homepage = ({user}) => {
   const router = useRouter();
   const auth = getAuth();
 
@@ -18,7 +18,10 @@ const Homepage = () => {
 
   const handleProfile = (event) => {
     event.preventDefault();
-    router.push("/profile");
+    router.push({
+      pathname: '/profile',
+      query: { user: JSON.stringify(user) },
+    });
   };
 
   return (

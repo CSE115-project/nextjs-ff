@@ -56,9 +56,9 @@ export default function Component() {
       const userObj = {
         uid: user.uid,
         email: user.email, // user's email
-        displayName: user.displayName,
-        image: "", // user's picture link
-        bio: "", // user's bio
+        displayName: user.displayName || "" ,
+        image: user.photoURL || "", // user's picture link
+        bio: `Hey, I'm new here!`, // user's bio
         favorites: [], // list of favorite places (places id)
         wantToGo: [], // list of want to go places (places id)
         friends: [], // list of friends (favorite places can be linked by friend id)
