@@ -16,7 +16,7 @@ export default function Profile({ user }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [bio, setBio] = useState("");
-  const [pictureLink, setPictureLink] = useState("");
+  // const [pictureLink, setPictureLink] = useState("");
   
   // function to retrieve the user's data from the database
   const fetchData = async () => {
@@ -28,20 +28,16 @@ export default function Profile({ user }) {
         },
         body: JSON.stringify({ uid: user.uid }),
       });
+      const {data} = await response.json();
+      console.log("profile data:", data);
+      const useData = data;
 
-      //   console.log("RESPONSE", response);
-
-      const data = await response.json();
-
-      //   console.log("DATA:", data);
-
-      const useData = data.data;
       
       // do something with the data here
-      setFirstName(useData.firstName);
-      setLastName(useData.lastName);
-      setBio(useData.bio);
-      setPictureLink(useData.pictureLink);
+      // setFirstName(useData.firstName);
+      // setLastName(useData.lastName);
+      // setBio(useData.bio);
+      // setPictureLink(useData.pictureLink);
 
     } catch (error) {
       console.error(error);
@@ -97,7 +93,7 @@ export default function Profile({ user }) {
             }}
           >
             {/* need to test with real avatar */}
-            <Avatar sx={{ height: "128px", width: "128px", margin: "auto" }} src="${pictureLink}" />
+            <Avatar sx={{ height: "128px", width: "128px", margin: "auto" }} src="" />
 
             {/* Name of User */}
             <Typography

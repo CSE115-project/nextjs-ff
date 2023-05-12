@@ -50,20 +50,21 @@ export default function Component() {
         email,
         password
       );
-      console.log("p/signup user:", user.uid);
+      console.log("p/signup user:", user.uid, user);
 
-      // Create User object in DB 'users' table
+      // Create User object
       const userObj = {
-        firstName: null, // user's first name
-        lastName: null, // user's last name
         uid: user.uid,
-        pictureLink: null, // user's picture link
-        bio: null, // user's bio
         email: user.email, // user's email
-        favoritePlaces: [], // list of favorite places (can be links to the place?)
-        wantToGo: [], // list of want to go places (can be links to the place?)
-        friendsRecc: [], // list of friends favorite places (can be links to the place?)
+        displayName: user.displayName,
+        image: "", // user's picture link
+        bio: "", // user's bio
+        favorites: [], // list of favorite places (places id)
+        wantToGo: [], // list of want to go places (places id)
+        friends: [], // list of friends (favorite places can be linked by friend id)
       };
+
+      // Add userObj in DB 'users' table
       await setDoc(doc(db, "users", user.uid), userObj);
 
       router.push("/");
