@@ -52,7 +52,8 @@ export default function Component() {
       );
       console.log("p/signup user:", user.uid);
 
-      await setDoc(doc(db, "users", user.uid), { 
+      // Create User object in DB 'users' table
+      const userObj = {
         firstName: null, // user's first name
         lastName: null, // user's last name
         uid: user.uid,
@@ -62,7 +63,8 @@ export default function Component() {
         favoritePlaces: [], // list of favorite places (can be links to the place?)
         wantToGo: [], // list of want to go places (can be links to the place?)
         friendsRecc: [], // list of friends favorite places (can be links to the place?)
-        });
+      };
+      await setDoc(doc(db, "users", user.uid), userObj);
 
       router.push("/");
     } catch (error) {
@@ -124,6 +126,7 @@ export default function Component() {
   );
 }
 
+{/* Dark/Light mode for Login component */}
 function ModeToggle() {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);

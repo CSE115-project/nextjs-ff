@@ -9,8 +9,10 @@ export default function App({ Component, pageProps }) {
   const auth = getAuth(firebase);
   const [user, setUser] = useState(null);
 
+  // Check if user is logged in the browser
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (authUser) => {
+      // if (user) => '/', else => '/login'
       if (authUser) {
         setUser(authUser);
         router.push("/");

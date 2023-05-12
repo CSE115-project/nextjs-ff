@@ -30,6 +30,7 @@ export default function Component() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
+  // Handle Field changes as user types
   const onChangeHandlerEmail = (e) => {
     setEmail(e.target.value);
   };
@@ -38,6 +39,7 @@ export default function Component() {
     setPassword(e.target.value);
   };
 
+  // login user
   const handleLogin = async (event) => {
     event.preventDefault();
     const auth = getAuth(firebase);
@@ -52,9 +54,11 @@ export default function Component() {
     }
   };
 
+  // redirect to '/signup'
   const handleSignUpRedirect = () => {
     router.push("/signup");
   };
+
 
   return (
     <CssVarsProvider>
@@ -106,6 +110,7 @@ export default function Component() {
   );
 }
 
+{/* Dark/Light mode for Login component */}
 function ModeToggle() {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
