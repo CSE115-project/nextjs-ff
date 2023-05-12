@@ -10,6 +10,7 @@ import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/router";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
 
 const containerStyle = {
   width: 300,
@@ -24,10 +25,11 @@ const containerStyle = {
   boxShadow: "md",
 };
 
-export default function Component({ user }) {
+export default function Component() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const db = getFirestore();
 
   const onChangeHandlerEmail = (e) => {
     setEmail(e.target.value);
@@ -39,22 +41,43 @@ export default function Component({ user }) {
 
   const handleSignup = async (event) => {
     event.preventDefault();
-    const response = await fetch("/api/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    const auth = getAuth();
 
-    const data = await response.json();
+    try {
+      // Create Authenticated User: email, password
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log("p/signup user:", user.uid, user);
 
-    if (response.ok) {
-      router.push("/login"); // Redirect to index after successful login
-    } else {
-      console.error(data.message);
+      // Create User object
+      const userObj = {
+        uid: user.uid,
+        email: user.email, // user's email
+        displayName: user.displayName || "" ,
+        image: user.photoURL || "", // user's picture link
+        bio: `Hey, I'm new here!`, // user's bio
+        favorites: [], // list of favorite places (places id)
+        wantToGo: [], // list of want to go places (places id)
+        friends: [], // list of friends (favorite places can be linked by friend id)
+      };
+
+      // Add userObj in DB 'users' table
+      await setDoc(doc(db, "users", user.uid), userObj);
+
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+      alert(error);
     }
   };
+
+  const handleLoginRedirect = () => {
+    return router.push("/login");
+  };
+
   return (
     <CssVarsProvider>
       <Sheet sx={containerStyle} variant="outlined">
@@ -66,34 +89,36 @@ export default function Component({ user }) {
         </div>
         <ModeToggle />
 
-        <FormControl>
-          <FormLabel>Email</FormLabel>
-          <Input
-            name="email"
-            type="email"
-            placeholder="user@mail.com"
-            onChange={onChangeHandlerEmail}
-          />
-        </FormControl>
+        <form onSubmit={handleSignup}>
+          <FormControl>
+            <FormLabel>Email</FormLabel>
+            <Input
+              name="email"
+              type="email"
+              placeholder="user@mail.com"
+              onChange={onChangeHandlerEmail}
+            />
+          </FormControl>
 
-        <FormControl>
-          <FormLabel>Password</FormLabel>
-          <Input
-            name="password"
-            type="password"
-            placeholder="password"
-            onChange={onChangeHandlerPassword}
-          />
-        </FormControl>
+          <FormControl>
+            <FormLabel>Password</FormLabel>
+            <Input
+              name="password"
+              type="password"
+              placeholder="password"
+              onChange={onChangeHandlerPassword}
+            />
+          </FormControl>
 
-        <Button onClick={handleSignup} sx={{ mt: 1 }}>
-          Sign Up
-        </Button>
+          <Button type="submit" sx={{ mt: 1, width: "100%" }}>
+            Sign Up
+          </Button>
+        </form>
 
         <Typography
           fontSize="sm"
           sx={{ alignSelf: "center" }}
-          endDecorator={<Link href="/">Log In</Link>}
+          endDecorator={<Link onClick={handleLoginRedirect}>Log In</Link>}
         >
           Have an account?
         </Typography>
@@ -102,6 +127,7 @@ export default function Component({ user }) {
   );
 }
 
+{/* Dark/Light mode for Login component */}
 function ModeToggle() {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);

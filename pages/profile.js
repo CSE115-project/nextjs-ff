@@ -1,76 +1,249 @@
-import Link from "next/link";
 import Button from "@mui/joy/Button";
 import Avatar from "@mui/joy/Avatar";
+import Box from "@mui/joy/Box";
+import Sheet from "@mui/joy/Sheet";
+import Stack from "@mui/joy/Stack";
+import Typography from "@mui/joy/Typography";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { firebase } from "../firebase";
+import { getDoc, getFirestore, doc } from "firebase/firestore";
+import Card from "@mui/joy/Card";
+import CardCover from "@mui/joy/CardCover";
+import CardContent from "@mui/joy/CardContent";
 
-export default function Profile() {
+/*
+const userObj = {
+        uid: user.uid,
+        email: user.email, // user's email
+        displayName: user.displayName || "" ,
+        image: user.photoURL || "", // user's picture link
+        bio: `Hey, I'm new here!`, // user's bio
+        favorites: [], // list of favorite places (places id)
+        wantToGo: [], // list of want to go places (places id)
+        friends: [], // list of friends (favorite places can be linked by friend id)
+      };
+*/
+
+export default function Profile({ user }) {
   const router = useRouter();
-  // userData is a string that contains the UID
-  const { userData } = router.query;
-  console.log("uid:", userData);
+  const db = getFirestore(firebase);
+  const [userData, setUserData] = useState({});
 
-  const [userName, setUserName] = useState("");
-
-  // this function fetches the data from the database...
-  // need to set variables according to what is needed to be displayed
-  const fetchData = async () => {
-    try {
-      const response = await fetch("/api/getUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ uid: userData }),
-      });
-
-      console.log("RESPONSE", response);
-
-      const data = await response.json();
-
-      console.log("DATA:", data);
-
-      const useData = data.data;
-      // do something with the data here
-      setUserName(useData.name);
-      // add additional variables being set here depending on what will be displayed
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  fetchData();
-
+  // initialize all fields and their according set methods
   const handleHome = (event) => {
     event.preventDefault();
-    router.push({
-      pathname: "/",
-      query: { userData },
-    });
+    router.push("/");
   };
 
   const handleEditProfile = (event) => {
     event.preventDefault();
-    router.push({
-      pathname: "/edit-profile",
-      query: { userData },
-    });
+    router.push("/edit-profile");
   };
 
-  return (
-    <div className="userProfile">
-      <Button onClick={handleHome} sx={{ mt: 1 }}>
-        Home
-      </Button>
+  // function to retrieve the user's data from the database
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const docRef = doc(db, "users", user.uid);
+        const docRes = await getDoc(docRef);
 
-      <Button onClick={handleEditProfile} sx={{ mt: 1 }}>
-        Edit Profile
-      </Button>
+        if (docRes.exists()) {
+          const data = docRes.data();
+          setUserData(data);
+        } else {
+          console.error("User Not Found");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchData();
 
-      <h1>User Profile</h1>
-      <h2> {userName} </h2>
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-      <Avatar />
-      {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}
-    </div>
-  );
+  console.log("p/profile userData:", userData);
+  if (!userData) {
+    return <div>Loading...</div>;
+  } else {
+    console.log("Loading Profile...");
+    return (
+      <div className="userProfile">
+        <Sheet>
+          <Stack direction="row" alignItems="center" spacing={0}>
+            {/* Home Button */}
+            <Button onClick={handleHome} sx={{ mt: 1 }}>
+              Home
+            </Button>
+
+            <Typography level="h1" fontSize="xl2">
+              My profile
+            </Typography>
+
+            {/* Edit Profile Button */}
+            <Button onClick={handleEditProfile} sx={{ marginLeft: "auto" }}>
+              Edit Profile
+            </Button>
+          </Stack>
+
+          <Sheet
+            sx={{
+              maxWidth: "75%",
+              width: "100%",
+              mx: "auto",
+            }}
+          >
+            <Box
+              sx={{
+                bgcolor: "#222158",
+                pt: 3,
+                pb: 12,
+                display: "block",
+                borderRadius: "20px",
+              }}
+            >
+              {/* need to test with real avatar */}
+              <Avatar
+                sx={{ height: "128px", width: "128px", margin: "auto" }}
+                src=""
+              />
+
+              {/* Name of User */}
+              <Typography
+                component="h6"
+                sx={{ mt: 1, color: "white" }}
+                align="center"
+              >
+                {userData.displayName || "New User"}
+              </Typography>
+
+              {/* User's bio */}
+              <Typography
+                className="bio"
+                sx={{ mt: 1, color: "white" }}
+                align="center"
+              >
+                {userData.bio || "Bio.."}
+              </Typography>
+            </Box>
+
+            <Box
+              sx={{
+                pt: 3,
+                pb: 3,
+                display: "flex",
+              }}
+            >
+              <Typography component="h6" sx={{ color: "black" }}>
+                My Folders
+              </Typography>
+
+              {/* Button to add new list */}
+              <Button variant="plain" sx={{ marginLeft: "auto" }}>
+                +
+              </Button>
+            </Box>
+
+            {/* Liked Place (need to route to list of places) */}
+
+            {/* Stack to create rows */}
+            <Stack direction="row" alignItems="flex-start" spacing={6}>
+              {/* Stack to create the first column */}
+              <Stack
+                direction="column"
+                justifyContent="space-evenly"
+                alignItems="flex-start"
+                spacing={0}
+                sx={{ ml: 1 }}
+              >
+                {/* Top Right Card */}
+                <Card
+                  sx={{
+                    "--Card-radius": "20px",
+                    mb: 3,
+                    width: 200,
+                    height: 100,
+                    bgcolor: "#EFF7FD",
+                  }}
+                >
+                  <CardCover>
+                    {/* Add rest of Card */}
+                    <Typography textColor="#5F7CEC" component="h1">
+                      Test1
+                    </Typography>
+                  </CardCover>
+                  <CardContent>
+                    {/* Add rest of Card */}
+                    <Typography textColor="#5F7CEC">Test2</Typography>
+                  </CardContent>
+
+                  {/* Bottom Right Card */}
+                </Card>
+                <Card sx={{ width: 200, height: 100, bgcolor: "#FBEEEE" }}>
+                  <CardCover>
+                    {/* Add rest of card */}
+                    <Typography component="h1" textColor="#E2615C">
+                      Test1
+                    </Typography>
+                  </CardCover>
+                  <CardContent>
+                    {/* Add rest of Card */}
+                    <Typography textColor="#E2615C">Test2</Typography>
+                  </CardContent>
+                </Card>
+              </Stack>
+
+              {/* Stack for Second Column */}
+              <Stack
+                direction="column"
+                justifyContent="space-evenly"
+                alignItems="flex-start"
+                spacing={0}
+              >
+                {/* Top Right Card */}
+                <Card
+                  sx={{
+                    "--Card-radius": "20px",
+                    mb: 3,
+                    width: 200,
+                    height: 100,
+                    bgcolor: "#FEFBED",
+                  }}
+                >
+                  <CardCover>
+                    <Typography textColor="#FADF7D" component="h1">
+                      Test1
+                    </Typography>
+                  </CardCover>
+                  <CardContent>
+                    <Typography textColor="#FADF7D">Test2</Typography>
+                  </CardContent>
+
+                  {/* Bottom Right Card */}
+                </Card>
+                <Card
+                  sx={{
+                    "--Card-radius": "20px",
+                    width: 200,
+                    height: 100,
+                    bgcolor: "#F3FEFF",
+                  }}
+                >
+                  <CardCover>
+                    <Typography textColor="#6FDBDC" component="h1">
+                      Test1
+                    </Typography>
+                  </CardCover>
+                  <CardContent>
+                    <Typography textColor="#6FDBDC">Test2</Typography>
+                  </CardContent>
+                </Card>
+              </Stack>
+            </Stack>
+          </Sheet>
+        </Sheet>
+      </div>
+    );
+  }
 }
