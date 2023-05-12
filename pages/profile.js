@@ -8,6 +8,9 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { firebase } from "../firebase";
 import { getDoc, getFirestore, doc } from "firebase/firestore";
+import Card from "@mui/joy/Card";
+import CardCover from "@mui/joy/CardCover";
+import CardContent from "@mui/joy/CardContent";
 
 /*
 const userObj = {
@@ -57,7 +60,7 @@ export default function Profile({ user }) {
     };
     fetchData();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   console.log("p/profile userData:", userData);
@@ -93,10 +96,11 @@ export default function Profile({ user }) {
           >
             <Box
               sx={{
-                bgcolor: "navy",
+                bgcolor: "#222158",
                 pt: 3,
-                pb: 25,
+                pb: 12,
                 display: "block",
+                borderRadius: "20px",
               }}
             >
               {/* need to test with real avatar */}
@@ -126,7 +130,6 @@ export default function Profile({ user }) {
 
             <Box
               sx={{
-                //bgcolor: "red",
                 pt: 3,
                 pb: 3,
                 display: "flex",
@@ -137,23 +140,107 @@ export default function Profile({ user }) {
               </Typography>
 
               {/* Button to add new list */}
-              <Button sx={{ marginLeft: "auto" }}>+</Button>
+              <Button variant="plain" sx={{ marginLeft: "auto" }}>
+                +
+              </Button>
             </Box>
 
             {/* Liked Place (need to route to list of places) */}
-            <Box>
-              <Button
-                style={{
-                  maxWidth: "200px",
-                  maxHeight: "200px",
-                  minWidth: "200px",
-                  minHeight: "200px",
-                }}
-                variant="outlined"
+
+            {/* Stack to create rows */}
+            <Stack direction="row" alignItems="flex-start" spacing={6}>
+              {/* Stack to create the first column */}
+              <Stack
+                direction="column"
+                justifyContent="space-evenly"
+                alignItems="flex-start"
+                spacing={0}
+                sx={{ ml: 1 }}
               >
-                Liked Place
-              </Button>
-            </Box>
+                {/* Top Right Card */}
+                <Card
+                  sx={{
+                    "--Card-radius": "20px",
+                    mb: 3,
+                    width: 200,
+                    height: 100,
+                    bgcolor: "#EFF7FD",
+                  }}
+                >
+                  <CardCover>
+                    {/* Add rest of Card */}
+                    <Typography textColor="#5F7CEC" component="h1">
+                      Test1
+                    </Typography>
+                  </CardCover>
+                  <CardContent>
+                    {/* Add rest of Card */}
+                    <Typography textColor="#5F7CEC">Test2</Typography>
+                  </CardContent>
+
+                  {/* Bottom Right Card */}
+                </Card>
+                <Card sx={{ width: 200, height: 100, bgcolor: "#FBEEEE" }}>
+                  <CardCover>
+                    {/* Add rest of card */}
+                    <Typography component="h1" textColor="#E2615C">
+                      Test1
+                    </Typography>
+                  </CardCover>
+                  <CardContent>
+                    {/* Add rest of Card */}
+                    <Typography textColor="#E2615C">Test2</Typography>
+                  </CardContent>
+                </Card>
+              </Stack>
+
+              {/* Stack for Second Column */}
+              <Stack
+                direction="column"
+                justifyContent="space-evenly"
+                alignItems="flex-start"
+                spacing={0}
+              >
+                {/* Top Right Card */}
+                <Card
+                  sx={{
+                    "--Card-radius": "20px",
+                    mb: 3,
+                    width: 200,
+                    height: 100,
+                    bgcolor: "#FEFBED",
+                  }}
+                >
+                  <CardCover>
+                    <Typography textColor="#FADF7D" component="h1">
+                      Test1
+                    </Typography>
+                  </CardCover>
+                  <CardContent>
+                    <Typography textColor="#FADF7D">Test2</Typography>
+                  </CardContent>
+
+                  {/* Bottom Right Card */}
+                </Card>
+                <Card
+                  sx={{
+                    "--Card-radius": "20px",
+                    width: 200,
+                    height: 100,
+                    bgcolor: "#F3FEFF",
+                  }}
+                >
+                  <CardCover>
+                    <Typography textColor="#6FDBDC" component="h1">
+                      Test1
+                    </Typography>
+                  </CardCover>
+                  <CardContent>
+                    <Typography textColor="#6FDBDC">Test2</Typography>
+                  </CardContent>
+                </Card>
+              </Stack>
+            </Stack>
           </Sheet>
         </Sheet>
       </div>
