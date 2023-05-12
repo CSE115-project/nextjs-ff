@@ -170,7 +170,7 @@ export default function Profile({ user }) {
                   <CardCover>
                     {/* Add rest of Card */}
                     <Typography textColor="#5F7CEC" component="h1">
-                      Test1
+                      Restaurant
                     </Typography>
                   </CardCover>
                   <CardContent>
@@ -184,7 +184,7 @@ export default function Profile({ user }) {
                   <CardCover>
                     {/* Add rest of card */}
                     <Typography component="h1" textColor="#E2615C">
-                      Test1
+                      Liked places
                     </Typography>
                   </CardCover>
                   <CardContent>
@@ -213,7 +213,7 @@ export default function Profile({ user }) {
                 >
                   <CardCover>
                     <Typography textColor="#FADF7D" component="h1">
-                      Test1
+                      Fun
                     </Typography>
                   </CardCover>
                   <CardContent>
@@ -232,7 +232,7 @@ export default function Profile({ user }) {
                 >
                   <CardCover>
                     <Typography textColor="#6FDBDC" component="h1">
-                      Test1
+                      Viewpoint
                     </Typography>
                   </CardCover>
                   <CardContent>
