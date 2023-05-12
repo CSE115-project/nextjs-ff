@@ -23,6 +23,9 @@ export default function DropZone({ sx, ...props }) {
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
+      <form>
+      
+
       <Box sx={{ p: 1, bgcolor: 'background.level1', borderRadius: '50%' }}>
         <Box
           sx={{
@@ -39,12 +42,13 @@ export default function DropZone({ sx, ...props }) {
         </Box>
       </Box>
       <Typography level="body2" textAlign="center">
-        <Link component="button" overlay>
+        <Link type = 'file' component="button" overlay>
           Click to upload
         </Link>{' '}
         or drag and drop
         <br /> SVG, PNG, JPG or GIF (max. 800x400px)
       </Typography>
+      </form>
     </Card>
   );
 }

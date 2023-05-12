@@ -21,8 +21,56 @@ import DropZone from '../components/DropZone';
 import FileUpload from '../components/FileUpload';
 import CountrySelector from '../components/CountrySelector';
 import EditorToolbar from '../components/EditorToolbar';
+import { getStorage, ref } from "firebase/storage";
+import  { useState } from 'react';
+import  { useRouter } from 'next/router';
+
 
 export default function MyProfile() {
+
+  // Get a reference to the storage service, which is used to create references in your storage bucket
+  const storage = getStorage();
+
+  // Create a storage reference from our storage service
+  const storageRef = ref(storage);
+
+  // Create a reference to 'images/mountains.jpg'
+  // const profileImageRef = ref(storage, 'profileImage/' + );
+
+  const [image, setImage] = useState(null);
+  const router = useRouter();
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setImage(file);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append('file', image);
+    formData.append('upload_preset', 'YOUR_UPLOAD_PRESET'); // Replace with your Cloudinary upload preset
+
+    // Make an API call to upload the image
+    const response = await fetch('https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const imageUrl = data.secure_url;
+      // Do something with the uploaded image URL, such as storing it in your database
+      console.log('Uploaded image URL:', imageUrl);
+
+      // Redirect to another page or perform any desired action
+      router.push('/gallery');
+    } else {
+      console.error('Image upload failed');
+    }
+  };
+
   return (
     <Sheet
       sx={{
@@ -204,7 +252,15 @@ export default function MyProfile() {
               src=""
               sx={{ '--Avatar-size': '64px' }}
             />
-            <DropZone />
+            {/* <DropZone /> */}
+            <form onSubmit={handleSubmit}>
+
+              <input type="file" onChange={handleFileChange}/>
+
+              <Button type="submit">
+                Click to upload
+              </Button>
+            </form>
           </Box>
 
           <Divider role="presentation" />
