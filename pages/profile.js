@@ -157,7 +157,7 @@ export default function Profile({ user }) {
                 spacing={"10%"}
                 sx={{ ml: "20%" }}
               >
-                {/* Top Right Card */}
+                {/* Top Left Card */}
                 <Card
                   sx={{
                     "--Card-radius": "20px",
@@ -178,7 +178,7 @@ export default function Profile({ user }) {
                     <Typography textColor="#5F7CEC">Test2</Typography>
                   </CardContent>
 
-                  {/* Bottom Right Card */}
+                  {/* Bottom Left Card */}
                 </Card>
                 <Card sx={{ width: 250, height: 200, bgcolor: "#FBEEEE" }}>
                   <CardCover>
