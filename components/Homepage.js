@@ -24,6 +24,12 @@ const Homepage = ({user}) => {
     });
   };
 
+  const handleAddFriend = () => {
+    // Logic for adding a friend here
+    console.log("Friend added!");
+  };
+
+
   return (
     <div style={{ height: "100vh", width: "100%" }}>
       <Button onClick={handleSignOut} sx={{ mt: 1 }}>
@@ -32,6 +38,10 @@ const Homepage = ({user}) => {
 
       <Button onClick={handleProfile} sx={{ mt: 1 }}>
         Profile
+      </Button>
+
+      <Button onClick={handleAddFriend} sx={{ mt: 1 }}>
+        Add Friend
       </Button>
 
       <Map />
