@@ -148,22 +148,22 @@ export default function Profile({ user }) {
             {/* Liked Place (need to route to list of places) */}
 
             {/* Stack to create rows */}
-            <Stack direction="row" alignItems="flex-start" spacing={6}>
+            <Stack direction="row" alignItems="flex-start" spacing={"10%"}>
               {/* Stack to create the first column */}
               <Stack
                 direction="column"
                 justifyContent="space-evenly"
                 alignItems="flex-start"
-                spacing={0}
-                sx={{ ml: 1 }}
+                spacing={"10%"}
+                sx={{ ml: "20%" }}
               >
                 {/* Top Right Card */}
                 <Card
                   sx={{
                     "--Card-radius": "20px",
                     mb: 3,
-                    width: 200,
-                    height: 100,
+                    width: 250,
+                    height: 200,
                     bgcolor: "#EFF7FD",
                   }}
                 >
@@ -180,7 +180,7 @@ export default function Profile({ user }) {
 
                   {/* Bottom Right Card */}
                 </Card>
-                <Card sx={{ width: 200, height: 100, bgcolor: "#FBEEEE" }}>
+                <Card sx={{ width: 250, height: 200, bgcolor: "#FBEEEE" }}>
                   <CardCover>
                     {/* Add rest of card */}
                     <Typography component="h1" textColor="#E2615C">
@@ -199,15 +199,15 @@ export default function Profile({ user }) {
                 direction="column"
                 justifyContent="space-evenly"
                 alignItems="flex-start"
-                spacing={0}
+                spacing={"10%"}
               >
                 {/* Top Right Card */}
                 <Card
                   sx={{
                     "--Card-radius": "20px",
                     mb: 3,
-                    width: 200,
-                    height: 100,
+                    width: 250,
+                    height: 200,
                     bgcolor: "#FEFBED",
                   }}
                 >
@@ -225,8 +225,8 @@ export default function Profile({ user }) {
                 <Card
                   sx={{
                     "--Card-radius": "20px",
-                    width: 200,
-                    height: 100,
+                    width: 250,
+                    height: 200,
                     bgcolor: "#F3FEFF",
                   }}
                 >
