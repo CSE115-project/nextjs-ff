@@ -9,9 +9,8 @@ import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { db } from "../firebase";
 import { useRouter } from "next/router";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
 
 const containerStyle = {
   width: 300,
@@ -30,6 +29,7 @@ export default function Component() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const db = getFirestore();
 
   const onChangeHandlerEmail = (e) => {
     setEmail(e.target.value);
