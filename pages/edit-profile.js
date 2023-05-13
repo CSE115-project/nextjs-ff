@@ -21,8 +21,41 @@ import DropZone from '../components/DropZone';
 import FileUpload from '../components/FileUpload';
 import CountrySelector from '../components/CountrySelector';
 import EditorToolbar from '../components/EditorToolbar';
+import db from "../firebase.js";
+import { useState } from "react";
+import { getDoc, doc } from "firebase/firestore";
 
-export default function MyProfile() {
+export default function EditProfile({ user }) {
+  // get user id
+  
+  const [userData, setUserData] = useState({});
+
+  // function to retrieve the user's data from the database
+  const fetchData = async () => {
+    try {
+      const docRef = doc(db, "users", user.uid);
+      const docRes = await getDoc(docRef);
+
+      if (docRes.exists()) {
+        const data = docRes.data();
+        setUserData(data);
+      } else {
+        console.error("User Not Found");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+  fetchData();
+
+
+  // pull info from database
+  // set current user data to input fields
+  // cancel -> direct back to profile
+  // save -> save to db, popup msg that it was successful
+  
+  // image upload next after
+
   return (
     <Sheet
       sx={{
@@ -43,107 +76,7 @@ export default function MyProfile() {
           '--Tab-height': '48px',
         }}
       >
-        <Box
-          sx={{
-            '--_shadow-height': '16px',
-            height: 0,
-            position: 'sticky',
-            top: 'calc(var(--Tab-height) - var(--main-paddingTop, 0px) + var(--Header-height, 0px) - (var(--_shadow-height) / 2))',
-            zIndex: 1,
-            '&::before': {
-              content: '""',
-              display: 'block',
-              position: 'relative',
-              zIndex: 1,
-              height: 'var(--_shadow-height)',
-              background:
-                'radial-gradient(closest-side, rgba(0 0 0 / 0.12), transparent 100%)',
-            },
-          }}
-        />
-        <TabList
-          variant="plain"
-          size="sm"
-          sx={(theme) => ({
-            '--List-padding': '0px',
-            '--ListItem-minHeight': 'var(--Tab-height)',
-            '--Chip-minHeight': '20px',
-            '--_TabList-bg': theme.vars.palette.background.body,
-            backgroundColor: 'var(--_TabList-bg)',
-            boxShadow: `inset 0 -1px 0 0 ${theme.vars.palette.divider}`,
-            position: 'sticky',
-            top: 'calc(-1 * (var(--main-paddingTop, 0px) - var(--Header-height, 0px)))',
-            zIndex: 10,
-            width: '100%',
-            overflow: 'auto hidden',
-            alignSelf: 'flex-start',
-            borderRadius: 0,
-            scrollSnapType: 'inline',
-            '&::after': {
-              pointerEvents: 'none',
-              display: { xs: 'block', sm: 'none' },
-              content: '""',
-              position: 'sticky',
-              top: 0,
-              width: 40,
-              flex: 'none',
-              zIndex: 1,
-              right: 0,
-              borderBottom: '1px solid transparent',
-              background: `linear-gradient(to left, var(--_TabList-bg), rgb(0 0 0 / 0))`,
-              backgroundClip: 'content-box',
-            },
-            '&::-webkit-scrollbar': {
-              width: 0,
-              display: 'none',
-            },
-            [`& .${tabClasses.root}`]: {
-              '&:first-of-type': {
-                ml: 'calc(-1 * var(--ListItem-paddingX))',
-              },
-              scrollSnapAlign: 'start',
-              bgcolor: 'transparent',
-              boxShadow: 'none',
-              flex: 'none',
-              '&:hover': {
-                bgcolor: 'transparent',
-              },
-              [`&.${tabClasses.selected}`]: {
-                color: 'primary.plainColor',
-                '&:before': {
-                  content: '""',
-                  display: 'block',
-                  position: 'absolute',
-                  zIndex: 1,
-                  bottom: 0,
-                  left: 'var(--ListItem-paddingLeft)',
-                  right: 'var(--ListItem-paddingRight)',
-                  height: '2px',
-                  bgcolor: 'primary.500',
-                },
-                [`& .${chipClasses.root}`]: theme.variants.solid.primary,
-              },
-            },
-          })}
-        >
-          <Tab value={0}>Account settings</Tab>
-          <Tab value={1}>
-            Team{' '}
-            <Chip size="sm" variant="soft" color="neutral" sx={{ ml: 1 }}>
-              2
-            </Chip>
-          </Tab>
-          <Tab value={2}>Plan</Tab>
-          <Tab value={3}>
-            Billing{' '}
-            <Chip size="sm" variant="soft" color="neutral" sx={{ ml: 1 }}>
-              4
-            </Chip>
-          </Tab>
-          <Tab value={4}>Notifications</Tab>
-          <Tab value={5}>Integrations</Tab>
-          <Tab value={6}>API</Tab>
-        </TabList>
+
         <Box
           sx={{
             pt: 3,
@@ -209,43 +142,11 @@ export default function MyProfile() {
 
           <Divider role="presentation" />
 
-          <FormControl sx={{ display: { sm: 'contents' } }}>
-            <FormLabel>Role</FormLabel>
-            <Input defaultValue="UI Developer" />
-          </FormControl>
-
-          <Divider role="presentation" />
-
-          <CountrySelector />
-
-          <Divider role="presentation" />
-
-          <FormControl sx={{ display: { sm: 'contents' } }}>
-            <FormLabel>Timezone</FormLabel>
-            <Select startDecorator={<i data-feather="clock" />} defaultValue="1">
-              <Option value="1">
-                Indochina Time (Bangkok){' '}
-                <Typography textColor="text.tertiary" ml={0.5}>
-                  — GMT+07:00
-                </Typography>
-              </Option>
-              <Option value="2">
-                Indochina Time (Ho Chi Minh City){' '}
-                <Typography textColor="text.tertiary" ml={0.5}>
-                  — GMT+07:00
-                </Typography>
-              </Option>
-            </Select>
-          </FormControl>
-
-          <Divider role="presentation" />
-
           <Box>
             <FormLabel>Bio</FormLabel>
             <FormHelperText>Write a short introduction.</FormHelperText>
           </Box>
           <Box>
-            <EditorToolbar />
             <Textarea
               minRows={4}
               sx={{ mt: 1.5 }}
@@ -259,32 +160,27 @@ export default function MyProfile() {
           <Divider role="presentation" />
 
           <Box>
-            <FormLabel>Portfolio projects</FormLabel>
-            <FormHelperText>Share a few snippets of your work.</FormHelperText>
+            <FormLabel>Friends</FormLabel>
           </Box>
-          <Stack useFlexGap spacing={1.5}>
-            <DropZone />
-
-            <FileUpload
-              fileName="Tech design requirements.pdf"
-              fileSize="200 KB"
-              progress={100}
+          <Box>
+            <Textarea
+              minRows={4}
+              sx={{ mt: 1.5 }}
+              defaultValue = "FRIENDS"
             />
+          </Box>
 
-            <FileUpload
-              icon={<i data-feather="film" />}
-              fileName="Dashboard prototype recording.mp4"
-              fileSize="16 MB"
-              progress={40}
-            />
+          <Divider role="presentation" />
 
-            <FileUpload
-              icon={<i data-feather="upload-cloud" />}
-              fileName="Dashboard prototype FINAL.fig"
-              fileSize="4.2 MB"
-              progress={80}
-            />
-          </Stack>
+          <Box>
+            <FormLabel>Favorites</FormLabel>
+          </Box>
+
+          <Divider role="presentation" />
+
+          <Box>
+            <FormLabel>Want to go</FormLabel>
+          </Box>
 
           <Divider role="presentation" />
 
