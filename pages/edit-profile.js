@@ -28,12 +28,17 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { useState } from "react";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
-export default function MyProfile() {
-  const storage = getStorage();
+export default function Component({ user }) {
+  // Image Uploading
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [imageURL, setImageURL] = useState(null);
+  const [imageURL, setImageURL] = useState("");
+
+  if (!user) return <div>Loading...</div>;
+  console.log("edPro user", user.uid);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -42,9 +47,9 @@ export default function MyProfile() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const storage = getStorage();
     if (file) {
       const storageRef = ref(storage, "uploads/" + file.name);
-      console.log("editProf storageRef", storageRef);
       try {
         const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -59,6 +64,31 @@ export default function MyProfile() {
         setImageURL(downloadURL);
       } catch (error) {
         console.error("File upload error:", error);
+      }
+    }
+  };
+
+  const handleSave = async (event) => {
+    event.preventDefault();
+    // Update the user document with the new image URL
+    if (imageURL) {
+      const { uid, email, displayName, bio, favorites, wantToGo, friends } =
+        user;
+      const updateUser = {
+        uid: uid || user.uid,
+        email: email || user.email,
+        displayName: displayName || user.displayName || "",
+        image: imageURL,
+        bio: bio || "",
+        favorites: favorites || user.favorites || [],
+        wantToGo: wantToGo || user.wantToGo || [],
+        friends: friends || user.friends || [],
+      };
+      try {
+        await setDoc(doc(db, "users", user.uid), updateUser);
+        console.log("Saved user details");
+      } catch (error) {
+        console.error("Error updating user document:", error);
       }
     }
   };
@@ -246,12 +276,10 @@ export default function MyProfile() {
             <Avatar size="lg" src={imageURL} sx={{ "--Avatar-size": "64px" }} />
 
             {/* Image Upload */}
-            <form onSubmit={handleSubmit}>
-              <input type="file" onChange={handleFileChange} />
+            <input type="file" onChange={handleFileChange} />
 
-              <Button type="submit">Click to upload</Button>
-              {uploadProgress > 0 && <p>Upload progress: {uploadProgress}%</p>}
-            </form>
+            <Button onClick={handleSubmit}>Click to upload</Button>
+            {uploadProgress > 0 && <p>Upload progress: {uploadProgress}%</p>}
           </Box>
 
           <Divider role="presentation" />
@@ -349,7 +377,9 @@ export default function MyProfile() {
             <Button variant="outlined" color="neutral" size="sm">
               Cancel
             </Button>
-            <Button size="sm">Save</Button>
+            <Button size="sm" onClick={handleSave}>
+              Save
+            </Button>
           </Box>
         </Box>
       </Tabs>

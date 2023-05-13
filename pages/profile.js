@@ -106,7 +106,7 @@ export default function Profile({ user }) {
               {/* need to test with real avatar */}
               <Avatar
                 sx={{ height: "128px", width: "128px", margin: "auto" }}
-                src=""
+                src={""}
               />
 
               {/* Name of User */}
