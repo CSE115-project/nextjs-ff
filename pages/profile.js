@@ -106,7 +106,7 @@ export default function Profile({ user }) {
               {/* need to test with real avatar */}
               <Avatar
                 sx={{ height: "128px", width: "128px", margin: "auto" }}
-                src=""
+                src={""}
               />
 
               {/* Name of User */}
@@ -148,29 +148,29 @@ export default function Profile({ user }) {
             {/* Liked Place (need to route to list of places) */}
 
             {/* Stack to create rows */}
-            <Stack direction="row" alignItems="flex-start" spacing={6}>
+            <Stack direction="row" alignItems="flex-start" spacing={"10%"}>
               {/* Stack to create the first column */}
               <Stack
                 direction="column"
                 justifyContent="space-evenly"
                 alignItems="flex-start"
-                spacing={0}
-                sx={{ ml: 1 }}
+                spacing={"10%"}
+                sx={{ ml: "20%" }}
               >
-                {/* Top Right Card */}
+                {/* Top Left Card */}
                 <Card
                   sx={{
                     "--Card-radius": "20px",
                     mb: 3,
-                    width: 200,
-                    height: 100,
+                    width: 250,
+                    height: 200,
                     bgcolor: "#EFF7FD",
                   }}
                 >
                   <CardCover>
                     {/* Add rest of Card */}
                     <Typography textColor="#5F7CEC" component="h1">
-                      Test1
+                      Restaurant
                     </Typography>
                   </CardCover>
                   <CardContent>
@@ -178,13 +178,13 @@ export default function Profile({ user }) {
                     <Typography textColor="#5F7CEC">Test2</Typography>
                   </CardContent>
 
-                  {/* Bottom Right Card */}
+                  {/* Bottom Left Card */}
                 </Card>
-                <Card sx={{ width: 200, height: 100, bgcolor: "#FBEEEE" }}>
+                <Card sx={{ width: 250, height: 200, bgcolor: "#FBEEEE" }}>
                   <CardCover>
                     {/* Add rest of card */}
                     <Typography component="h1" textColor="#E2615C">
-                      Test1
+                      Liked places
                     </Typography>
                   </CardCover>
                   <CardContent>
@@ -199,21 +199,21 @@ export default function Profile({ user }) {
                 direction="column"
                 justifyContent="space-evenly"
                 alignItems="flex-start"
-                spacing={0}
+                spacing={"10%"}
               >
                 {/* Top Right Card */}
                 <Card
                   sx={{
                     "--Card-radius": "20px",
                     mb: 3,
-                    width: 200,
-                    height: 100,
+                    width: 250,
+                    height: 200,
                     bgcolor: "#FEFBED",
                   }}
                 >
                   <CardCover>
                     <Typography textColor="#FADF7D" component="h1">
-                      Test1
+                      Fun
                     </Typography>
                   </CardCover>
                   <CardContent>
@@ -225,14 +225,14 @@ export default function Profile({ user }) {
                 <Card
                   sx={{
                     "--Card-radius": "20px",
-                    width: 200,
-                    height: 100,
+                    width: 250,
+                    height: 200,
                     bgcolor: "#F3FEFF",
                   }}
                 >
                   <CardCover>
                     <Typography textColor="#6FDBDC" component="h1">
-                      Test1
+                      Viewpoint
                     </Typography>
                   </CardCover>
                   <CardContent>
