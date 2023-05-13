@@ -1,84 +1,66 @@
-import * as React from 'react';
-import Avatar from '@mui/joy/Avatar';
-import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
-import Chip, { chipClasses } from '@mui/joy/Chip';
-import Divider from '@mui/joy/Divider';
-import FormControl from '@mui/joy/FormControl';
-import FormLabel from '@mui/joy/FormLabel';
-import FormHelperText from '@mui/joy/FormHelperText';
-import Input from '@mui/joy/Input';
-import Textarea from '@mui/joy/Textarea';
-import Stack from '@mui/joy/Stack';
-import Sheet from '@mui/joy/Sheet';
-import Select from '@mui/joy/Select';
-import Option from '@mui/joy/Option';
-import Typography from '@mui/joy/Typography';
-import Tabs from '@mui/joy/Tabs';
-import TabList from '@mui/joy/TabList';
-import Tab, { tabClasses } from '@mui/joy/Tab';
-import DropZone from '../components/DropZone';
-import FileUpload from '../components/FileUpload';
-import CountrySelector from '../components/CountrySelector';
-import EditorToolbar from '../components/EditorToolbar';
-import { getStorage, ref } from "firebase/storage";
-import  { useState } from 'react';
-import  { useRouter } from 'next/router';
-
+import * as React from "react";
+import Avatar from "@mui/joy/Avatar";
+import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
+import Chip, { chipClasses } from "@mui/joy/Chip";
+import Divider from "@mui/joy/Divider";
+import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
+import FormHelperText from "@mui/joy/FormHelperText";
+import Input from "@mui/joy/Input";
+import Textarea from "@mui/joy/Textarea";
+import Stack from "@mui/joy/Stack";
+import Sheet from "@mui/joy/Sheet";
+import Select from "@mui/joy/Select";
+import Option from "@mui/joy/Option";
+import Typography from "@mui/joy/Typography";
+import Tabs from "@mui/joy/Tabs";
+import TabList from "@mui/joy/TabList";
+import Tab, { tabClasses } from "@mui/joy/Tab";
+import DropZone from "../components/DropZone";
+import FileUpload from "../components/FileUpload";
+import CountrySelector from "../components/CountrySelector";
+import EditorToolbar from "../components/EditorToolbar";
+import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
+import { useState } from "react";
 
 export default function MyProfile() {
-
-  // Get a reference to the storage service, which is used to create references in your storage bucket
   const storage = getStorage();
-
-  // Create a storage reference from our storage service
-  const storageRef = ref(storage);
-
-  // Create a reference to 'images/mountains.jpg'
-  // const profileImageRef = ref(storage, 'profileImage/' + );
-
-  const [image, setImage] = useState(null);
-  const router = useRouter();
+  const [file, setFile] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setImage(file);
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const formData = new FormData();
-    formData.append('file', image);
-    formData.append('upload_preset', 'YOUR_UPLOAD_PRESET'); // Replace with your Cloudinary upload preset
-
-    // Make an API call to upload the image
-    const response = await fetch('https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload', {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      const imageUrl = data.secure_url;
-      // Do something with the uploaded image URL, such as storing it in your database
-      console.log('Uploaded image URL:', imageUrl);
-
-      // Redirect to another page or perform any desired action
-      router.push('/gallery');
-    } else {
-      console.error('Image upload failed');
+    if (file) {
+      const storageRef = ref(storage, "uploads/" + file.name);
+      try {
+        const uploadTask = uploadBytesResumable(storageRef, file);
+        console.log("handleSubmit uploadTask", uploadTask);
+        uploadTask.on("state_changed", (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setUploadProgress(progress);
+        });
+        await uploadTask;
+      } catch (error) {
+        console.error("File upload error:", error);
+      }
     }
   };
 
   return (
     <Sheet
       sx={{
-        bgcolor: 'background.body',
+        bgcolor: "background.body",
         flex: 1,
         maxWidth: 1200,
-        width: '100%',
-        mx: 'auto',
+        width: "100%",
+        mx: "auto",
       }}
     >
       <Typography level="h1" fontSize="xl2" sx={{ mb: 1 }}>
@@ -87,25 +69,25 @@ export default function MyProfile() {
       <Tabs
         defaultValue={0}
         sx={{
-          bgcolor: 'background.body',
-          '--Tab-height': '48px',
+          bgcolor: "background.body",
+          "--Tab-height": "48px",
         }}
       >
         <Box
           sx={{
-            '--_shadow-height': '16px',
+            "--_shadow-height": "16px",
             height: 0,
-            position: 'sticky',
-            top: 'calc(var(--Tab-height) - var(--main-paddingTop, 0px) + var(--Header-height, 0px) - (var(--_shadow-height) / 2))',
+            position: "sticky",
+            top: "calc(var(--Tab-height) - var(--main-paddingTop, 0px) + var(--Header-height, 0px) - (var(--_shadow-height) / 2))",
             zIndex: 1,
-            '&::before': {
+            "&::before": {
               content: '""',
-              display: 'block',
-              position: 'relative',
+              display: "block",
+              position: "relative",
               zIndex: 1,
-              height: 'var(--_shadow-height)',
+              height: "var(--_shadow-height)",
               background:
-                'radial-gradient(closest-side, rgba(0 0 0 / 0.12), transparent 100%)',
+                "radial-gradient(closest-side, rgba(0 0 0 / 0.12), transparent 100%)",
             },
           }}
         />
@@ -113,61 +95,61 @@ export default function MyProfile() {
           variant="plain"
           size="sm"
           sx={(theme) => ({
-            '--List-padding': '0px',
-            '--ListItem-minHeight': 'var(--Tab-height)',
-            '--Chip-minHeight': '20px',
-            '--_TabList-bg': theme.vars.palette.background.body,
-            backgroundColor: 'var(--_TabList-bg)',
+            "--List-padding": "0px",
+            "--ListItem-minHeight": "var(--Tab-height)",
+            "--Chip-minHeight": "20px",
+            "--_TabList-bg": theme.vars.palette.background.body,
+            backgroundColor: "var(--_TabList-bg)",
             boxShadow: `inset 0 -1px 0 0 ${theme.vars.palette.divider}`,
-            position: 'sticky',
-            top: 'calc(-1 * (var(--main-paddingTop, 0px) - var(--Header-height, 0px)))',
+            position: "sticky",
+            top: "calc(-1 * (var(--main-paddingTop, 0px) - var(--Header-height, 0px)))",
             zIndex: 10,
-            width: '100%',
-            overflow: 'auto hidden',
-            alignSelf: 'flex-start',
+            width: "100%",
+            overflow: "auto hidden",
+            alignSelf: "flex-start",
             borderRadius: 0,
-            scrollSnapType: 'inline',
-            '&::after': {
-              pointerEvents: 'none',
-              display: { xs: 'block', sm: 'none' },
+            scrollSnapType: "inline",
+            "&::after": {
+              pointerEvents: "none",
+              display: { xs: "block", sm: "none" },
               content: '""',
-              position: 'sticky',
+              position: "sticky",
               top: 0,
               width: 40,
-              flex: 'none',
+              flex: "none",
               zIndex: 1,
               right: 0,
-              borderBottom: '1px solid transparent',
+              borderBottom: "1px solid transparent",
               background: `linear-gradient(to left, var(--_TabList-bg), rgb(0 0 0 / 0))`,
-              backgroundClip: 'content-box',
+              backgroundClip: "content-box",
             },
-            '&::-webkit-scrollbar': {
+            "&::-webkit-scrollbar": {
               width: 0,
-              display: 'none',
+              display: "none",
             },
             [`& .${tabClasses.root}`]: {
-              '&:first-of-type': {
-                ml: 'calc(-1 * var(--ListItem-paddingX))',
+              "&:first-of-type": {
+                ml: "calc(-1 * var(--ListItem-paddingX))",
               },
-              scrollSnapAlign: 'start',
-              bgcolor: 'transparent',
-              boxShadow: 'none',
-              flex: 'none',
-              '&:hover': {
-                bgcolor: 'transparent',
+              scrollSnapAlign: "start",
+              bgcolor: "transparent",
+              boxShadow: "none",
+              flex: "none",
+              "&:hover": {
+                bgcolor: "transparent",
               },
               [`&.${tabClasses.selected}`]: {
-                color: 'primary.plainColor',
-                '&:before': {
+                color: "primary.plainColor",
+                "&:before": {
                   content: '""',
-                  display: 'block',
-                  position: 'absolute',
+                  display: "block",
+                  position: "absolute",
                   zIndex: 1,
                   bottom: 0,
-                  left: 'var(--ListItem-paddingLeft)',
-                  right: 'var(--ListItem-paddingRight)',
-                  height: '2px',
-                  bgcolor: 'primary.500',
+                  left: "var(--ListItem-paddingLeft)",
+                  right: "var(--ListItem-paddingRight)",
+                  height: "2px",
+                  bgcolor: "primary.500",
                 },
                 [`& .${chipClasses.root}`]: theme.variants.solid.primary,
               },
@@ -176,14 +158,14 @@ export default function MyProfile() {
         >
           <Tab value={0}>Account settings</Tab>
           <Tab value={1}>
-            Team{' '}
+            Team{" "}
             <Chip size="sm" variant="soft" color="neutral" sx={{ ml: 1 }}>
               2
             </Chip>
           </Tab>
           <Tab value={2}>Plan</Tab>
           <Tab value={3}>
-            Billing{' '}
+            Billing{" "}
             <Chip size="sm" variant="soft" color="neutral" sx={{ ml: 1 }}>
               4
             </Chip>
@@ -196,34 +178,36 @@ export default function MyProfile() {
           sx={{
             pt: 3,
             pb: 10,
-            display: 'grid',
+            display: "grid",
             gridTemplateColumns: {
-              xs: '100%',
-              sm: 'minmax(120px, 30%) 1fr',
-              lg: '280px 1fr minmax(120px, 208px)',
+              xs: "100%",
+              sm: "minmax(120px, 30%) 1fr",
+              lg: "280px 1fr minmax(120px, 208px)",
             },
             columnGap: { xs: 2, sm: 3, md: 4 },
             rowGap: { xs: 2, sm: 2.5 },
-            '& > hr': {
-              gridColumn: '1/-1',
+            "& > hr": {
+              gridColumn: "1/-1",
             },
           }}
         >
-          <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Name</FormLabel>
-          <Box sx={{ display: { xs: 'contents', sm: 'flex' }, gap: 2 }}>
+          <FormLabel sx={{ display: { xs: "none", sm: "block" } }}>
+            Name
+          </FormLabel>
+          <Box sx={{ display: { xs: "contents", sm: "flex" }, gap: 2 }}>
             <FormControl sx={{ flex: 1 }}>
-              <FormLabel sx={{ display: { sm: 'none' } }}>First name</FormLabel>
+              <FormLabel sx={{ display: { sm: "none" } }}>First name</FormLabel>
               <Input placeholder="first name" defaultValue="Siriwat" />
             </FormControl>
             <FormControl sx={{ flex: 1 }}>
-              <FormLabel sx={{ display: { sm: 'none' } }}>Last name</FormLabel>
+              <FormLabel sx={{ display: { sm: "none" } }}>Last name</FormLabel>
               <Input placeholder="last name" defaultValue="K." />
             </FormControl>
           </Box>
 
           <Divider role="presentation" />
 
-          <FormControl sx={{ display: { sm: 'contents' } }}>
+          <FormControl sx={{ display: { sm: "contents" } }}>
             <FormLabel>Email</FormLabel>
             <Input
               type="email"
@@ -237,35 +221,31 @@ export default function MyProfile() {
 
           <Box>
             <FormLabel>Your photo</FormLabel>
-            <FormHelperText>This will be displayed on your profile.</FormHelperText>
+            <FormHelperText>
+              This will be displayed on your profile.
+            </FormHelperText>
           </Box>
           <Box
             sx={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              flexWrap: 'wrap',
+              display: "flex",
+              alignItems: "flex-start",
+              flexWrap: "wrap",
               gap: 2.5,
             }}
           >
-            <Avatar
-              size="lg"
-              src=""
-              sx={{ '--Avatar-size': '64px' }}
-            />
-            {/* <DropZone /> */}
+            <Avatar size="lg" src="" sx={{ "--Avatar-size": "64px" }} />
+            {/* Image Upload */}
             <form onSubmit={handleSubmit}>
+              <input type="file" onChange={handleFileChange} />
 
-              <input type="file" onChange={handleFileChange}/>
-
-              <Button type="submit">
-                Click to upload
-              </Button>
+              <Button type="submit">Click to upload</Button>
+              {uploadProgress > 0 && <p>Upload progress: {uploadProgress}%</p>}
             </form>
           </Box>
 
           <Divider role="presentation" />
 
-          <FormControl sx={{ display: { sm: 'contents' } }}>
+          <FormControl sx={{ display: { sm: "contents" } }}>
             <FormLabel>Role</FormLabel>
             <Input defaultValue="UI Developer" />
           </FormControl>
@@ -276,17 +256,20 @@ export default function MyProfile() {
 
           <Divider role="presentation" />
 
-          <FormControl sx={{ display: { sm: 'contents' } }}>
+          <FormControl sx={{ display: { sm: "contents" } }}>
             <FormLabel>Timezone</FormLabel>
-            <Select startDecorator={<i data-feather="clock" />} defaultValue="1">
+            <Select
+              startDecorator={<i data-feather="clock" />}
+              defaultValue="1"
+            >
               <Option value="1">
-                Indochina Time (Bangkok){' '}
+                Indochina Time (Bangkok){" "}
                 <Typography textColor="text.tertiary" ml={0.5}>
                   — GMT+07:00
                 </Typography>
               </Option>
               <Option value="2">
-                Indochina Time (Ho Chi Minh City){' '}
+                Indochina Time (Ho Chi Minh City){" "}
                 <Typography textColor="text.tertiary" ml={0.5}>
                   — GMT+07:00
                 </Typography>
@@ -307,7 +290,7 @@ export default function MyProfile() {
               sx={{ mt: 1.5 }}
               defaultValue="I'm a software developer based in Bangkok, Thailand. My goal is to solve UI problems with neat CSS without using too much JavaScript."
             />
-            <FormHelperText sx={{ mt: 0.75, fontSize: 'xs' }}>
+            <FormHelperText sx={{ mt: 0.75, fontSize: "xs" }}>
               275 characters left
             </FormHelperText>
           </Box>
@@ -346,9 +329,9 @@ export default function MyProfile() {
 
           <Box
             sx={{
-              gridColumn: '1/-1',
-              justifySelf: 'flex-end',
-              display: 'flex',
+              gridColumn: "1/-1",
+              justifySelf: "flex-end",
+              display: "flex",
               gap: 1,
             }}
           >
