@@ -207,8 +207,8 @@ export default function Profile({ user }) {
                       position: 'absolute',
                       top: 0,
                       left: 0,
-                      width: '100px', // Adjust the width as desired
-                      height: 'auto', // Maintain the aspect ratio of the image
+                      width: '100px', 
+                      height: 'auto', 
                       }}
                     />
                   </CardContent>
@@ -245,8 +245,8 @@ export default function Profile({ user }) {
                       position: 'absolute',
                       top: 0,
                       left: 0,
-                      width: '100px', // Adjust the width as desired
-                      height: 'auto', // Maintain the aspect ratio of the image
+                      width: '100px', 
+                      height: 'auto', 
                       }}
                     />
                   </CardContent>
@@ -274,8 +274,8 @@ export default function Profile({ user }) {
                     position: 'absolute',
                     top: 0,
                     left: 0,
-                    width: '100px', // Adjust the width as desired
-                    height: 'auto', // Maintain the aspect ratio of the image
+                    width: '100px', 
+                    height: 'auto', 
                     }}
                   />
                   </CardContent>
