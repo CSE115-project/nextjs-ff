@@ -106,7 +106,7 @@ export default function Profile({ user }) {
               {/* need to test with real avatar */}
               <Avatar
                 sx={{ height: "128px", width: "128px", margin: "auto" }}
-                src=""
+                src={""}
               />
 
               {/* Name of User */}
@@ -175,7 +175,18 @@ export default function Profile({ user }) {
                   </CardCover>
                   <CardContent>
                     {/* Add rest of Card */}
-                    <Typography textColor="#5F7CEC">Test2</Typography>
+                    <img
+                      src="images/blue_folder.png"
+                      alt="Blue folder image"
+                      style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100px', // Adjust the width as desired
+                      height: 'auto', // Maintain the aspect ratio of the image
+                      }}
+                    />
+                    {/* <Typography textColor="#5F7CEC">Test2</Typography> */}
                   </CardContent>
 
                   {/* Bottom Left Card */}
@@ -189,7 +200,17 @@ export default function Profile({ user }) {
                   </CardCover>
                   <CardContent>
                     {/* Add rest of Card */}
-                    <Typography textColor="#E2615C">Test2</Typography>
+                    <img
+                      src="images/red_folder.png"
+                      alt="Red folder image"
+                      style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100px', // Adjust the width as desired
+                      height: 'auto', // Maintain the aspect ratio of the image
+                      }}
+                    />
                   </CardContent>
                 </Card>
               </Stack>
@@ -217,7 +238,17 @@ export default function Profile({ user }) {
                     </Typography>
                   </CardCover>
                   <CardContent>
-                    <Typography textColor="#FADF7D">Test2</Typography>
+                    <img
+                      src="images/yellow_folder.png"
+                      alt="Yellow folder image"
+                      style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100px', // Adjust the width as desired
+                      height: 'auto', // Maintain the aspect ratio of the image
+                      }}
+                    />
                   </CardContent>
 
                   {/* Bottom Right Card */}
@@ -227,16 +258,26 @@ export default function Profile({ user }) {
                     "--Card-radius": "20px",
                     width: 250,
                     height: 200,
-                    bgcolor: "#F3FEFF",
+                    bgcolor: "#b7e8c2",
                   }}
                 >
                   <CardCover>
-                    <Typography textColor="#6FDBDC" component="h1">
+                    <Typography textColor="#6b8771" component="h1">
                       Viewpoint
                     </Typography>
                   </CardCover>
                   <CardContent>
-                    <Typography textColor="#6FDBDC">Test2</Typography>
+                  <img
+                    src="images/green_folder.png"
+                    alt="Green folder image"
+                    style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100px', // Adjust the width as desired
+                    height: 'auto', // Maintain the aspect ratio of the image
+                    }}
+                  />
                   </CardContent>
                 </Card>
               </Stack>
