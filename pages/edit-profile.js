@@ -21,13 +21,19 @@ import DropZone from "../components/DropZone";
 import FileUpload from "../components/FileUpload";
 import CountrySelector from "../components/CountrySelector";
 import EditorToolbar from "../components/EditorToolbar";
-import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 import { useState } from "react";
 
 export default function MyProfile() {
   const storage = getStorage();
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [imageURL, setImageURL] = useState(null);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -38,15 +44,19 @@ export default function MyProfile() {
     event.preventDefault();
     if (file) {
       const storageRef = ref(storage, "uploads/" + file.name);
+      console.log("editProf storageRef", storageRef);
       try {
         const uploadTask = uploadBytesResumable(storageRef, file);
-        console.log("handleSubmit uploadTask", uploadTask);
+
         uploadTask.on("state_changed", (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           setUploadProgress(progress);
         });
         await uploadTask;
+
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        setImageURL(downloadURL);
       } catch (error) {
         console.error("File upload error:", error);
       }
@@ -233,7 +243,8 @@ export default function MyProfile() {
               gap: 2.5,
             }}
           >
-            <Avatar size="lg" src="" sx={{ "--Avatar-size": "64px" }} />
+            <Avatar size="lg" src={imageURL} sx={{ "--Avatar-size": "64px" }} />
+
             {/* Image Upload */}
             <form onSubmit={handleSubmit}>
               <input type="file" onChange={handleFileChange} />
