@@ -12,7 +12,6 @@ export default async function handler(req, res) {
     const usersRef = doc(db, "users", cleanedUID);
     const docSnap = await getDoc(usersRef);
     const retrievedData = docSnap.data();
-    console.log("DATA RETRIEVED:", retrievedData);
 
     return res
       .status(200)

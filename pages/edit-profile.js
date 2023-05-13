@@ -19,42 +19,51 @@ import TabList from '@mui/joy/TabList';
 import Tab, { tabClasses } from '@mui/joy/Tab';
 import DropZone from '../components/DropZone';
 import FileUpload from '../components/FileUpload';
-import CountrySelector from '../components/CountrySelector';
-import EditorToolbar from '../components/EditorToolbar';
-import db from "../firebase.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getDoc, doc } from "firebase/firestore";
 
 export default function EditProfile({ user }) {
-  // get user id
-  
-  const [userData, setUserData] = useState({});
-
-  // function to retrieve the user's data from the database
-  const fetchData = async () => {
-    try {
-      const docRef = doc(db, "users", user.uid);
-      const docRes = await getDoc(docRef);
-
-      if (docRes.exists()) {
-        const data = docRes.data();
-        setUserData(data);
-      } else {
-        console.error("User Not Found");
-      }
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
-  fetchData();
-
-
-  // pull info from database
-  // set current user data to input fields
+  // get user id done
+  // pull info from database done
+  // set current user data to input fields done
   // cancel -> direct back to profile
   // save -> save to db, popup msg that it was successful
   
   // image upload next after
+  
+  const [userData, setUserData] = useState({});
+
+   // function to retrieve the user's data from the database
+   useEffect (() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/getUser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ uid: user.uid }),
+        });
+  
+        const data = await response.json();
+  
+        setUserData(data.data);
+        // do something with the data here
+        console.log("/EP USERDATA:", userData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // need some sort of logic to determine what has been edited tbh...
+
+  // const handleSave = async () => {
+  //   try {
+
+  //   }
+  // }
 
   return (
     <Sheet
@@ -94,15 +103,11 @@ export default function EditProfile({ user }) {
             },
           }}
         >
-          <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Name</FormLabel>
+          <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Display Name</FormLabel>
           <Box sx={{ display: { xs: 'contents', sm: 'flex' }, gap: 2 }}>
             <FormControl sx={{ flex: 1 }}>
-              <FormLabel sx={{ display: { sm: 'none' } }}>First name</FormLabel>
-              <Input placeholder="first name" defaultValue="Siriwat" />
-            </FormControl>
-            <FormControl sx={{ flex: 1 }}>
-              <FormLabel sx={{ display: { sm: 'none' } }}>Last name</FormLabel>
-              <Input placeholder="last name" defaultValue="K." />
+              <FormLabel sx={{ display: { sm: 'none' } }}>Display Name</FormLabel>
+              <Input placeholder="display name" defaultValue={ userData.displayName } />
             </FormControl>
           </Box>
 
@@ -114,7 +119,7 @@ export default function EditProfile({ user }) {
               type="email"
               startDecorator={<i data-feather="mail" />}
               placeholder="email"
-              defaultValue="siriwatk@test.com"
+              defaultValue= { userData.email }
             />
           </FormControl>
 
@@ -150,7 +155,7 @@ export default function EditProfile({ user }) {
             <Textarea
               minRows={4}
               sx={{ mt: 1.5 }}
-              defaultValue="I'm a software developer based in Bangkok, Thailand. My goal is to solve UI problems with neat CSS without using too much JavaScript."
+              defaultValue= { userData.bio }
             />
             <FormHelperText sx={{ mt: 0.75, fontSize: 'xs' }}>
               275 characters left
