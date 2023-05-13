@@ -32,6 +32,8 @@ export default function EditProfile({ user }) {
   // image upload next after
   
   const [userData, setUserData] = useState({});
+  const [field, setField] = useState("");
+  const [content, setContent] = useState("");
 
    // function to retrieve the user's data from the database
    useEffect (() => {
@@ -59,11 +61,33 @@ export default function EditProfile({ user }) {
 
   // need some sort of logic to determine what has been edited tbh...
 
-  // const handleSave = async () => {
-  //   try {
+  // maybe something like a global edit data 
 
-  //   }
-  // }
+  const editData = async () => {
+    try {
+      const response = await fetch("/api/editUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ uid: userData.uid, field, content }),
+      });
+
+      console.log("RESPONSE", response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      // logic for it will appear here...
+      await editData();
+      
+    } catch (error) {
+      console.error("Error saving data:", error);
+    }
+  };
 
   return (
     <Sheet
