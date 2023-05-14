@@ -236,13 +236,13 @@ export default function Component({ user }) {
           </FormLabel>
           <Box sx={{ display: { xs: "contents", sm: "flex" }, gap: 2 }}>
             <FormControl sx={{ flex: 1 }}>
-              <FormLabel sx={{ display: { sm: "none" } }}>First name</FormLabel>
-              <Input placeholder="first name" defaultValue="Siriwat" />
+              <FormLabel sx={{ display: { sm: "none" } }}>Display Name</FormLabel>
+              <Input placeholder="Display Name" defaultValue="Siriwat" />
             </FormControl>
-            <FormControl sx={{ flex: 1 }}>
+            {/* <FormControl sx={{ flex: 1 }}>
               <FormLabel sx={{ display: { sm: "none" } }}>Last name</FormLabel>
               <Input placeholder="last name" defaultValue="K." />
-            </FormControl>
+            </FormControl> */}
           </Box>
 
           <Divider role="presentation" />
@@ -284,18 +284,20 @@ export default function Component({ user }) {
 
           <Divider role="presentation" />
 
-          <FormControl sx={{ display: { sm: "contents" } }}>
+          {/* <FormControl sx={{ display: { sm: "contents" } }}>
             <FormLabel>Role</FormLabel>
             <Input defaultValue="UI Developer" />
-          </FormControl>
+          </FormControl> */}
 
-          <Divider role="presentation" />
+          {/* <Divider role="presentation" /> */}
+          
+          {/* Commenting out things we don't need */}
 
-          <CountrySelector />
+          {/* <CountrySelector /> */}
 
-          <Divider role="presentation" />
+          {/* <Divider role="presentation" /> */}
 
-          <FormControl sx={{ display: { sm: "contents" } }}>
+          {/* <FormControl sx={{ display: { sm: "contents" } }}>
             <FormLabel>Timezone</FormLabel>
             <Select
               startDecorator={<i data-feather="clock" />}
@@ -314,9 +316,9 @@ export default function Component({ user }) {
                 </Typography>
               </Option>
             </Select>
-          </FormControl>
+          </FormControl> */}
 
-          <Divider role="presentation" />
+          {/* <Divider role="presentation" /> */}
 
           <Box>
             <FormLabel>Bio</FormLabel>
