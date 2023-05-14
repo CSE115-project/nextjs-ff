@@ -30,12 +30,17 @@ import {
 import { useState } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { useRouter } from "next/router";
+
 
 export default function Component({ user }) {
   // Image Uploading
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imageURL, setImageURL] = useState("");
+  
+  // for route
+  const router = useRouter();
 
   if (!user) return <div>Loading...</div>;
   console.log("edPro user", user.uid);
@@ -91,6 +96,11 @@ export default function Component({ user }) {
         console.error("Error updating user document:", error);
       }
     }
+  };
+
+  const handleCancel = (event) => {
+    event.preventDefault();
+    router.push("/profile");
   };
 
   return (
@@ -313,7 +323,8 @@ export default function Component({ user }) {
               gap: 1,
             }}
           >
-            <Button variant="outlined" color="neutral" size="sm">
+            {/* Cancel will route back to profile page */}
+            <Button variant="outlined" color="neutral" size="sm" onClick={handleCancel}>
               Cancel
             </Button>
             <Button size="sm" onClick={handleSave}>
