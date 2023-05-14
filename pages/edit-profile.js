@@ -336,7 +336,7 @@ export default function Component({ user }) {
             </FormHelperText>
           </Box>
 
-          <Divider role="presentation" />
+          {/* <Divider role="presentation" />
 
           <Box>
             <FormLabel>Portfolio projects</FormLabel>
@@ -364,7 +364,7 @@ export default function Component({ user }) {
               fileSize="4.2 MB"
               progress={80}
             />
-          </Stack>
+          </Stack>  */}
 
           <Divider role="presentation" />
 
