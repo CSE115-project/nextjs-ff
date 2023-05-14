@@ -239,6 +239,9 @@ export default function Component({ user }) {
               <FormLabel sx={{ display: { sm: "none" } }}>Display Name</FormLabel>
               <Input placeholder="Display Name" defaultValue="Siriwat" />
             </FormControl>
+            
+            {/* Just have Display Name instead of first and last name */}
+            
             {/* <FormControl sx={{ flex: 1 }}>
               <FormLabel sx={{ display: { sm: "none" } }}>Last name</FormLabel>
               <Input placeholder="last name" defaultValue="K." />
@@ -284,42 +287,6 @@ export default function Component({ user }) {
 
           <Divider role="presentation" />
 
-          {/* <FormControl sx={{ display: { sm: "contents" } }}>
-            <FormLabel>Role</FormLabel>
-            <Input defaultValue="UI Developer" />
-          </FormControl> */}
-
-          {/* <Divider role="presentation" /> */}
-          
-          {/* Commenting out things we don't need */}
-
-          {/* <CountrySelector /> */}
-
-          {/* <Divider role="presentation" /> */}
-
-          {/* <FormControl sx={{ display: { sm: "contents" } }}>
-            <FormLabel>Timezone</FormLabel>
-            <Select
-              startDecorator={<i data-feather="clock" />}
-              defaultValue="1"
-            >
-              <Option value="1">
-                Indochina Time (Bangkok){" "}
-                <Typography textColor="text.tertiary" ml={0.5}>
-                  — GMT+07:00
-                </Typography>
-              </Option>
-              <Option value="2">
-                Indochina Time (Ho Chi Minh City){" "}
-                <Typography textColor="text.tertiary" ml={0.5}>
-                  — GMT+07:00
-                </Typography>
-              </Option>
-            </Select>
-          </FormControl> */}
-
-          {/* <Divider role="presentation" /> */}
-
           <Box>
             <FormLabel>Bio</FormLabel>
             <FormHelperText>Write a short introduction.</FormHelperText>
@@ -335,36 +302,6 @@ export default function Component({ user }) {
               275 characters left
             </FormHelperText>
           </Box>
-
-          {/* <Divider role="presentation" />
-
-          <Box>
-            <FormLabel>Portfolio projects</FormLabel>
-            <FormHelperText>Share a few snippets of your work.</FormHelperText>
-          </Box>
-          <Stack useFlexGap spacing={1.5}>
-            <DropZone />
-
-            <FileUpload
-              fileName="Tech design requirements.pdf"
-              fileSize="200 KB"
-              progress={100}
-            />
-
-            <FileUpload
-              icon={<i data-feather="film" />}
-              fileName="Dashboard prototype recording.mp4"
-              fileSize="16 MB"
-              progress={40}
-            />
-
-            <FileUpload
-              icon={<i data-feather="upload-cloud" />}
-              fileName="Dashboard prototype FINAL.fig"
-              fileSize="4.2 MB"
-              progress={80}
-            />
-          </Stack>  */}
 
           <Divider role="presentation" />
 
