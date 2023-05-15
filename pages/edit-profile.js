@@ -38,6 +38,10 @@ export default function Component({ user }) {
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imageURL, setImageURL] = useState("");
+
+  //update name and bio
+  const [updatedName, setUpdatedName] = React.useState("");
+  const [updatedBio, setUpdatedBio] = React.useState("");
   
   // for route
   const router = useRouter();
@@ -76,15 +80,15 @@ export default function Component({ user }) {
   const handleSave = async (event) => {
     event.preventDefault();
     // Update the user document with the new image URL
-    if (imageURL) {
+    if (updatedName || updatedBio) {
       const { uid, email, displayName, bio, favorites, wantToGo, friends } =
         user;
       const updateUser = {
         uid: uid || user.uid,
         email: email || user.email,
-        displayName: displayName || user.displayName || "",
-        image: imageURL,
-        bio: bio || "",
+        displayName: updatedName ||updatedBio || "",
+        // image: imageURL,
+        bio: updatedBio || bio || "",
         favorites: favorites || user.favorites || [],
         wantToGo: wantToGo || user.wantToGo || [],
         friends: friends || user.friends || [],
@@ -126,7 +130,7 @@ export default function Component({ user }) {
       <Button onClick={handleProfile} sx={{ position: "fixed", top: 0, left: 0 }}>
         Profile
       </Button>
-      
+
       <Tabs
         defaultValue={0}
         sx={{
@@ -258,7 +262,7 @@ export default function Component({ user }) {
           <Box sx={{ display: { xs: "contents", sm: "flex" }, gap: 2 }}>
             <FormControl sx={{ flex: 1 }}>
               <FormLabel sx={{ display: { sm: "none" } }}>Display Name</FormLabel>
-              <Input placeholder="Display Name" defaultValue="Siriwat" />
+              <Input placeholder="Display Name" defaultValue="Siriwat" value = {updatedName} onChange={(event) => setUpdatedName(event.target.value)}/>
             </FormControl>
             
             {/* Just have Display Name instead of first and last name */}
@@ -318,7 +322,9 @@ export default function Component({ user }) {
               minRows={4}
               sx={{ mt: 1.5 }}
               defaultValue="I'm a software developer based in Bangkok, Thailand. My goal is to solve UI problems with neat CSS without using too much JavaScript."
-            />
+              value = {updatedBio}
+              onChange={(event) => setUpdatedBio(event.target.value)}
+              />
             <FormHelperText sx={{ mt: 0.75, fontSize: "xs" }}>
               275 characters left
             </FormHelperText>
