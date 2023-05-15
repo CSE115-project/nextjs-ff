@@ -40,7 +40,7 @@ export default function Component({ user }) {
   const [imageURL, setImageURL] = useState("");
 
   //update name and bio
-  const [updatedName, setUpdatedName] = React.useState("");
+  const [updatedName, setUpdatedName] = React.useState("Siriwat Ponchalatam");
   const [updatedBio, setUpdatedBio] = React.useState("");
   
   // for route
@@ -87,7 +87,7 @@ export default function Component({ user }) {
         uid: uid || user.uid,
         email: email || user.email,
         displayName: updatedName ||updatedBio || "",
-        // image: imageURL,
+        image: imageURL,
         bio: updatedBio || bio || "",
         favorites: favorites || user.favorites || [],
         wantToGo: wantToGo || user.wantToGo || [],
@@ -262,7 +262,7 @@ export default function Component({ user }) {
           <Box sx={{ display: { xs: "contents", sm: "flex" }, gap: 2 }}>
             <FormControl sx={{ flex: 1 }}>
               <FormLabel sx={{ display: { sm: "none" } }}>Display Name</FormLabel>
-              <Input placeholder="Display Name" defaultValue="Siriwat" value = {updatedName} onChange={(event) => setUpdatedName(event.target.value)}/>
+              <Input placeholder="Display Name" defaultValue={updatedName} value = {updatedName} onChange={(event) => setUpdatedName(event.target.value)}/>
             </FormControl>
             
             {/* Just have Display Name instead of first and last name */}
@@ -301,7 +301,7 @@ export default function Component({ user }) {
               gap: 2.5,
             }}
           >
-            <Avatar size="lg" src={imageURL} sx={{ "--Avatar-size": "64px" }} />
+            <Avatar size="lg" src={imageURL || user.image} sx={{ "--Avatar-size": "64px" }} />
 
             {/* Image Upload */}
             <input type="file" onChange={handleFileChange} />
