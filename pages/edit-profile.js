@@ -40,7 +40,7 @@ export default function Component({ user }) {
   const [imageURL, setImageURL] = useState("");
 
   //update name and bio
-  const [updatedName, setUpdatedName] = React.useState("Siriwat Ponchalatam");
+  const [updatedName, setUpdatedName] = React.useState("");
   const [updatedBio, setUpdatedBio] = React.useState("");
   
   // for route
@@ -80,13 +80,13 @@ export default function Component({ user }) {
   const handleSave = async (event) => {
     event.preventDefault();
     // Update the user document with the new image URL
-    if (updatedName || updatedBio) {
+    if (imageURL || updatedName || updatedBio) {
       const { uid, email, displayName, bio, favorites, wantToGo, friends } =
         user;
       const updateUser = {
         uid: uid || user.uid,
         email: email || user.email,
-        displayName: updatedName ||updatedBio || "",
+        displayName: updatedName || user.displayName || "",
         image: imageURL,
         bio: updatedBio || bio || "",
         favorites: favorites || user.favorites || [],
@@ -262,7 +262,7 @@ export default function Component({ user }) {
           <Box sx={{ display: { xs: "contents", sm: "flex" }, gap: 2 }}>
             <FormControl sx={{ flex: 1 }}>
               <FormLabel sx={{ display: { sm: "none" } }}>Display Name</FormLabel>
-              <Input placeholder="Display Name" defaultValue={updatedName} value = {updatedName} onChange={(event) => setUpdatedName(event.target.value)}/>
+              <Input placeholder="Display Name" value={ updatedName || "Siriwat Ponchalatam"} onChange={(event) => setUpdatedName(event.target.value)}/>
             </FormControl>
             
             {/* Just have Display Name instead of first and last name */}
