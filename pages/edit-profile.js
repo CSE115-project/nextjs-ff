@@ -39,7 +39,7 @@ export default function Component({ user }) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imageURL, setImageURL] = useState("");
 
-  //update name and bio
+  // update name and bio
   const [updatedName, setUpdatedName] = React.useState("");
   const [updatedBio, setUpdatedBio] = React.useState("");
   
@@ -107,12 +107,6 @@ export default function Component({ user }) {
     router.push("/profile");
   };
 
-  const handleProfile = (event) => {
-    event.preventDefault();
-    router.push("/profile");
-  }
-
-
   return (
     <Sheet
       sx={{
@@ -126,10 +120,6 @@ export default function Component({ user }) {
       <Typography level="h1" fontSize="xl2" sx={{ mb: 1 }}>
         My profile
       </Typography>
-
-      <Button onClick={handleProfile} sx={{ position: "fixed", top: 0, left: 0 }}>
-        Profile
-      </Button>
 
       <Tabs
         defaultValue={0}
