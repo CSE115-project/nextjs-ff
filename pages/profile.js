@@ -11,6 +11,7 @@ import { getDoc, getFirestore, doc } from "firebase/firestore";
 import Card from "@mui/joy/Card";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
+import Image from "next/image";
 
 /*
 const userObj = {
@@ -64,22 +65,21 @@ export default function Profile({ user }) {
   }, []);
 
   console.log("p/profile userData:", userData);
+
   if (!userData) {
     return <div>Loading...</div>;
   } else {
     console.log("Loading Profile...");
     return (
       <div className="userProfile">
+        {/* <meta name="viewport" content="initial-scale=1, width=device-width" /> */}
+
         <Sheet>
           <Stack direction="row" alignItems="center" spacing={0}>
             {/* Home Button */}
             <Button onClick={handleHome} sx={{ mt: 1 }}>
               Home
             </Button>
-
-            <Typography level="h1" fontSize="xl2">
-              My profile
-            </Typography>
 
             {/* Edit Profile Button */}
             <Button onClick={handleEditProfile} sx={{ marginLeft: "auto" }}>
@@ -89,11 +89,19 @@ export default function Profile({ user }) {
 
           <Sheet
             sx={{
-              maxWidth: "75%",
+              maxWidth: 1200,
               width: "100%",
               mx: "auto",
+              display: "flex",
+              flexDirection: "column",
+              minWidth: 0,
+              height: "100%",
+              overflow: "auto",
             }}
           >
+            <Typography level="h1" fontSize="xl2" sx={{ mx: "auto", mb: 1 }}>
+              My profile
+            </Typography>
             <Box
               sx={{
                 bgcolor: "#222158",
@@ -148,14 +156,19 @@ export default function Profile({ user }) {
             {/* Liked Place (need to route to list of places) */}
 
             {/* Stack to create rows */}
-            <Stack direction="row" alignItems="flex-start" spacing={"10%"}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="center"
+              spacing={{ xs: 0, sm: "10%", md: "10%", lg: "10%" }}
+              sx={{ flexWrap: "wrap" }}
+            >
               {/* Stack to create the first column */}
               <Stack
                 direction="column"
                 justifyContent="space-evenly"
                 alignItems="flex-start"
                 spacing={"10%"}
-                sx={{ ml: "20%" }}
               >
                 {/* Top Left Card */}
                 <Card
@@ -175,15 +188,17 @@ export default function Profile({ user }) {
                   </CardCover>
                   <CardContent>
                     {/* Add rest of Card */}
-                    <img
-                      src="images/blue_folder.png"
+                    <Image
+                      src="/images/blue_folder.png"
                       alt="Blue folder image"
+                      width={100}
+                      height={100}
                       style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100px', // Adjust the width as desired
-                      height: 'auto', // Maintain the aspect ratio of the image
+                        position: "absolute",
+                        top: 3,
+                        left: 5,
+                        // width: "100px", // Adjust the width as desired
+                        // height: "auto", // Maintain the aspect ratio of the image
                       }}
                     />
                     {/* <Typography textColor="#5F7CEC">Test2</Typography> */}
@@ -191,7 +206,14 @@ export default function Profile({ user }) {
 
                   {/* Bottom Left Card */}
                 </Card>
-                <Card sx={{ width: 250, height: 200, bgcolor: "#FBEEEE" }}>
+                <Card
+                  sx={{
+                    "--Card-radius": "20px",
+                    width: 250,
+                    height: 200,
+                    bgcolor: "#FBEEEE",
+                  }}
+                >
                   <CardCover>
                     {/* Add rest of card */}
                     <Typography component="h1" textColor="#E2615C">
@@ -200,15 +222,17 @@ export default function Profile({ user }) {
                   </CardCover>
                   <CardContent>
                     {/* Add rest of Card */}
-                    <img
-                      src="images/red_folder.png"
+                    <Image
+                      src="/images/red_folder.png"
                       alt="Red folder image"
+                      width={100}
+                      height={100}
                       style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100px', // Adjust the width as desired
-                      height: 'auto', // Maintain the aspect ratio of the image
+                        position: "absolute",
+                        top: 3,
+                        left: 5,
+                        // width: "100px", // Adjust the width as desired
+                        // height: "auto", // Maintain the aspect ratio of the image
                       }}
                     />
                   </CardContent>
@@ -233,20 +257,22 @@ export default function Profile({ user }) {
                   }}
                 >
                   <CardCover>
-                    <Typography textColor="#FADF7D" component="h1">
+                    <Typography textColor="#F4BA4F" component="h1">
                       Fun
                     </Typography>
                   </CardCover>
                   <CardContent>
-                    <img
-                      src="images/yellow_folder.png"
+                    <Image
+                      src="/images/yellow_folder.png"
                       alt="Yellow folder image"
+                      width={100}
+                      height={100}
                       style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100px', // Adjust the width as desired
-                      height: 'auto', // Maintain the aspect ratio of the image
+                        position: "absolute",
+                        top: 3,
+                        left: 5,
+                        // width: "100px", // Adjust the width as desired
+                        // height: "auto", // Maintain the aspect ratio of the image
                       }}
                     />
                   </CardContent>
@@ -267,17 +293,19 @@ export default function Profile({ user }) {
                     </Typography>
                   </CardCover>
                   <CardContent>
-                  <img
-                    src="images/green_folder.png"
-                    alt="Green folder image"
-                    style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100px', // Adjust the width as desired
-                    height: 'auto', // Maintain the aspect ratio of the image
-                    }}
-                  />
+                    <Image
+                      src="/images/green_folder.png"
+                      alt="Green folder image"
+                      width={100}
+                      height={100}
+                      style={{
+                        position: "absolute",
+                        top: 3,
+                        left: 5,
+                        // width: "100px", // Adjust the width as desired
+                        // height: "auto", // Maintain the aspect ratio of the image
+                      }}
+                    />
                   </CardContent>
                 </Card>
               </Stack>
