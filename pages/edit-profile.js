@@ -17,9 +17,9 @@ import Typography from "@mui/joy/Typography";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab, { tabClasses } from "@mui/joy/Tab";
-import DropZone from "../components/DropZone";
-import FileUpload from "../components/FileUpload";
-import CountrySelector from "../components/CountrySelector";
+// import DropZone from "../components/DropZone";
+// import FileUpload from "../components/FileUpload";
+// import CountrySelector from "../components/CountrySelector";
 import EditorToolbar from "../components/EditorToolbar";
 import {
   getStorage,
