@@ -42,6 +42,8 @@ export default function Profile({ user }) {
     router.push("/edit-profile");
   };
 
+
+
   // function to retrieve the user's data from the database
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +54,7 @@ export default function Profile({ user }) {
         if (docRes.exists()) {
           const data = docRes.data();
           setUserData(data);
+          setProfileImageUrl(data.image || "");
         } else {
           console.error("User Not Found");
         }
@@ -114,7 +117,7 @@ export default function Profile({ user }) {
               {/* need to test with real avatar */}
               <Avatar
                 sx={{ height: "128px", width: "128px", margin: "auto" }}
-                src={""}
+                src={userData.image || ""}
               />
 
               {/* Name of User */}
