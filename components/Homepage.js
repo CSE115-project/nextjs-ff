@@ -1,6 +1,6 @@
 import * as React from "react";
 import Button from "@mui/joy/Button";
-import Map from "./Map";
+import GoogleMap from "./GoogleMap";
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 
@@ -44,7 +44,8 @@ const Homepage = ({user}) => {
         Add Friend
       </Button>
 
-      <Map />
+      {/* <Map /> */}
+      <GoogleMap />
     </div>
   );
 };
