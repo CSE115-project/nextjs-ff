@@ -7,7 +7,7 @@ export default function GoogleMap() {
 
 
   let placesService;
-  
+
   // Google Maps
   // default: San Francisco
   const defLocation = {
@@ -40,13 +40,14 @@ export default function GoogleMap() {
             zoom: 13,
           });
 
-          // Initialize PlacesService
-          let service = new google.maps.places.PlacesService(map);
-
-
+          const request = {
+            query: "Night life",
+            fields: ["name", "geometry"],
+          };
+  
           // Perform search and get bars within the current map view
-          map.addListener("idle", performSearch);
-
+          const result = performSearch(request, map);
+          console.log(result);
 
           // Add a marker for the user's current location
           new google.maps.Marker({
@@ -54,6 +55,8 @@ export default function GoogleMap() {
             map,
           });
         });
+
+
       } else {
         const map = new Map(mapRef.current, {
           center: { lat: defLocation.lat, lng: defLocation.lng },
@@ -62,33 +65,42 @@ export default function GoogleMap() {
       }
     });
   }, []);
-  
-// Perform search for bars within the current map view
-const performSearch = () => {
-  if (!mapRef.current) return;
 
-  const mapInstance = mapRef.current.getMap();
-  const bounds = mapInstance.getBounds();
+  // Perform search for bars within the current map view
+  const performSearch = (request, map) => {
+    if (!mapRef.current) return;
 
-  const request = {
-    query: "Night life",
-    fields: ["name", "geometry"],
+    // Initialize PlacesService
+    let service = new google.maps.places.PlacesService(map);
+
+    service.findPlaceFromQuery(
+      request,
+      (
+        results,
+        status,
+      ) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+          for (let i = 0; i < results.length; i++) {
+            createMarker(results[i]);
+          }
+
+          map.setCenter(results[0].geometry.location);
+        }
+      }
+    );
   };
 
-  placesServiceRef.current.nearbySearch(request, handleSearchResults);
-};
+  // Handle search results and retrieve lat/lng of bars
+  const handleSearchResults = (results, status) => {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+      const barLocations = results.map((result) => ({
+        lat: result.geometry.location.lat(),
+        lng: result.geometry.location.lng(),
+      }));
 
-// Handle search results and retrieve lat/lng of bars
-const handleSearchResults = (results, status) => {
-  if (status === google.maps.places.PlacesServiceStatus.OK) {
-    const barLocations = results.map((result) => ({
-      lat: result.geometry.location.lat(),
-      lng: result.geometry.location.lng(),
-    }));
-
-    console.log(barLocations);
-  }
-};
+      console.log(barLocations);
+    }
+  };
 
   return (
     <div ref={mapRef} style={{ height: "90%", width: "100%" }}>
