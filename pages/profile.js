@@ -12,6 +12,9 @@ import Card from "@mui/joy/Card";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
 import Image from "next/image";
+import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
+import Input from "@mui/joy/Input";
 
 /*
 const userObj = {
@@ -41,8 +44,6 @@ export default function Profile({ user }) {
     event.preventDefault();
     router.push("/edit-profile");
   };
-
-
 
   // function to retrieve the user's data from the database
   useEffect(() => {
@@ -138,6 +139,34 @@ export default function Profile({ user }) {
                 {userData.bio || "Bio.."}
               </Typography>
             </Box>
+
+            <Typography component="h4" sx={{ py: 1, margin: "auto" }}>
+              Add Friend
+            </Typography>
+
+            {/* stack to input and button in same line */}
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="center"
+              spacing={1}
+              sx={{ flexWrap: "wrap" }}
+            >
+              {/* Form to input friend's email */}
+              <FormControl sx={{ display: { xs: "contents", sm: "flex" } }}>
+                <Input
+                  type="friendEmail"
+                  placeholder="email"
+                  defaultValue=""
+                  sx={{ width: 500 }}
+
+                  // Add add friend functionality
+                  // Button to add a friend
+                  endDecorator={<Button>Add</Button>}
+                />
+              </FormControl>
+              
+            </Stack>
 
             <Box
               sx={{
