@@ -144,7 +144,7 @@ export default function Profile({ user }) {
               Add Friend
             </Typography>
 
-            {/* stack to input and button in same line */}
+            {/* stack for input and button in same line */}
             <Stack
               direction="row"
               alignItems="center"
@@ -152,20 +152,18 @@ export default function Profile({ user }) {
               spacing={1}
               sx={{ flexWrap: "wrap" }}
             >
-              {/* Form to input friend's email */}
+              {/* Form for inputing friend's email */}
               <FormControl sx={{ display: { xs: "contents", sm: "flex" } }}>
                 <Input
-                  type="friendEmail"
+                  type="email"
                   placeholder="email"
                   defaultValue=""
                   sx={{ width: 500 }}
-
                   // Add add friend functionality
                   // Button to add a friend
                   endDecorator={<Button>Add</Button>}
                 />
               </FormControl>
-              
             </Stack>
 
             <Box
