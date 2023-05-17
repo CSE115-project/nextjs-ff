@@ -3,7 +3,11 @@ import { useEffect, useRef } from "react";
 
 export default function GoogleMap() {
   const mapRef = useRef(null);
+  const placesServiceRef = useRef(null);
 
+
+  let placesService;
+  
   // Google Maps
   // default: San Francisco
   const defLocation = {
@@ -15,7 +19,7 @@ export default function GoogleMap() {
     const loader = new Loader({
       apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API,
       version: "weekly",
-      //   ...additionalOptions,
+      libraries: ["places"],
     });
 
     loader.load().then(async () => {
@@ -33,8 +37,16 @@ export default function GoogleMap() {
           // Create a new map centered on the user's current location
           const map = new Map(mapRef.current, {
             center: currentLocation,
-            zoom: 8,
+            zoom: 13,
           });
+
+          // Initialize PlacesService
+          let service = new google.maps.places.PlacesService(map);
+
+
+          // Perform search and get bars within the current map view
+          map.addListener("idle", performSearch);
+
 
           // Add a marker for the user's current location
           new google.maps.Marker({
@@ -50,6 +62,34 @@ export default function GoogleMap() {
       }
     });
   }, []);
+  
+// Perform search for bars within the current map view
+const performSearch = () => {
+  if (!mapRef.current) return;
+
+  const mapInstance = mapRef.current.getMap();
+  const bounds = mapInstance.getBounds();
+
+  const request = {
+    query: "Night life",
+    fields: ["name", "geometry"],
+  };
+
+  placesServiceRef.current.nearbySearch(request, handleSearchResults);
+};
+
+// Handle search results and retrieve lat/lng of bars
+const handleSearchResults = (results, status) => {
+  if (status === google.maps.places.PlacesServiceStatus.OK) {
+    const barLocations = results.map((result) => ({
+      lat: result.geometry.location.lat(),
+      lng: result.geometry.location.lng(),
+    }));
+
+    console.log(barLocations);
+  }
+};
+
   return (
     <div ref={mapRef} style={{ height: "90%", width: "100%" }}>
       GoogleMap
