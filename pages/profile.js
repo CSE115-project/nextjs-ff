@@ -152,7 +152,7 @@ export default function Profile({ user }) {
               spacing={1}
               sx={{ flexWrap: "wrap" }}
             >
-              {/* Form for inputing friend's email */}
+              {/* Form for inputting friend's email */}
               <FormControl sx={{ display: { xs: "contents", sm: "flex" } }}>
                 <Input
                   type="email"
