@@ -3,10 +3,6 @@ import { useEffect, useRef } from "react";
 
 export default function GoogleMap() {
   const mapRef = useRef(null);
-  const placesServiceRef = useRef(null);
-
-
-  let placesService;
 
   // Google Maps
   // default: San Francisco
@@ -40,14 +36,18 @@ export default function GoogleMap() {
             zoom: 13,
           });
 
+          // Create Heatmap overlay in nearby area
           const request = {
-            query: "Night life",
-            fields: ["name", "geometry"],
+            location: currentLocation,
+            radius: '500',
+            type: ['bars']
+            // query: "Los Pinos Mexican food",
+            // fields: ["keyword", "geometry"],
           };
-  
-          // Perform search and get bars within the current map view
-          const result = performSearch(request, map);
-          console.log(result);
+
+          let service = new google.maps.places.PlacesService(map);
+          service.nearbySearch(request, nearbyResults);
+
 
           // Add a marker for the user's current location
           new google.maps.Marker({
@@ -60,51 +60,21 @@ export default function GoogleMap() {
       } else {
         const map = new Map(mapRef.current, {
           center: { lat: defLocation.lat, lng: defLocation.lng },
-          zoom: 11,
+          zoom: 13,
         });
       }
     });
   }, []);
 
-  // Perform search for bars within the current map view
-  const performSearch = (request, map) => {
-    if (!mapRef.current) return;
-
-    // Initialize PlacesService
-    let service = new google.maps.places.PlacesService(map);
-
-    service.findPlaceFromQuery(
-      request,
-      (
-        results,
-        status,
-      ) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-          for (let i = 0; i < results.length; i++) {
-            createMarker(results[i]);
-          }
-
-          map.setCenter(results[0].geometry.location);
-        }
-      }
-    );
-  };
-
-  // Handle search results and retrieve lat/lng of bars
-  const handleSearchResults = (results, status) => {
-    if (status === google.maps.places.PlacesServiceStatus.OK) {
-      const barLocations = results.map((result) => ({
-        lat: result.geometry.location.lat(),
-        lng: result.geometry.location.lng(),
-      }));
-
-      console.log(barLocations);
+  function nearbyResults(results, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      console.log("Results:", results);
     }
-  };
+  }
 
   return (
     <div ref={mapRef} style={{ height: "90%", width: "100%" }}>
-      GoogleMap
+      Map Loading...
     </div>
   );
 }
