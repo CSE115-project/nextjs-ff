@@ -31,45 +31,51 @@ export default function GoogleMap() {
           };
 
           // Create a new map centered on the user's current location
-          const map = new Map(mapRef.current, {
+          mapRef.current = new Map(mapRef.current, {
             center: currentLocation,
             zoom: 13,
+          });
+
+          // Add a marker for the user's current location
+          new google.maps.Marker({
+            position: currentLocation,
+            map: mapRef.current,
           });
 
           // Create Heatmap overlay in nearby area
           const request = {
             location: currentLocation,
-            radius: '500',
-            type: ['bars']
-            // query: "Los Pinos Mexican food",
-            // fields: ["keyword", "geometry"],
+            radius: "8000",
+            keyword: "food, attractions, night life nearby open now",
           };
 
-          let service = new google.maps.places.PlacesService(map);
+          let service = new google.maps.places.PlacesService(mapRef.current);
           service.nearbySearch(request, nearbyResults);
-
-
-          // Add a marker for the user's current location
-          new google.maps.Marker({
-            position: currentLocation,
-            map,
-          });
         });
-
-
       } else {
-        const map = new Map(mapRef.current, {
+        mapRef.current = new Map(mapRef.current, {
           center: { lat: defLocation.lat, lng: defLocation.lng },
           zoom: 13,
         });
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function nearbyResults(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       console.log("Results:", results);
+      for (let result of results) {
+        createMarker(result);
+      }
     }
+  }
+
+  function createMarker(place) {
+    new google.maps.Marker({
+      position: place.geometry.location,
+      map: mapRef.current,
+    });
   }
 
   return (
