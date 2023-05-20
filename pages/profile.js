@@ -7,7 +7,7 @@ import Typography from "@mui/joy/Typography";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { firebase } from "../firebase";
-import { getDoc, getFirestore, doc } from "firebase/firestore";
+import { getDoc, getFirestore, doc, collection, query, where, getDocs, updateDoc, arrayUnion } from "firebase/firestore";
 import Card from "@mui/joy/Card";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
@@ -15,6 +15,8 @@ import Image from "next/image";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
+
+
 
 /*
 const userObj = {
@@ -44,6 +46,56 @@ export default function Profile({ user }) {
     event.preventDefault();
     router.push("/edit-profile");
   };
+
+  // Adding search friends functionality ----------------------------------------------------------
+
+  // Handle search query input and button click
+  const [searchQuery, setSearchQuery] = useState('');
+  const [matchingUsers, setMatchingUsers] = useState([]);
+
+  const searchFriends = async () => {
+    const db = getFirestore();
+    const usersCollectionRef = collection(db, 'users');
+    const searchQueryRef = query(usersCollectionRef, where('email', '==', searchQuery));
+    const snapshot = await getDocs(searchQueryRef);
+    const matchingUsersData = snapshot.docs.map((doc) => doc.data());
+    setMatchingUsers(matchingUsersData);
+
+    // Process matchingUsers or update state with the search results
+  };
+
+  const handleAddFriend = async (event) => {
+    event.preventDefault();
+    const db = getFirestore();
+    const usersCollectionRef = collection(db, 'users');
+    const searchQueryRef = query(usersCollectionRef, where('email', '==', searchQuery));
+    const snapshot = await getDocs(searchQueryRef);
+    const matchingUsersData = snapshot.docs.map((doc) => doc.data());
+    setMatchingUsers(matchingUsersData);
+    console.log("matching user", matchingUsers);
+
+    if (matchingUsers.length >= 1) {
+      const currentUserRef = doc(db, 'users', user.uid);
+      const friendUserRef = doc(db, 'users', matchingUsers[0].uid);
+
+      await updateDoc(currentUserRef, {
+        friends: arrayUnion(matchingUsers[0].uid),
+      });
+
+      await updateDoc(friendUserRef, {
+        friends: arrayUnion(user.uid),
+      });
+    }
+
+    // Handle success or update state accordingly
+  };
+
+  const handleSearch = () => {
+    searchFriends();
+  };
+
+
+  // Adding search friends functionality ----------------------------------------------------------
 
   // function to retrieve the user's data from the database
   useEffect(() => {
@@ -153,7 +205,7 @@ export default function Profile({ user }) {
               sx={{ flexWrap: "wrap" }}
             >
               {/* Form for inputting friend's email */}
-              <FormControl sx={{ display: { xs: "contents", sm: "flex" } }}>
+              {/* <FormControl sx={{ display: { xs: "contents", sm: "flex" } }}>
                 <Input
                   type="email"
                   placeholder="email"
@@ -163,7 +215,17 @@ export default function Profile({ user }) {
                   // Button to add a friend
                   endDecorator={<Button>Add</Button>}
                 />
-              </FormControl>
+              </FormControl> */}
+
+              <form
+                onSubmit={handleAddFriend}
+              >
+                <Input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                <Button type="submit">Add</Button>
+              </form>
+
+              {/* Render the matching users */}
+
             </Stack>
 
             <Box
