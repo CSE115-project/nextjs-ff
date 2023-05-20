@@ -47,38 +47,46 @@ export default function Profile({ user }) {
     router.push("/edit-profile");
   };
 
-
   // Adding search friends functionality ----------------------------------------------------------
-  
+
   // Handle search query input and button click
   const [searchQuery, setSearchQuery] = useState('');
   const [matchingUsers, setMatchingUsers] = useState([]);
-  const currentUserId = user.uid;
-  
+
   const searchFriends = async () => {
     const db = getFirestore();
     const usersCollectionRef = collection(db, 'users');
-    const searchQueryRef = query(usersCollectionRef, where('displayName', '==', searchQuery));
+    const searchQueryRef = query(usersCollectionRef, where('email', '==', searchQuery));
     const snapshot = await getDocs(searchQueryRef);
     const matchingUsersData = snapshot.docs.map((doc) => doc.data());
     setMatchingUsers(matchingUsersData);
-    
+
     // Process matchingUsers or update state with the search results
   };
 
-  const addFriend = async (friendId) => {
+  const handleAddFriend = async (event) => {
+    event.preventDefault();
     const db = getFirestore();
-    const currentUserRef = doc(db, 'users', currentUserId);
-    const friendUserRef = doc(db, 'users', friendId);
+    const usersCollectionRef = collection(db, 'users');
+    const searchQueryRef = query(usersCollectionRef, where('email', '==', searchQuery));
+    const snapshot = await getDocs(searchQueryRef);
+    const matchingUsersData = snapshot.docs.map((doc) => doc.data());
+    setMatchingUsers(matchingUsersData);
+    console.log("matching user", matchingUsers);
 
-    await updateDoc(currentUserRef, {
-      friends: arrayUnion(friendId),
-    });
-  
-    await updateDoc(friendUserRef, {
-      friends: arrayUnion(currentUserId),
-    });
-  
+    if (matchingUsers.length >= 1) {
+      const currentUserRef = doc(db, 'users', user.uid);
+      const friendUserRef = doc(db, 'users', matchingUsers[0].uid);
+
+      await updateDoc(currentUserRef, {
+        friends: arrayUnion(matchingUsers[0].uid),
+      });
+
+      await updateDoc(friendUserRef, {
+        friends: arrayUnion(user.uid),
+      });
+    }
+
     // Handle success or update state accordingly
   };
 
@@ -208,16 +216,16 @@ export default function Profile({ user }) {
                   endDecorator={<Button>Add</Button>}
                 />
               </FormControl> */}
-                <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-                <button onClick={handleSearch}>Search</button>
 
-                {/* Render the matching users */}
-                {matchingUsers.map((user) => (
-                  <div key={user.id}>
-                    <span>{user.name}</span>
-                    <button onClick={() => addFriend(user.id)}>Add Friend</button>
-                  </div>
-                ))}
+              <form
+                onSubmit={handleAddFriend}
+              >
+                <Input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                <Button type="submit">Add</Button>
+              </form>
+
+              {/* Render the matching users */}
+
             </Stack>
 
             <Box
