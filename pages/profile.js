@@ -97,6 +97,11 @@ export default function Profile({ user }) {
 
   // Adding search friends functionality ----------------------------------------------------------
 
+  const handleFriendProfile = (event) => {
+    event.preventDefault();
+    router.push("/friends-profile");
+  };
+
   // function to retrieve the user's data from the database
   useEffect(() => {
     const fetchData = async () => {
@@ -137,10 +142,20 @@ export default function Profile({ user }) {
               Home
             </Button>
 
-            {/* Edit Profile Button */}
-            <Button onClick={handleEditProfile} sx={{ marginLeft: "auto" }}>
-              Edit Profile
-            </Button>
+            <div style={{ display: "flex", marginLeft: 'auto' }}>
+              {/* Friend Profile Button */}
+              <Button onClick={handleFriendProfile}sx={{ width: "auto", mt: 1 }}>
+                Friends' Profile
+              </Button>
+
+              {/* Edit Profile Button */}
+              <Button onClick={handleEditProfile} sx={{ mt: 1}}>
+                Edit Profile
+              </Button>
+
+            </div>
+
+
           </Stack>
 
           <Sheet
