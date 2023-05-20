@@ -145,7 +145,7 @@ export default function Profile({ user }) {
             <div style={{ display: "flex", marginLeft: 'auto' }}>
               {/* Friend Profile Button */}
               <Button onClick={handleFriendProfile}sx={{ width: "auto", mt: 1 }}>
-                Friends' Profile
+                Friends Profile
               </Button>
 
               {/* Edit Profile Button */}
