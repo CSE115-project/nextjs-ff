@@ -37,16 +37,9 @@ const Homepage = ({user}) => {
           Profile
         </Button>
 
-        <div style={{ display: "flex", marginLeft: 'auto' }}>
-          <Button sx={{ width: "auto", mt: 1 }}>
-            List
-          </Button>
-
-          <Button sx={{ mt: 1 }}>
-            Friend
-          </Button>
-        </div>
-
+        <Button sx={{ marginLeft: "auto" }}>
+          List
+        </Button>
       </Stack>
 
       {/* <Map /> */}
