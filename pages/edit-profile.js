@@ -31,7 +31,7 @@ import { useState } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useRouter } from "next/router";
-
+import Checkbox from "@mui/joy/Checkbox";
 
 export default function Component({ user }) {
   // Image Uploading
@@ -42,10 +42,10 @@ export default function Component({ user }) {
   // update name and bio
   const [updatedName, setUpdatedName] = React.useState("");
   const [updatedBio, setUpdatedBio] = React.useState("");
-  
+
   // for route
   const router = useRouter();
-  
+
   if (!user) return <div>Loading...</div>;
   console.log("edPro user", user.uid);
 
@@ -100,6 +100,7 @@ export default function Component({ user }) {
         console.error("Error updating user document:", error);
       }
     }
+    router.push("/profile");
   };
 
   const handleCancel = (event) => {
@@ -121,7 +122,7 @@ export default function Component({ user }) {
         My profile
       </Typography>
 
-      <Tabs
+      {/* <Tabs
         defaultValue={0}
         sx={{
           bgcolor: "background.body",
@@ -228,118 +229,228 @@ export default function Component({ user }) {
           <Tab value={4}>Notifications</Tab>
           <Tab value={5}>Integrations</Tab>
           <Tab value={6}>API</Tab>
-        </TabList>
-        <Box
-          sx={{
-            pt: 3,
-            pb: 10,
-            display: "grid",
-            gridTemplateColumns: {
-              xs: "100%",
-              sm: "minmax(120px, 30%) 1fr",
-              lg: "280px 1fr minmax(120px, 208px)",
-            },
-            columnGap: { xs: 2, sm: 3, md: 4 },
-            rowGap: { xs: 2, sm: 2.5 },
-            "& > hr": {
-              gridColumn: "1/-1",
-            },
-          }}
-        >
-          <FormLabel sx={{ display: { xs: "none", sm: "block" } }}>
-            Name
-          </FormLabel>
-          <Box sx={{ display: { xs: "contents", sm: "flex" }, gap: 2 }}>
-            <FormControl sx={{ flex: 1 }}>
-              <FormLabel sx={{ display: { sm: "none" } }}>Display Name</FormLabel>
-              <Input placeholder="Display Name" value={ updatedName || "Siriwat Ponchalatam"} onChange={(event) => setUpdatedName(event.target.value)}/>
-            </FormControl>
-            
-            {/* Just have Display Name instead of first and last name */}
-            
-            {/* <FormControl sx={{ flex: 1 }}>
-              <FormLabel sx={{ display: { sm: "none" } }}>Last name</FormLabel>
-              <Input placeholder="last name" defaultValue="K." />
-            </FormControl> */}
-          </Box>
+        </TabList> */}
 
-          <Divider role="presentation" />
+      <Divider sx={{ paddingBottom: 0.5 }} role="presentation" />
 
-          <FormControl sx={{ display: { sm: "contents" } }}>
-            <FormLabel>Email</FormLabel>
+      <Box
+        sx={{
+          pt: 3,
+          pb: 10,
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "100%",
+            sm: "minmax(120px, 30%) 1fr",
+            lg: "280px 1fr minmax(120px, 208px)",
+          },
+          columnGap: { xs: 2, sm: 3, md: 4 },
+          rowGap: { xs: 2, sm: 2.5 },
+          "& > hr": {
+            gridColumn: "1/-1",
+          },
+        }}
+      >
+        <FormLabel sx={{ display: { xs: "none", sm: "block" } }}>
+          Name
+        </FormLabel>
+        <Box sx={{ display: { xs: "contents", sm: "flex" }, gap: 2 }}>
+          <FormControl sx={{ flex: 1 }}>
+            <FormLabel sx={{ display: { sm: "none" } }}>Display Name</FormLabel>
             <Input
-              type="email"
-              startDecorator={<i data-feather="mail" />}
-              placeholder="email"
-              defaultValue="siriwatk@test.com"
+              placeholder="Display Name"
+              value={updatedName || ""}
+              onChange={(event) => setUpdatedName(event.target.value)}
             />
           </FormControl>
 
-          <Divider role="presentation" />
+          {/* Just have Display Name instead of first and last name */}
 
-          <Box>
-            <FormLabel>Your photo</FormLabel>
-            <FormHelperText>
-              This will be displayed on your profile.
-            </FormHelperText>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "flex-start",
-              flexWrap: "wrap",
-              gap: 2.5,
-            }}
-          >
-            <Avatar size="lg" src={imageURL || user.image} sx={{ "--Avatar-size": "64px" }} />
-
-            {/* Image Upload */}
-            <input type="file" onChange={handleFileChange} />
-
-            <Button onClick={handleSubmit}>Click to upload</Button>
-            {uploadProgress > 0 && <p>Upload progress: {uploadProgress}%</p>}
-          </Box>
-
-          <Divider role="presentation" />
-
-          <Box>
-            <FormLabel>Bio</FormLabel>
-            <FormHelperText>Write a short introduction.</FormHelperText>
-          </Box>
-          <Box>
-            <EditorToolbar />
-            <Textarea
-              minRows={4}
-              sx={{ mt: 1.5 }}
-              defaultValue="I'm a software developer based in Bangkok, Thailand. My goal is to solve UI problems with neat CSS without using too much JavaScript."
-              value = {updatedBio}
-              onChange={(event) => setUpdatedBio(event.target.value)}
-              />
-            <FormHelperText sx={{ mt: 0.75, fontSize: "xs" }}>
-              275 characters left
-            </FormHelperText>
-          </Box>
-
-          <Divider role="presentation" />
-
-          <Box
-            sx={{
-              gridColumn: "1/-1",
-              justifySelf: "flex-end",
-              display: "flex",
-              gap: 1,
-            }}
-          >
-            {/* Cancel will route back to profile page */}
-            <Button variant="outlined" color="neutral" size="sm" onClick={handleCancel}>
-              Cancel
-            </Button>
-            <Button size="sm" onClick={handleSave}>
-              Save
-            </Button>
-          </Box>
+          {/* <FormControl sx={{ flex: 1 }}>
+              <FormLabel sx={{ display: { sm: "none" } }}>Last name</FormLabel>
+              <Input placeholder="last name" defaultValue="K." />
+            </FormControl> */}
         </Box>
-      </Tabs>
+
+        <Divider role="presentation" />
+
+        <FormControl sx={{ display: { sm: "contents" } }}>
+          <FormLabel>Email</FormLabel>
+          <Input
+            type="email"
+            // startDecorator={<i data-feather="mail" />}
+            placeholder="email"
+            defaultValue="siriwatk@test.com"
+          />
+        </FormControl>
+
+        <Divider role="presentation" />
+
+        <Box>
+          <FormLabel>Your photo</FormLabel>
+          <FormHelperText>
+            This will be displayed on your profile.
+          </FormHelperText>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "flex-start",
+            flexWrap: "wrap",
+            gap: 2.5,
+          }}
+        >
+          <Avatar
+            size="lg"
+            src={imageURL || user.image}
+            sx={{ "--Avatar-size": "64px" }}
+          />
+
+          {/* Image Upload */}
+          <input type="file" onChange={handleFileChange} />
+
+          <Button onClick={handleSubmit}>Click to upload</Button>
+          {uploadProgress > 0 && <p>Upload progress: {uploadProgress}%</p>}
+        </Box>
+
+        <Divider role="presentation" />
+
+        <Box>
+          <FormLabel>Bio</FormLabel>
+          <FormHelperText>Write a short introduction.</FormHelperText>
+        </Box>
+        <Box>
+          {/* <EditorToolbar /> */}
+          <Textarea
+            minRows={4}
+            sx={{ mt: 1.5 }}
+            defaultValue="I'm a software developer based in Bangkok, Thailand. My goal is to solve UI problems with neat CSS without using too much JavaScript."
+            value={updatedBio}
+            onChange={(event) => setUpdatedBio(event.target.value)}
+          />
+          <FormHelperText sx={{ mt: 0.75, fontSize: "xs" }}>
+            275 characters left
+          </FormHelperText>
+        </Box>
+
+        <Divider role="presentation" />
+
+        {/* Interest Checklist */}
+        <Box>
+          <FormLabel>Interests</FormLabel>
+          <FormHelperText>Your Interests</FormHelperText>
+        </Box>
+
+        <Box>
+          {/* Stack to create the rows */}
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={{ xs: "10%", sm: "30%", md: "30%", lg: "30%" }}
+            sx={{ flexWrap: "wrap" }}
+          >
+            {/* Stack to create the first column */}
+            <Stack
+              direction="column"
+              justifyContent="space-evenly"
+              alignItems="flex-start"
+              spacing={"10%"}
+            >
+              <Checkbox
+                defaultChecked={false}
+                label="Interest1"
+                size="md"
+                variant="outlined"
+              />
+              <Checkbox
+                defaultChecked={false}
+                label="Interest2"
+                size="md"
+                variant="outlined"
+              />
+              <Checkbox
+                defaultChecked={false}
+                label="Interest3"
+                size="md"
+                variant="outlined"
+              />
+              <Checkbox
+                defaultChecked={false}
+                label="Interest4"
+                size="md"
+                variant="outlined"
+              />
+              <Checkbox
+                defaultChecked={false}
+                label="Interest5"
+                size="md"
+                variant="outlined"
+              />
+            </Stack>
+
+            {/* Stack for Second Column */}
+            <Stack
+              direction="column"
+              justifyContent="space-evenly"
+              alignItems="flex-start"
+              spacing={"10%"}
+            >
+              <Checkbox
+                defaultChecked={false}
+                label="Interest6"
+                size="md"
+                variant="outlined"
+              />
+              <Checkbox
+                defaultChecked={false}
+                label="Interest7"
+                size="md"
+                variant="outlined"
+              />
+              <Checkbox
+                defaultChecked={false}
+                label="Interest8"
+                size="md"
+                variant="outlined"
+              />
+              <Checkbox
+                defaultChecked={false}
+                label="Interest9"
+                size="md"
+                variant="outlined"
+              />
+              <Checkbox
+                defaultChecked={false}
+                label="Interest10"
+                size="md"
+                variant="outlined"
+              />
+            </Stack>
+          </Stack>
+        </Box>
+
+        <Box
+          sx={{
+            gridColumn: "1/-1",
+            justifySelf: "flex-end",
+            display: "flex",
+            gap: 1,
+          }}
+        >
+          {/* Cancel will route back to profile page */}
+          <Button
+            variant="outlined"
+            color="neutral"
+            size="sm"
+            onClick={handleCancel}
+          >
+            Cancel
+          </Button>
+          <Button size="sm" onClick={handleSave}>
+            Save
+          </Button>
+        </Box>
+      </Box>
+      {/* </Tabs> */}
     </Sheet>
   );
 }
