@@ -258,7 +258,7 @@ export default function Component({ user }) {
             <FormLabel sx={{ display: { sm: "none" } }}>Display Name</FormLabel>
             <Input
               placeholder="Display Name"
-              value={updatedName || ""}
+              value={updatedName || "Siriwat Ponchalatam"}
               onChange={(event) => setUpdatedName(event.target.value)}
             />
           </FormControl>
