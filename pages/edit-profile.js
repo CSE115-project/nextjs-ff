@@ -43,6 +43,11 @@ export default function Component({ user }) {
   const [updatedName, setUpdatedName] = React.useState("");
   const [updatedBio, setUpdatedBio] = React.useState("");
 
+  const [loginEmail, setLoginEmail] = useState(user?.email || "");
+  const [updatedEmail, setUpdatedEmail] = React.useState("");
+  
+
+  
   // for route
   const router = useRouter();
 
@@ -85,7 +90,8 @@ export default function Component({ user }) {
         user;
       const updateUser = {
         uid: uid || user.uid,
-        email: email || user.email,
+        email: updatedEmail || user.email || "",
+        loginEmail: loginEmail || user.loginEmail || "",
         displayName: updatedName || user.displayName || "",
         image: imageURL,
         bio: updatedBio || bio || "",
@@ -279,7 +285,8 @@ export default function Component({ user }) {
             type="email"
             // startDecorator={<i data-feather="mail" />}
             placeholder="email"
-            defaultValue="siriwatk@test.com"
+            defaultValue= {updatedEmail || "siriwatk@test.com"}
+            onChange={(event) => setUpdatedEmail(event.target.value)}
           />
         </FormControl>
 
