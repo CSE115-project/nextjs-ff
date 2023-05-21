@@ -25,6 +25,8 @@ import Image from "next/image";
 import FormControl from "@mui/joy/FormControl";
 import Input from "@mui/joy/Input";
 
+
+
 /*
 const userObj = {
         uid: user.uid,
@@ -62,11 +64,8 @@ export default function Profile({ user }) {
 
   const searchFriends = async () => {
     const db = getFirestore();
-    const usersCollectionRef = collection(db, "users");
-    const searchQueryRef = query(
-      usersCollectionRef,
-      where("email", "==", searchQuery)
-    );
+    const usersCollectionRef = collection(db, 'users');
+    const searchQueryRef = query(usersCollectionRef, where('email', '==', searchQuery));
     const snapshot = await getDocs(searchQueryRef);
     const matchingUsersData = snapshot.docs.map((doc) => doc.data());
     setMatchingUsers(matchingUsersData);
@@ -77,19 +76,16 @@ export default function Profile({ user }) {
   const handleAddFriend = async (event) => {
     event.preventDefault();
     const db = getFirestore();
-    const usersCollectionRef = collection(db, "users");
-    const searchQueryRef = query(
-      usersCollectionRef,
-      where("email", "==", searchQuery)
-    );
+    const usersCollectionRef = collection(db, 'users');
+    const searchQueryRef = query(usersCollectionRef, where('email', '==', searchQuery));
     const snapshot = await getDocs(searchQueryRef);
     const matchingUsersData = snapshot.docs.map((doc) => doc.data());
     setMatchingUsers(matchingUsersData);
     console.log("matching user", matchingUsers);
 
     if (matchingUsers.length >= 1) {
-      const currentUserRef = doc(db, "users", user.uid);
-      const friendUserRef = doc(db, "users", matchingUsers[0].uid);
+      const currentUserRef = doc(db, 'users', user.uid);
+      const friendUserRef = doc(db, 'users', matchingUsers[0].uid);
 
       await updateDoc(currentUserRef, {
         friends: arrayUnion(matchingUsers[0].uid),
