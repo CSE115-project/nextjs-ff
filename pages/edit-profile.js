@@ -46,13 +46,23 @@ export default function Component({ user }) {
   const [loginEmail, setLoginEmail] = useState(user?.email || "");
   const [updatedEmail, setUpdatedEmail] = React.useState("");
   
-
-  
   // for route
   const router = useRouter();
+  // max characters 
+  const maxBioChar = 400;
+  // remaining characters
+  const remainingChar = maxBioChar - updatedBio.length;
 
   if (!user) return <div>Loading...</div>;
   console.log("edPro user", user.uid);
+
+  const handleBioChange = (event) => {
+    const inputVal = event.target.value;
+    if (inputVal.length <= maxBioChar) {
+      setUpdatedBio(inputVal);
+    }
+
+  };
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -264,7 +274,7 @@ export default function Component({ user }) {
             <FormLabel sx={{ display: { sm: "none" } }}>Display Name</FormLabel>
             <Input
               placeholder="Display Name"
-              value={updatedName || "Siriwat Ponchalatam"}
+              value={updatedName || "Siriwat Konchalatam"}
               onChange={(event) => setUpdatedName(event.target.value)}
             />
           </FormControl>
@@ -331,10 +341,10 @@ export default function Component({ user }) {
             minRows={4}
             sx={{ mt: 1.5 }}
             value={updatedBio}
-            onChange={(event) => setUpdatedBio(event.target.value)}
+            onChange={handleBioChange}
           />
           <FormHelperText sx={{ mt: 0.75, fontSize: "xs" }}>
-            275 characters left
+            {remainingChar} characters left
           </FormHelperText>
         </Box>
 
