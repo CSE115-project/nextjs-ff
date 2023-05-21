@@ -11,14 +11,14 @@ const Homepage = ({user}) => {
 
   // Authentication
   const handleSignOut = (event) => {
-    event.preventDefault();
+    if (event.cancelable) event.preventDefault();
     console.log("Signed Out.");
     signOut(auth);
     router.push("/login");
   };
 
   const handleProfile = (event) => {
-    event.preventDefault();
+    if (event.cancelable) event.preventDefault();
     router.push({
       pathname: '/profile',
       query: { user: JSON.stringify(user) },
@@ -42,7 +42,6 @@ const Homepage = ({user}) => {
         </Button>
       </Stack>
 
-      {/* <Map /> */}
       <GoogleMap />
     </div>
   );

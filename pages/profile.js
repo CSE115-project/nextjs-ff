@@ -25,8 +25,6 @@ import Image from "next/image";
 import FormControl from "@mui/joy/FormControl";
 import Input from "@mui/joy/Input";
 
-
-
 /*
 const userObj = {
         uid: user.uid,
@@ -47,12 +45,12 @@ export default function Profile({ user }) {
 
   // initialize all fields and their according set methods
   const handleHome = (event) => {
-    event.preventDefault();
+    if (event.cancelable) event.preventDefault();
     router.push("/");
   };
 
   const handleEditProfile = (event) => {
-    event.preventDefault();
+    if (event.cancelable) event.preventDefault();
     router.push("/edit-profile");
   };
 
@@ -64,8 +62,11 @@ export default function Profile({ user }) {
 
   const searchFriends = async () => {
     const db = getFirestore();
-    const usersCollectionRef = collection(db, 'users');
-    const searchQueryRef = query(usersCollectionRef, where('email', '==', searchQuery));
+    const usersCollectionRef = collection(db, "users");
+    const searchQueryRef = query(
+      usersCollectionRef,
+      where("email", "==", searchQuery)
+    );
     const snapshot = await getDocs(searchQueryRef);
     const matchingUsersData = snapshot.docs.map((doc) => doc.data());
     setMatchingUsers(matchingUsersData);
@@ -74,18 +75,21 @@ export default function Profile({ user }) {
   };
 
   const handleAddFriend = async (event) => {
-    event.preventDefault();
+    if (event.cancelable) event.preventDefault();
     const db = getFirestore();
-    const usersCollectionRef = collection(db, 'users');
-    const searchQueryRef = query(usersCollectionRef, where('email', '==', searchQuery));
+    const usersCollectionRef = collection(db, "users");
+    const searchQueryRef = query(
+      usersCollectionRef,
+      where("email", "==", searchQuery)
+    );
     const snapshot = await getDocs(searchQueryRef);
     const matchingUsersData = snapshot.docs.map((doc) => doc.data());
     setMatchingUsers(matchingUsersData);
     console.log("matching user", matchingUsers);
 
     if (matchingUsers.length >= 1) {
-      const currentUserRef = doc(db, 'users', user.uid);
-      const friendUserRef = doc(db, 'users', matchingUsers[0].uid);
+      const currentUserRef = doc(db, "users", user.uid);
+      const friendUserRef = doc(db, "users", matchingUsers[0].uid);
 
       await updateDoc(currentUserRef, {
         friends: arrayUnion(matchingUsers[0].uid),
@@ -106,7 +110,7 @@ export default function Profile({ user }) {
   // Adding search friends functionality ----------------------------------------------------------
 
   const handleFriendProfile = (event) => {
-    event.preventDefault();
+    if (event.cancelable) event.preventDefault();
     router.push("/friends-profile");
   };
 
@@ -120,7 +124,6 @@ export default function Profile({ user }) {
         if (docRes.exists()) {
           const data = docRes.data();
           setUserData(data);
-          setProfileImageUrl(data.image || "");
         } else {
           console.error("User Not Found");
         }
@@ -235,12 +238,15 @@ export default function Profile({ user }) {
                 <Input
                   type="email"
                   placeholder="email"
-                  defaultValue=""
                   sx={{ width: 500 }}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   // Button to add a friend
-                  endDecorator={<Button onClick={handleAddFriend} type="submit">Add</Button>}
+                  endDecorator={
+                    <Button onClick={handleAddFriend} type="submit">
+                      Add
+                    </Button>
+                  }
                 />
               </FormControl>
 

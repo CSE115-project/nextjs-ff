@@ -323,7 +323,6 @@ export default function Component({ user }) {
           <Textarea
             minRows={4}
             sx={{ mt: 1.5 }}
-            defaultValue="I'm a software developer based in Bangkok, Thailand. My goal is to solve UI problems with neat CSS without using too much JavaScript."
             value={updatedBio}
             onChange={(event) => setUpdatedBio(event.target.value)}
           />
