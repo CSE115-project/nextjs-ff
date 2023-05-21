@@ -7,13 +7,22 @@ import Typography from "@mui/joy/Typography";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { firebase } from "../firebase";
-import { getDoc, getFirestore, doc } from "firebase/firestore";
+import {
+  getDoc,
+  getFirestore,
+  doc,
+  collection,
+  query,
+  where,
+  getDocs,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
 import Card from "@mui/joy/Card";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
 import Image from "next/image";
 import FormControl from "@mui/joy/FormControl";
-import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
 
 /*
@@ -43,6 +52,66 @@ export default function Profile({ user }) {
   const handleEditProfile = (event) => {
     event.preventDefault();
     router.push("/edit-profile");
+  };
+
+  // Adding search friends functionality ----------------------------------------------------------
+
+  // Handle search query input and button click
+  const [searchQuery, setSearchQuery] = useState("");
+  const [matchingUsers, setMatchingUsers] = useState([]);
+
+  const searchFriends = async () => {
+    const db = getFirestore();
+    const usersCollectionRef = collection(db, "users");
+    const searchQueryRef = query(
+      usersCollectionRef,
+      where("email", "==", searchQuery)
+    );
+    const snapshot = await getDocs(searchQueryRef);
+    const matchingUsersData = snapshot.docs.map((doc) => doc.data());
+    setMatchingUsers(matchingUsersData);
+
+    // Process matchingUsers or update state with the search results
+  };
+
+  const handleAddFriend = async (event) => {
+    event.preventDefault();
+    const db = getFirestore();
+    const usersCollectionRef = collection(db, "users");
+    const searchQueryRef = query(
+      usersCollectionRef,
+      where("email", "==", searchQuery)
+    );
+    const snapshot = await getDocs(searchQueryRef);
+    const matchingUsersData = snapshot.docs.map((doc) => doc.data());
+    setMatchingUsers(matchingUsersData);
+    console.log("matching user", matchingUsers);
+
+    if (matchingUsers.length >= 1) {
+      const currentUserRef = doc(db, "users", user.uid);
+      const friendUserRef = doc(db, "users", matchingUsers[0].uid);
+
+      await updateDoc(currentUserRef, {
+        friends: arrayUnion(matchingUsers[0].uid),
+      });
+
+      await updateDoc(friendUserRef, {
+        friends: arrayUnion(user.uid),
+      });
+    }
+
+    // Handle success or update state accordingly
+  };
+
+  const handleSearch = () => {
+    searchFriends();
+  };
+
+  // Adding search friends functionality ----------------------------------------------------------
+
+  const handleFriendProfile = (event) => {
+    event.preventDefault();
+    router.push("/friends-profile");
   };
 
   // function to retrieve the user's data from the database
@@ -85,10 +154,20 @@ export default function Profile({ user }) {
               Home
             </Button>
 
-            {/* Edit Profile Button */}
-            <Button onClick={handleEditProfile} sx={{ marginLeft: "auto" }}>
-              Edit Profile
-            </Button>
+            <div style={{ display: "flex", marginLeft: "auto" }}>
+              {/* Friend Profile Button */}
+              <Button
+                onClick={handleFriendProfile}
+                sx={{ width: "auto", mt: 1 }}
+              >
+                Friends Profile
+              </Button>
+
+              {/* Edit Profile Button */}
+              <Button onClick={handleEditProfile} sx={{ mt: 1 }}>
+                Edit Profile
+              </Button>
+            </div>
           </Stack>
 
           <Sheet
@@ -144,7 +223,7 @@ export default function Profile({ user }) {
               Add Friend
             </Typography>
 
-            {/* stack for input and button in same line */}
+            {/* stack for formatting purposes */}
             <Stack
               direction="row"
               alignItems="center"
@@ -153,17 +232,30 @@ export default function Profile({ user }) {
               sx={{ flexWrap: "wrap" }}
             >
               {/* Form for inputting friend's email */}
-              <FormControl sx={{ display: { xs: "contents", sm: "flex" } }}>
+              <FormControl
+                // onSubmit={handleAddFriend}
+                sx={{ display: { xs: "contents", sm: "flex" } }}
+              >
                 <Input
                   type="email"
                   placeholder="email"
                   defaultValue=""
                   sx={{ width: 500 }}
-                  // Add add friend functionality
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   // Button to add a friend
-                  endDecorator={<Button>Add</Button>}
+                  endDecorator={<Button onClick={handleAddFriend} type="submit">Add</Button>}
                 />
               </FormControl>
+
+              {/* <form
+                onSubmit={handleAddFriend}
+              >
+                <Input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                <Button type="submit">Add</Button>
+              </form> */}
+
+              {/* Render the matching users */}
             </Stack>
 
             <Box
@@ -211,13 +303,11 @@ export default function Profile({ user }) {
                   }}
                 >
                   <CardCover>
-                    {/* Add rest of Card */}
                     <Typography textColor="#5F7CEC" component="h1">
                       Restaurant
                     </Typography>
                   </CardCover>
                   <CardContent>
-                    {/* Add rest of Card */}
                     <Image
                       src="/images/blue_folder.png"
                       alt="Blue folder image"
@@ -231,7 +321,6 @@ export default function Profile({ user }) {
                         // height: "auto", // Maintain the aspect ratio of the image
                       }}
                     />
-                    {/* <Typography textColor="#5F7CEC">Test2</Typography> */}
                   </CardContent>
 
                   {/* Bottom Left Card */}
@@ -245,13 +334,11 @@ export default function Profile({ user }) {
                   }}
                 >
                   <CardCover>
-                    {/* Add rest of card */}
                     <Typography component="h1" textColor="#E2615C">
                       Liked places
                     </Typography>
                   </CardCover>
                   <CardContent>
-                    {/* Add rest of Card */}
                     <Image
                       src="/images/red_folder.png"
                       alt="Red folder image"
