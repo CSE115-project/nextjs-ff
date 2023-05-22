@@ -40,7 +40,7 @@ export default function Component({ user }) {
   // for route
   const router = useRouter();
   // max characters
-  const maxBioChar = 400;
+  const maxBioChar = 200;
   // remaining characters
   const remainingChar = maxBioChar - updatedBio.length;
 
@@ -61,10 +61,7 @@ export default function Component({ user }) {
   console.log("edPro user", userData.uid);
 
   const handleBioChange = (event) => {
-    const inputVal = event.target.value;
-    if (inputVal.length <= maxBioChar) {
-      setUpdatedBio(inputVal);
-    }
+    console.log(event.target.value);
   };
 
   const handleFileChange = (event) => {
@@ -226,10 +223,14 @@ export default function Component({ user }) {
         <Box>
           {/* Bio */}
           <Textarea
-            minRows={4}
-            sx={{ mt: 1.5 }}
-            value={userData.bio}
-            onChange={handleBioChange}
+            slotProps={{
+              textarea: {
+                maxLength: maxBioChar,
+              }
+            }}
+            minRows={3}
+            value={updatedBio || userData.bio}
+            onChange={(e) => {e.preventDefault(); setUpdatedBio(e.target.value)}}
           />
           <FormHelperText sx={{ mt: 0.75, fontSize: "xs" }}>
             {remainingChar} characters left
