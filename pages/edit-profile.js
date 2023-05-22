@@ -17,8 +17,8 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { useState } from "react";
-import { doc, setDoc } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import { doc, setDoc, getDoc, getFirestore } from "firebase/firestore";
 import { db } from "../firebase";
 import { useRouter } from "next/router";
 import Checkbox from "@mui/joy/Checkbox";
@@ -28,6 +28,7 @@ export default function Component({ user }) {
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imageURL, setImageURL] = useState("");
+  const [userData, setUserData] = useState(null);
 
   // update name and bio
   const [updatedName, setUpdatedName] = React.useState("");
@@ -35,23 +36,35 @@ export default function Component({ user }) {
 
   const [loginEmail, setLoginEmail] = useState(user?.email || "");
   const [updatedEmail, setUpdatedEmail] = React.useState("");
-  
+
   // for route
   const router = useRouter();
-  // max characters 
+  // max characters
   const maxBioChar = 400;
   // remaining characters
   const remainingChar = maxBioChar - updatedBio.length;
 
-  if (!user) return <div>Loading...</div>;
-  console.log("edPro user", user.uid);
+  // fetch user from firestore
+  useEffect(() => {
+    const fetchUserDataAsync = async () => {
+      if (user) {
+        const userDocData = await fetchUserData(user.uid);
+        setUserData(userDocData);
+      }
+    }
+
+    fetchUserDataAsync();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!userData) return <div>Loading...</div>;
+  console.log("edPro user", userData.uid);
 
   const handleBioChange = (event) => {
     const inputVal = event.target.value;
     if (inputVal.length <= maxBioChar) {
       setUpdatedBio(inputVal);
     }
-
   };
 
   const handleFileChange = (event) => {
@@ -114,6 +127,8 @@ export default function Component({ user }) {
     router.push("/profile");
   };
 
+  console.log("EPro User:", userData);
+
   return (
     <Sheet
       sx={{
@@ -155,17 +170,10 @@ export default function Component({ user }) {
             <FormLabel sx={{ display: { sm: "none" } }}>Display Name</FormLabel>
             <Input
               placeholder="Display Name"
-              value={user.displayName || user.email.split('@')[0]}
+              value={userData.displayName || userData.email.split("@")[0]}
               onChange={(event) => setUpdatedName(event.target.value)}
             />
           </FormControl>
-
-          {/* Just have Display Name instead of first and last name */}
-
-          {/* <FormControl sx={{ flex: 1 }}>
-              <FormLabel sx={{ display: { sm: "none" } }}>Last name</FormLabel>
-              <Input placeholder="last name" defaultValue="K." />
-            </FormControl> */}
         </Box>
 
         <Divider role="presentation" />
@@ -174,9 +182,8 @@ export default function Component({ user }) {
           <FormLabel>Email</FormLabel>
           <Input
             type="email"
-            // startDecorator={<i data-feather="mail" />}
             placeholder="email"
-            value= {user.email}
+            value={userData.email}
             onChange={(event) => setUpdatedEmail(event.target.value)}
           />
         </FormControl>
@@ -199,7 +206,7 @@ export default function Component({ user }) {
         >
           <Avatar
             size="lg"
-            src={user.image || imageURL}
+            src={imageURL || userData.image}
             sx={{ "--Avatar-size": "64px" }}
           />
 
@@ -217,11 +224,11 @@ export default function Component({ user }) {
           <FormHelperText>Write a short introduction.</FormHelperText>
         </Box>
         <Box>
-          {/* <EditorToolbar /> */}
+          {/* Bio */}
           <Textarea
             minRows={4}
             sx={{ mt: 1.5 }}
-            value={updatedBio}
+            value={userData.bio}
             onChange={handleBioChange}
           />
           <FormHelperText sx={{ mt: 0.75, fontSize: "xs" }}>
@@ -351,3 +358,20 @@ export default function Component({ user }) {
     </Sheet>
   );
 }
+
+const fetchUserData = async (userId) => {
+  try {
+    const db = getFirestore();
+    const userDocRef = doc(db, 'users', userId);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (!userDocSnap.exists()) {
+      throw new Error("User not found");
+    }
+
+    return userDocSnap.data();
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    return null;
+  }
+};
