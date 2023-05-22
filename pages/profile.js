@@ -27,7 +27,7 @@ import Input from "@mui/joy/Input";
 import Tabs from '@mui/joy/Tabs';
 import TabList from '@mui/joy/TabList';
 import Tab, { tabClasses } from '@mui/joy/Tab';
-import Chip, { chipClasses } from '@mui/joy/Chip';
+import TabPanel from '@mui/joy/TabPanel';
 
 /*
 const userObj = {
@@ -227,8 +227,8 @@ export default function Profile({ user }) {
               sx={{ flexWrap: "wrap" }}
             >
               {/* Form for inputting friend's email */}
-              <FormControl
-                // onSubmit={handleAddFriend}
+              <form
+                onSubmit={handleAddFriend}
                 sx={{ display: { xs: "contents", sm: "flex" } }}
               >
                 <Input
@@ -239,12 +239,12 @@ export default function Profile({ user }) {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   // Button to add a friend
                   endDecorator={
-                    <Button onClick={handleAddFriend} type="submit">
+                    <Button type="submit">
                       Add
                     </Button>
                   }
                 />
-              </FormControl>
+              </form>
 
               {/* <form
                 onSubmit={handleAddFriend}
@@ -255,6 +255,7 @@ export default function Profile({ user }) {
 
               {/* Render the matching users */}
             </Stack>
+
             <Tabs aria-label="tabs" defaultValue={0}>
               <TabList
                 variant="plain"
@@ -283,176 +284,195 @@ export default function Profile({ user }) {
                 <Tab>Review</Tab>
                 <Tab>My Folders</Tab>
               </TabList>
+
+              {/* TabPanel for User's like places */}
+              <TabPanel value={0} sx={{ p: 2 }}>
+                Like Places tab panel
+              </TabPanel>
+
+              {/* TabPanel for User's friends list */}
+              <TabPanel value={1} sx={{ p: 2 }}>
+                Friends tab panel
+              </TabPanel>
+
+              {/* TabPanel for User's past review */}
+              <TabPanel value={2} sx={{ p: 2 }}>
+                Review tab panel
+              </TabPanel>
+
+
+              {/* TabPanel for My Folders */}
+              <TabPanel value={3} sx={{ p: 2 }}>
+                <Box
+                  sx={{
+                    pt: 3,
+                    pb: 3,
+                    display: "flex",
+                  }}
+                >
+                  <Typography component="h6" sx={{ color: "black" }}>
+                    My Folders
+                  </Typography>
+
+                  {/* Button to add new list */}
+                  <Button variant="plain" sx={{ marginLeft: "auto" }}>
+                    +
+                  </Button>
+                </Box>
+
+                {/* Liked Place (need to route to list of places) */}
+                {/* Stack to create rows */}
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="center"
+                  spacing={{ xs: 0, sm: "10%", md: "10%", lg: "10%" }}
+                  sx={{ flexWrap: "wrap" }}
+                >
+                  {/* Stack to create the first column */}
+                  <Stack
+                    direction="column"
+                    justifyContent="space-evenly"
+                    alignItems="flex-start"
+                    spacing={"10%"}
+                  >
+                    {/* Top Left Card */}
+                    <Card
+                      sx={{
+                        "--Card-radius": "20px",
+                        mb: 3,
+                        width: 250,
+                        height: 200,
+                        bgcolor: "#EFF7FD",
+                      }}
+                    >
+                      <CardCover>
+                        <Typography textColor="#5F7CEC" component="h1">
+                          Restaurant
+                        </Typography>
+                      </CardCover>
+                      <CardContent>
+                        <Image
+                          src="/images/blue_folder.png"
+                          alt="Blue folder image"
+                          width={100}
+                          height={100}
+                          style={{
+                            position: "absolute",
+                            top: 3,
+                            left: 5,
+                            // width: "100px", // Adjust the width as desired
+                            // height: "auto", // Maintain the aspect ratio of the image
+                          }}
+                        />
+                      </CardContent>
+
+                      {/* Bottom Left Card */}
+                    </Card>
+                    <Card
+                      sx={{
+                        "--Card-radius": "20px",
+                        width: 250,
+                        height: 200,
+                        bgcolor: "#FBEEEE",
+                      }}
+                    >
+                      <CardCover>
+                        <Typography component="h1" textColor="#E2615C">
+                          Liked places
+                        </Typography>
+                      </CardCover>
+                      <CardContent>
+                        <Image
+                          src="/images/red_folder.png"
+                          alt="Red folder image"
+                          width={100}
+                          height={100}
+                          style={{
+                            position: "absolute",
+                            top: 3,
+                            left: 5,
+                            // width: "100px", // Adjust the width as desired
+                            // height: "auto", // Maintain the aspect ratio of the image
+                          }}
+                        />
+                      </CardContent>
+                    </Card>
+                  </Stack>
+
+                  {/* Stack for Second Column */}
+                  <Stack
+                    direction="column"
+                    justifyContent="space-evenly"
+                    alignItems="flex-start"
+                    spacing={"10%"}
+                  >
+                    {/* Top Right Card */}
+                    <Card
+                      sx={{
+                        "--Card-radius": "20px",
+                        mb: 3,
+                        width: 250,
+                        height: 200,
+                        bgcolor: "#FEFBED",
+                      }}
+                    >
+                      <CardCover>
+                        <Typography textColor="#F4BA4F" component="h1">
+                          Fun
+                        </Typography>
+                      </CardCover>
+                      <CardContent>
+                        <Image
+                          src="/images/yellow_folder.png"
+                          alt="Yellow folder image"
+                          width={100}
+                          height={100}
+                          style={{
+                            position: "absolute",
+                            top: 3,
+                            left: 5,
+                            // width: "100px", // Adjust the width as desired
+                            // height: "auto", // Maintain the aspect ratio of the image
+                          }}
+                        />
+                      </CardContent>
+
+                      {/* Bottom Right Card */}
+                    </Card>
+                    <Card
+                      sx={{
+                        "--Card-radius": "20px",
+                        width: 250,
+                        height: 200,
+                        bgcolor: "#b7e8c2",
+                      }}
+                    >
+                      <CardCover>
+                        <Typography textColor="#6b8771" component="h1">
+                          Viewpoint
+                        </Typography>
+                      </CardCover>
+                      <CardContent>
+                        <Image
+                          src="/images/green_folder.png"
+                          alt="Green folder image"
+                          width={100}
+                          height={100}
+                          style={{
+                            position: "absolute",
+                            top: 3,
+                            left: 5,
+                            // width: "100px", // Adjust the width as desired
+                            // height: "auto", // Maintain the aspect ratio of the image
+                          }}
+                        />
+                      </CardContent>
+                    </Card>
+                  </Stack>
+                </Stack>
+              </TabPanel>
             </Tabs>
-            <Box
-              sx={{
-                pt: 3,
-                pb: 3,
-                display: "flex",
-              }}
-            >
-              <Typography component="h6" sx={{ color: "black" }}>
-                My Folders
-              </Typography>
-
-              {/* Button to add new list */}
-              <Button variant="plain" sx={{ marginLeft: "auto" }}>
-                +
-              </Button>
-            </Box>
-
-            {/* Liked Place (need to route to list of places) */}
-
-            {/* Stack to create rows */}
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="center"
-              spacing={{ xs: 0, sm: "10%", md: "10%", lg: "10%" }}
-              sx={{ flexWrap: "wrap" }}
-            >
-              {/* Stack to create the first column */}
-              <Stack
-                direction="column"
-                justifyContent="space-evenly"
-                alignItems="flex-start"
-                spacing={"10%"}
-              >
-                {/* Top Left Card */}
-                <Card
-                  sx={{
-                    "--Card-radius": "20px",
-                    mb: 3,
-                    width: 250,
-                    height: 200,
-                    bgcolor: "#EFF7FD",
-                  }}
-                >
-                  <CardCover>
-                    <Typography textColor="#5F7CEC" component="h1">
-                      Restaurant
-                    </Typography>
-                  </CardCover>
-                  <CardContent>
-                    <Image
-                      src="/images/blue_folder.png"
-                      alt="Blue folder image"
-                      width={100}
-                      height={100}
-                      style={{
-                        position: "absolute",
-                        top: 3,
-                        left: 5,
-                        // width: "100px", // Adjust the width as desired
-                        // height: "auto", // Maintain the aspect ratio of the image
-                      }}
-                    />
-                  </CardContent>
-
-                  {/* Bottom Left Card */}
-                </Card>
-                <Card
-                  sx={{
-                    "--Card-radius": "20px",
-                    width: 250,
-                    height: 200,
-                    bgcolor: "#FBEEEE",
-                  }}
-                >
-                  <CardCover>
-                    <Typography component="h1" textColor="#E2615C">
-                      Liked places
-                    </Typography>
-                  </CardCover>
-                  <CardContent>
-                    <Image
-                      src="/images/red_folder.png"
-                      alt="Red folder image"
-                      width={100}
-                      height={100}
-                      style={{
-                        position: "absolute",
-                        top: 3,
-                        left: 5,
-                        // width: "100px", // Adjust the width as desired
-                        // height: "auto", // Maintain the aspect ratio of the image
-                      }}
-                    />
-                  </CardContent>
-                </Card>
-              </Stack>
-
-              {/* Stack for Second Column */}
-              <Stack
-                direction="column"
-                justifyContent="space-evenly"
-                alignItems="flex-start"
-                spacing={"10%"}
-              >
-                {/* Top Right Card */}
-                <Card
-                  sx={{
-                    "--Card-radius": "20px",
-                    mb: 3,
-                    width: 250,
-                    height: 200,
-                    bgcolor: "#FEFBED",
-                  }}
-                >
-                  <CardCover>
-                    <Typography textColor="#F4BA4F" component="h1">
-                      Fun
-                    </Typography>
-                  </CardCover>
-                  <CardContent>
-                    <Image
-                      src="/images/yellow_folder.png"
-                      alt="Yellow folder image"
-                      width={100}
-                      height={100}
-                      style={{
-                        position: "absolute",
-                        top: 3,
-                        left: 5,
-                        // width: "100px", // Adjust the width as desired
-                        // height: "auto", // Maintain the aspect ratio of the image
-                      }}
-                    />
-                  </CardContent>
-
-                  {/* Bottom Right Card */}
-                </Card>
-                <Card
-                  sx={{
-                    "--Card-radius": "20px",
-                    width: 250,
-                    height: 200,
-                    bgcolor: "#b7e8c2",
-                  }}
-                >
-                  <CardCover>
-                    <Typography textColor="#6b8771" component="h1">
-                      Viewpoint
-                    </Typography>
-                  </CardCover>
-                  <CardContent>
-                    <Image
-                      src="/images/green_folder.png"
-                      alt="Green folder image"
-                      width={100}
-                      height={100}
-                      style={{
-                        position: "absolute",
-                        top: 3,
-                        left: 5,
-                        // width: "100px", // Adjust the width as desired
-                        // height: "auto", // Maintain the aspect ratio of the image
-                      }}
-                    />
-                  </CardContent>
-                </Card>
-              </Stack>
-            </Stack>
           </Sheet>
         </Sheet>
       </div>
