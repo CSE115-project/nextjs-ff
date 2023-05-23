@@ -1,11 +1,11 @@
 import { Loader } from "@googlemaps/js-api-loader";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Button } from "@mui/joy";
 
 export default function GoogleMap() {
+  // Google Maps
   const mapRef = useRef(null);
 
-  // Google Maps
   // default: San Francisco
   const defLocation = {
     lat: 37.7749,
@@ -13,6 +13,7 @@ export default function GoogleMap() {
   };
 
   useEffect(() => {
+    // Google Map
     const loader = new Loader({
       apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API,
       version: "weekly",
@@ -54,6 +55,7 @@ export default function GoogleMap() {
           service.nearbySearch(request, nearbyResults);
         });
       } else {
+        // Create a new map centered on the default location
         mapRef.current = new Map(mapRef.current, {
           center: { lat: defLocation.lat, lng: defLocation.lng },
           zoom: 13,
@@ -63,6 +65,7 @@ export default function GoogleMap() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Nearby results: place markers, heatmap
   function nearbyResults(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       console.log("Results:", results);
@@ -73,6 +76,7 @@ export default function GoogleMap() {
     }
   }
 
+  // Create marker for place
   function createMarker(place) {
     new google.maps.Marker({
       position: place.geometry.location,
@@ -80,17 +84,17 @@ export default function GoogleMap() {
     });
   }
 
+  // Add Nearby Results locations for heatmap
   function getHeatmapData(results) {
     const data = results.map((result) => {
       const lat = result.geometry.location.lat();
       const lng = result.geometry.location.lng();
+
       return ({ 
         location: new google.maps.LatLng(lat,lng),
         weight: Math.random() * 10, // You can set the weight based on your data
       })
     });
-
-    console.log("data:", data);
 
     if (mapRef.current) {
       const heatmap = new google.maps.visualization.HeatmapLayer({
