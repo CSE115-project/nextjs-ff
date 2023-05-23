@@ -90,7 +90,7 @@ export default function Component({ user }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // // Update the user document with the new image URL
+    // Update the user document with the new image URL
     let userDetails = {...userData};
 
     userDetails.displayName =
