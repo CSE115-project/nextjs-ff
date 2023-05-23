@@ -8,7 +8,6 @@ import FormLabel from "@mui/joy/FormLabel";
 import FormHelperText from "@mui/joy/FormHelperText";
 import Input from "@mui/joy/Input";
 import Textarea from "@mui/joy/Textarea";
-import Stack from "@mui/joy/Stack";
 import Sheet from "@mui/joy/Sheet";
 import Typography from "@mui/joy/Typography";
 import {
@@ -21,7 +20,6 @@ import { useState, useEffect } from "react";
 import { doc, setDoc, getDoc, getFirestore } from "firebase/firestore";
 import { db } from "../firebase";
 import { useRouter } from "next/router";
-import Checkbox from "@mui/joy/Checkbox";
 
 export default function Component({ user }) {
   // Image Uploading
@@ -33,9 +31,6 @@ export default function Component({ user }) {
   // update name and bio
   const [updatedName, setUpdatedName] = React.useState("");
   const [updatedBio, setUpdatedBio] = React.useState("");
-
-  const [loginEmail, setLoginEmail] = useState(user?.email || "");
-  const [updatedEmail, setUpdatedEmail] = React.useState("");
 
   // for route
   const router = useRouter();
@@ -51,10 +46,10 @@ export default function Component({ user }) {
         const userDocData = await fetchUserData(user.uid);
         setUserData(userDocData);
       }
-    }
+    };
 
     fetchUserDataAsync();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!userData) return <div>Loading...</div>;
@@ -96,21 +91,19 @@ export default function Component({ user }) {
     event.preventDefault();
     // Update the user document with the new image URL
     if (imageURL || updatedName || updatedBio) {
-      const { uid, email, displayName, bio, favorites, wantToGo, friends } =
-        user;
+      const { uid, email, image, favorites, wantToGo, friends } = userData;
       const updateUser = {
-        uid: uid || user.uid,
-        email: updatedEmail || user.email || "",
-        loginEmail: loginEmail || user.loginEmail || "",
-        displayName: updatedName || user.displayName || "",
-        image: imageURL,
-        bio: updatedBio || bio || "",
-        favorites: favorites || user.favorites || [],
-        wantToGo: wantToGo || user.wantToGo || [],
-        friends: friends || user.friends || [],
+        uid: uid,
+        email: email,
+        displayName: updatedName,
+        image: imageURL || image,
+        bio: updatedBio,
+        favorites: favorites,
+        wantToGo: wantToGo,
+        friends: friends,
       };
       try {
-        await setDoc(doc(db, "users", user.uid), updateUser);
+        await setDoc(doc(db, "users", userData.uid), updateUser);
         console.log("Saved user details");
       } catch (error) {
         console.error("Error updating user document:", error);
@@ -167,23 +160,37 @@ export default function Component({ user }) {
             <FormLabel sx={{ display: { sm: "none" } }}>Display Name</FormLabel>
             <Input
               placeholder="Display Name"
-              value={userData.displayName || userData.email.split("@")[0]}
-              onChange={(event) => setUpdatedName(event.target.value)}
+              value={updatedName}
+              onChange={(e) => setUpdatedName(e.target.value)}
             />
           </FormControl>
         </Box>
 
         <Divider role="presentation" />
 
-        <FormControl sx={{ display: { sm: "contents" } }}>
-          <FormLabel>Email</FormLabel>
-          <Input
-            type="email"
-            placeholder="email"
-            value={userData.email}
-            onChange={(event) => setUpdatedEmail(event.target.value)}
+        <Box>
+          <FormLabel>Bio</FormLabel>
+          <FormHelperText>Write a short introduction.</FormHelperText>
+        </Box>
+        <Box>
+          {/* Bio */}
+          <Textarea
+            slotProps={{
+              textarea: {
+                maxLength: maxBioChar,
+              },
+            }}
+            minRows={3}
+            value={updatedBio}
+            onChange={(e) => {
+              e.preventDefault();
+              setUpdatedBio(e.target.value);
+            }}
           />
-        </FormControl>
+          <FormHelperText sx={{ mt: 0.75, fontSize: "xs" }}>
+            {remainingChar} characters left
+          </FormHelperText>
+        </Box>
 
         <Divider role="presentation" />
 
@@ -204,135 +211,21 @@ export default function Component({ user }) {
           <Avatar
             size="lg"
             src={imageURL || userData.image}
-            sx={{ "--Avatar-size": "64px" }}
+            sx={{ "--Avatar-size": "64px"}}
           />
 
           {/* Image Upload */}
-          <input type="file" onChange={handleFileChange} />
+          <Input
+            style={{ border: "none", outline: "none", width: "100%" }}
+            type="file"
+            onChange={handleFileChange}
+          />
 
           <Button onClick={handleSubmit}>Click to upload</Button>
           {uploadProgress > 0 && <p>Upload progress: {uploadProgress}%</p>}
         </Box>
 
         <Divider role="presentation" />
-
-        <Box>
-          <FormLabel>Bio</FormLabel>
-          <FormHelperText>Write a short introduction.</FormHelperText>
-        </Box>
-        <Box>
-          {/* Bio */}
-          <Textarea
-            slotProps={{
-              textarea: {
-                maxLength: maxBioChar,
-              }
-            }}
-            minRows={3}
-            value={updatedBio || userData.bio}
-            onChange={(e) => {e.preventDefault(); setUpdatedBio(e.target.value)}}
-          />
-          <FormHelperText sx={{ mt: 0.75, fontSize: "xs" }}>
-            {remainingChar} characters left
-          </FormHelperText>
-        </Box>
-
-        <Divider role="presentation" />
-
-        {/* Interest Checklist */}
-        <Box>
-          <FormLabel>Interests</FormLabel>
-          <FormHelperText>Your Interests</FormHelperText>
-        </Box>
-
-        <Box>
-          {/* Stack to create the rows */}
-          <Stack
-            direction="row"
-            alignItems="center"
-            spacing={{ xs: "10%", sm: "30%", md: "30%", lg: "30%" }}
-            sx={{ flexWrap: "wrap" }}
-          >
-            {/* Stack to create the first column */}
-            <Stack
-              direction="column"
-              justifyContent="space-evenly"
-              alignItems="flex-start"
-              spacing={"10%"}
-            >
-              <Checkbox
-                defaultChecked={false}
-                label="Interest1"
-                size="md"
-                variant="outlined"
-              />
-              <Checkbox
-                defaultChecked={false}
-                label="Interest2"
-                size="md"
-                variant="outlined"
-              />
-              <Checkbox
-                defaultChecked={false}
-                label="Interest3"
-                size="md"
-                variant="outlined"
-              />
-              <Checkbox
-                defaultChecked={false}
-                label="Interest4"
-                size="md"
-                variant="outlined"
-              />
-              <Checkbox
-                defaultChecked={false}
-                label="Interest5"
-                size="md"
-                variant="outlined"
-              />
-            </Stack>
-
-            {/* Stack for Second Column */}
-            <Stack
-              direction="column"
-              justifyContent="space-evenly"
-              alignItems="flex-start"
-              spacing={"10%"}
-            >
-              <Checkbox
-                defaultChecked={false}
-                label="Interest6"
-                size="md"
-                variant="outlined"
-              />
-              <Checkbox
-                defaultChecked={false}
-                label="Interest7"
-                size="md"
-                variant="outlined"
-              />
-              <Checkbox
-                defaultChecked={false}
-                label="Interest8"
-                size="md"
-                variant="outlined"
-              />
-              <Checkbox
-                defaultChecked={false}
-                label="Interest9"
-                size="md"
-                variant="outlined"
-              />
-              <Checkbox
-                defaultChecked={false}
-                label="Interest10"
-                size="md"
-                variant="outlined"
-              />
-            </Stack>
-          </Stack>
-        </Box>
-
         <Box
           sx={{
             gridColumn: "1/-1",
@@ -363,7 +256,7 @@ export default function Component({ user }) {
 const fetchUserData = async (userId) => {
   try {
     const db = getFirestore();
-    const userDocRef = doc(db, 'users', userId);
+    const userDocRef = doc(db, "users", userId);
     const userDocSnap = await getDoc(userDocRef);
 
     if (!userDocSnap.exists()) {
