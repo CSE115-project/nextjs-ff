@@ -1,9 +1,10 @@
 import { Loader } from "@googlemaps/js-api-loader";
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@mui/joy";
 
 export default function GoogleMap() {
   const mapRef = useRef(null);
+  const [heatMapData, setHeatMapData] = useState([]);
 
   // Google Maps
   // default: San Francisco
@@ -16,7 +17,7 @@ export default function GoogleMap() {
     const loader = new Loader({
       apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API,
       version: "weekly",
-      libraries: ["places"],
+      libraries: ["places", "visualization"],
     });
 
     loader.load().then(async () => {
@@ -52,6 +53,16 @@ export default function GoogleMap() {
 
           let service = new google.maps.places.PlacesService(mapRef.current);
           service.nearbySearch(request, nearbyResults);
+
+          // if (heatMapData.length > 0 && mapRef.current) {
+          //   const heatmap = new google.maps.visualization.HeatmapLayer({
+          //     data: heatMapData,
+          //     map: mapRef.current,
+          //   });
+          //   return () => {
+          //     heatmap.setMap(null); // Cleanup when component unmounts
+          //   };
+          // }
         });
       } else {
         mapRef.current = new Map(mapRef.current, {
@@ -66,6 +77,7 @@ export default function GoogleMap() {
   function nearbyResults(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       console.log("Results:", results);
+      getHeatmapData(results);
       for (let result of results) {
         createMarker(result);
       }
@@ -79,9 +91,24 @@ export default function GoogleMap() {
     });
   }
 
+  function getHeatmapData(results) {
+    const data = results.map((result) => ({
+      location: new google.maps.LatLng(
+        result.geometry.location.lat(),
+        result.geometry.location.lng()
+      ),
+      weight: Math.random() * 10, // You can set the weight based on your data
+    }));
+
+    console.log("data:", data);
+    setHeatMapData(data);
+  }
+
   return (
     <div ref={mapRef} style={{ height: "90%", width: "100%" }}>
-      <Button loading loadingPosition="start">Loading...</Button>
+      <Button loading loadingPosition="start">
+        Loading...
+      </Button>
     </div>
   );
 }
