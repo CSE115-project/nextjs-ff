@@ -89,7 +89,7 @@ export default function Profile({ user }) {
     const snapshot = await getDocs(searchQueryRef);
     const matchingUsersData = snapshot.docs.map((doc) => doc.data());
     setMatchingUsers(matchingUsersData);
-    console.log("matching user", matchingUsers);
+    // console.log("matching user", matchingUsers);  for testing
 
     if (matchingUsers.length >= 1) {
       const currentUserRef = doc(db, "users", user.uid);
@@ -111,7 +111,34 @@ export default function Profile({ user }) {
     searchFriends();
   };
 
-  // Adding search friends functionality ----------------------------------------------------------
+  // List friends ----------------------------------------------------------
+  const [friendList, setFriendList] = useState([]);
+
+  useEffect(() => {
+    const fetchFriends = async () => {
+      const db = getFirestore();
+      const currentUserRef = doc(db, 'users', user.uid);
+      const currentUserDoc = await getDoc(currentUserRef);
+
+      if (currentUserDoc.exists()) {
+        const currentUserData = currentUserDoc.data();
+        const friendIds = currentUserData.friendList || [];
+
+        const friendDetails = await Promise.all(
+          friendIds.map(async (friendId) => {
+            const friendUserRef = doc(db, 'users', friendId);
+            const friendUserDoc = await getDoc(friendUserRef);
+            return { id: friendId, ...friendUserDoc.data() };
+          })
+        );
+
+        setFriendList(friendDetails);
+      }
+    };
+
+    fetchFriends();
+  }, [user.uid]);
+
 
   const handleFriendProfile = (event) => {
     if (event.cancelable) event.preventDefault();
@@ -285,7 +312,18 @@ export default function Profile({ user }) {
 
               {/* TabPanel for User's friends list */}
               <TabPanel value={1} sx={{ p: 2 }}>
-                Friends tab panel
+                <div>
+                  <h1>List of Friends</h1>
+                  {friendList.length > 0 ? (
+                    <ul>
+                      {friendList.map((friend) => (
+                        <li key={friend.uid}>{friend.name}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No friends found.</p>
+                  )}
+                </div>
               </TabPanel>
 
               {/* TabPanel for User's past review */}
