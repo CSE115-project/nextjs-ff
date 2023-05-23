@@ -22,11 +22,12 @@ import { db } from "../firebase";
 import { useRouter } from "next/router";
 
 export default function Component({ user }) {
+  const [userData, setUserData] = useState(null);
+
   // Image Uploading
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imageURL, setImageURL] = useState("");
-  const [userData, setUserData] = useState(null);
 
   // update name and bio
   const [updatedName, setUpdatedName] = React.useState("");
@@ -62,7 +63,7 @@ export default function Component({ user }) {
     setFile(selectedFile);
   };
 
-  const handleSubmit = async (event) => {
+  const handleUpload = async (event) => {
     event.preventDefault();
     const storage = getStorage();
     if (file) {
@@ -85,29 +86,25 @@ export default function Component({ user }) {
     }
   };
 
-  // Checks changed values and save a new object data to 'users' 
-  const handleSave = async (event) => {
+  // Checks changed values and save a new object data to 'users'
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Update the user document with the new image URL
-    if (imageURL || updatedName || updatedBio) {
-      const { uid, email, image, favorites, wantToGo, friends } = userData;
-      const updateUser = {
-        uid: uid,
-        email: email,
-        displayName: updatedName,
-        image: imageURL || image,
-        bio: updatedBio,
-        favorites: favorites,
-        wantToGo: wantToGo,
-        friends: friends,
-      };
-      try {
-        await setDoc(doc(db, "users", userData.uid), updateUser);
-        console.log("Saved user details");
-      } catch (error) {
-        console.error("Error updating user document:", error);
-      }
+
+    // // Update the user document with the new image URL
+    let userDetails = {...userData};
+
+    userDetails.displayName =
+      userData.displayName != updatedName ? updatedName : userData.displayName;
+    userDetails.bio = userData.bio != updatedBio ? updatedBio : userData.bio;
+    userDetails.image = userData.image != imageURL ? imageURL : userData.image;
+
+    try {
+      await setDoc(doc(db, "users", userData.uid), userDetails);
+      console.log("Saved user details");
+    } catch (error) {
+      console.error("Error updating user document:", error);
     }
+
     router.push("/profile");
   };
 
@@ -135,119 +132,123 @@ export default function Component({ user }) {
 
       <Divider sx={{ paddingBottom: 0.5 }} role="presentation" />
 
-      <Box
-        sx={{
-          pt: 3,
-          pb: 10,
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "100%",
-            sm: "minmax(120px, 30%) 1fr",
-            lg: "280px 1fr minmax(120px, 208px)",
-          },
-          columnGap: { xs: 2, sm: 3, md: 4 },
-          rowGap: { xs: 2, sm: 2.5 },
-          "& > hr": {
-            gridColumn: "1/-1",
-          },
-        }}
-      >
-        <FormLabel sx={{ display: { xs: "none", sm: "block" } }}>
-          Name
-        </FormLabel>
-        <Box sx={{ display: { xs: "contents", sm: "flex" }, gap: 2 }}>
-          <FormControl sx={{ flex: 1 }}>
-            <FormLabel sx={{ display: { sm: "none" } }}>Display Name</FormLabel>
-            <Input
-              placeholder="Display Name"
-              value={updatedName}
-              onChange={(e) => setUpdatedName(e.target.value)}
+      <form onSubmit={handleSubmit}>
+        <Box
+          sx={{
+            pt: 3,
+            pb: 10,
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "100%",
+              sm: "minmax(120px, 100%) 1fr",
+              lg: "280px 1fr minmax(120px, 208px)",
+            },
+            columnGap: { xs: 2, sm: 3, md: 4 },
+            rowGap: { xs: 2, sm: 2.5 },
+            "& > hr": {
+              gridColumn: "1/-1",
+            },
+          }}
+        >
+          <FormLabel sx={{ display: { xs: "none", sm: "block" } }}>
+            Name
+          </FormLabel>
+          <Box sx={{ display: { xs: "contents", sm: "flex" }, gap: 2 }}>
+            <FormControl sx={{ flex: 1 }}>
+              <FormLabel sx={{ display: { sm: "none" } }}>
+                Display Name
+              </FormLabel>
+              <Input
+                placeholder="Display Name"
+                value={updatedName}
+                onChange={(e) => setUpdatedName(e.target.value)}
+              />
+            </FormControl>
+          </Box>
+
+          <Divider role="presentation" />
+
+          <Box>
+            <FormLabel>Bio</FormLabel>
+            <FormHelperText>Write a short introduction.</FormHelperText>
+          </Box>
+          <Box>
+            {/* Bio */}
+            <Textarea
+              slotProps={{
+                textarea: {
+                  maxLength: maxBioChar,
+                },
+              }}
+              minRows={3}
+              value={updatedBio}
+              onChange={(e) => {
+                e.preventDefault();
+                setUpdatedBio(e.target.value);
+              }}
             />
-          </FormControl>
-        </Box>
+            <FormHelperText sx={{ mt: 0.75, fontSize: "xs" }}>
+              {remainingChar} characters left
+            </FormHelperText>
+          </Box>
 
-        <Divider role="presentation" />
+          <Divider role="presentation" />
 
-        <Box>
-          <FormLabel>Bio</FormLabel>
-          <FormHelperText>Write a short introduction.</FormHelperText>
-        </Box>
-        <Box>
-          {/* Bio */}
-          <Textarea
-            slotProps={{
-              textarea: {
-                maxLength: maxBioChar,
-              },
+          <Box>
+            <FormLabel>Your photo</FormLabel>
+            <FormHelperText>
+              This will be displayed on your profile.
+            </FormHelperText>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              flexWrap: "wrap",
+              gap: 2.5,
             }}
-            minRows={3}
-            value={updatedBio}
-            onChange={(e) => {
-              e.preventDefault();
-              setUpdatedBio(e.target.value);
-            }}
-          />
-          <FormHelperText sx={{ mt: 0.75, fontSize: "xs" }}>
-            {remainingChar} characters left
-          </FormHelperText>
-        </Box>
-
-        <Divider role="presentation" />
-
-        <Box>
-          <FormLabel>Your photo</FormLabel>
-          <FormHelperText>
-            This will be displayed on your profile.
-          </FormHelperText>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "flex-start",
-            flexWrap: "wrap",
-            gap: 2.5,
-          }}
-        >
-          <Avatar
-            size="lg"
-            src={imageURL || userData.image}
-            sx={{ "--Avatar-size": "64px"}}
-          />
-
-          {/* Image Upload */}
-          <Input
-            style={{ border: "none", outline: "none", width: "100%" }}
-            type="file"
-            onChange={handleFileChange}
-          />
-
-          <Button onClick={handleSubmit}>Click to upload</Button>
-          {uploadProgress > 0 && <p>Upload progress: {uploadProgress}%</p>}
-        </Box>
-
-        <Divider role="presentation" />
-        <Box
-          sx={{
-            gridColumn: "1/-1",
-            justifySelf: "flex-end",
-            display: "flex",
-            gap: 1,
-          }}
-        >
-          {/* Cancel will route back to profile page */}
-          <Button
-            variant="outlined"
-            color="neutral"
-            size="sm"
-            onClick={handleCancel}
           >
-            Cancel
-          </Button>
-          <Button size="sm" onClick={handleSave}>
-            Save
-          </Button>
+            <Avatar
+              size="lg"
+              src={imageURL || userData.image}
+              sx={{ "--Avatar-size": "64px" }}
+            />
+
+            {/* Image Upload */}
+            <Input
+              style={{ border: "none", outline: "none", width: "100%" }}
+              type="file"
+              onChange={handleFileChange}
+            />
+
+            <Button onClick={handleUpload}>Click to upload</Button>
+            {uploadProgress > 0 && <p>Upload progress: {uploadProgress}%</p>}
+          </Box>
+
+          <Divider role="presentation" />
+          <Box
+            sx={{
+              gridColumn: "1/-1",
+              justifySelf: "flex-end",
+              display: "flex",
+              gap: 1,
+            }}
+          >
+            {/* Cancel will route back to profile page */}
+            <Button
+              variant="outlined"
+              color="neutral"
+              size="sm"
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
+            <Button size="sm" type="submit">
+              Save
+            </Button>
+          </Box>
         </Box>
-      </Box>
+      </form>
       {/* </Tabs> */}
     </Sheet>
   );

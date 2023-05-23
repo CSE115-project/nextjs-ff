@@ -1,5 +1,6 @@
 import { Loader } from "@googlemaps/js-api-loader";
 import { useEffect, useRef } from "react";
+import { Button } from "@mui/joy";
 
 export default function GoogleMap() {
   const mapRef = useRef(null);
@@ -80,7 +81,7 @@ export default function GoogleMap() {
 
   return (
     <div ref={mapRef} style={{ height: "90%", width: "100%" }}>
-      Map Loading...
+      <Button loading loadingPosition="start">Loading...</Button>
     </div>
   );
 }
