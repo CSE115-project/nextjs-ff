@@ -4,7 +4,6 @@ import { Button } from "@mui/joy";
 
 export default function GoogleMap() {
   const mapRef = useRef(null);
-  const [heatMapData, setHeatMapData] = useState([]);
 
   // Google Maps
   // default: San Francisco
@@ -28,7 +27,7 @@ export default function GoogleMap() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
           const currentLocation = {
-            lat: position.coords.latitude,
+          lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
 
@@ -48,21 +47,11 @@ export default function GoogleMap() {
           const request = {
             location: currentLocation,
             radius: "8000",
-            keyword: "food, attractions, night life nearby open now",
+            keyword: "restaurants, food, attractions, night life nearby open now",
           };
 
           let service = new google.maps.places.PlacesService(mapRef.current);
           service.nearbySearch(request, nearbyResults);
-
-          // if (heatMapData.length > 0 && mapRef.current) {
-          //   const heatmap = new google.maps.visualization.HeatmapLayer({
-          //     data: heatMapData,
-          //     map: mapRef.current,
-          //   });
-          //   return () => {
-          //     heatmap.setMap(null); // Cleanup when component unmounts
-          //   };
-          // }
         });
       } else {
         mapRef.current = new Map(mapRef.current, {
@@ -92,16 +81,24 @@ export default function GoogleMap() {
   }
 
   function getHeatmapData(results) {
-    const data = results.map((result) => ({
-      location: new google.maps.LatLng(
-        result.geometry.location.lat(),
-        result.geometry.location.lng()
-      ),
-      weight: Math.random() * 10, // You can set the weight based on your data
-    }));
+    const data = results.map((result) => {
+      const lat = result.geometry.location.lat();
+      const lng = result.geometry.location.lng();
+      return ({ 
+        location: new google.maps.LatLng(lat,lng),
+        weight: Math.random() * 10, // You can set the weight based on your data
+      })
+    });
 
     console.log("data:", data);
-    setHeatMapData(data);
+
+    if (mapRef.current) {
+      const heatmap = new google.maps.visualization.HeatmapLayer({
+        data: data,
+      });
+
+      heatmap.setMap(mapRef.current);
+    }
   }
 
   return (
