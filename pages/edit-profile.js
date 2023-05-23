@@ -52,13 +52,11 @@ export default function Component({ user }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Load Page when UserData is available
   if (!userData) return <div>Loading...</div>;
   console.log("edPro user", userData.uid);
 
-  const handleBioChange = (event) => {
-    console.log(event.target.value);
-  };
-
+  // Upload new image for Avatar
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
@@ -87,6 +85,7 @@ export default function Component({ user }) {
     }
   };
 
+  // Checks changed values and save a new object data to 'users' 
   const handleSave = async (event) => {
     event.preventDefault();
     // Update the user document with the new image URL
@@ -112,6 +111,7 @@ export default function Component({ user }) {
     router.push("/profile");
   };
 
+  // Cancel, redirect to Profile page
   const handleCancel = (event) => {
     event.preventDefault();
     router.push("/profile");
