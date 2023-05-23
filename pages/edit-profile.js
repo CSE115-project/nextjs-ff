@@ -46,6 +46,9 @@ export default function Component({ user }) {
       if (user) {
         const userDocData = await fetchUserData(user.uid);
         setUserData(userDocData);
+        setUpdatedName(userDocData.displayName);
+        setUpdatedBio(userDocData.bio);
+        setImageURL(userDocData.image);
       }
     };
 
