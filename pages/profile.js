@@ -24,8 +24,10 @@ import CardContent from "@mui/joy/CardContent";
 import Image from "next/image";
 import FormControl from "@mui/joy/FormControl";
 import Input from "@mui/joy/Input";
-
-
+import Tabs from '@mui/joy/Tabs';
+import TabList from '@mui/joy/TabList';
+import Tab, { tabClasses } from '@mui/joy/Tab';
+import TabPanel from '@mui/joy/TabPanel';
 
 /*
 const userObj = {
@@ -109,13 +111,59 @@ export default function Profile({ user }) {
     searchFriends();
   };
 
+  // List friends ---------------------------------------------------------- 
+  const friendsList = [];
+  // loop through userdata.friends and getdoc for each friend
+  // store each friend in friendsList
 
-  // Adding search friends functionality ----------------------------------------------------------
+  console.log("this is friend id:", userData.friends);
 
-  const handleFriendProfile = (event) => {
-    if (event.cancelable) event.preventDefault();
-    router.push("/friends-profile");
+  // getFriend from friend list of logged in user
+  const getFriend = async (db, friendId) => {
+    const friendUserRef = doc(db, 'users', friendId);
+    const friendUserDoc = await getDoc(friendUserRef);
+    console.log("friend user doc", friendUserDoc.data());
+    return friendUserDoc.data();
+  }
+  const createFriendList = async () => {
+    const db = getFirestore();
+    const { friends } = userData;
+    const promises = friends.map((friendId) => getFriend(db, friendId));
+
+    try {
+      const friendData = await Promise.all(promises);
+      friendsList.push(...friendData);
+      console.log("this is friend list", friendsList);
+    } catch (error) {
+      console.log("Error retrieving friend data:", error);
+    }
   };
+
+  // if userData is loaded, create friend list of related user 
+  if (userData) {
+    createFriendList();
+    // const db = getFirestore();
+    // const { friends } = userData;
+    // const promises = friends.map((friendId) => getFriend(db, friendId));
+    // const friendData = await Promise.all(promises);
+
+    // for (let i in friends) {
+    //   console.log("this is friend id:", friends[i]);
+    //   const friend = getFriend(db, friends[i]);
+    //   friendsList.push(friend);
+    // }
+    console.log("this is friend list", friendsList);
+
+  }
+
+
+
+  // --------------------------------------
+
+  // const handleFriendProfile = (event) => {
+  //   if (event.cancelable) event.preventDefault();
+  //   router.push("/friends-profile");
+  // };
 
   // function to retrieve the user's data from the database
   useEffect(() => {
@@ -156,10 +204,12 @@ export default function Profile({ user }) {
               Home
             </Button>
 
-            {/* Edit Profile Button */}
-            <Button onClick={handleEditProfile} sx={{ marginLeft: "auto" }}>
-              Edit Profile
-            </Button>
+            <div style={{ display: "flex", marginLeft: "auto" }}>
+              {/* Edit Profile Button */}
+              <Button onClick={handleEditProfile} sx={{ mt: 1 }}>
+                Edit Profile
+              </Button>
+            </div>
           </Stack>
 
           <Sheet
@@ -224,7 +274,10 @@ export default function Profile({ user }) {
               sx={{ flexWrap: "wrap" }}
             >
               {/* Form for inputting friend's email */}
-              {/* <FormControl sx={{ display: { xs: "contents", sm: "flex" } }}>
+              <form
+                onSubmit={handleAddFriend}
+                sx={{ display: { xs: "contents", sm: "flex" } }}
+              >
                 <Input
                   type="email"
                   placeholder="email"
@@ -232,15 +285,12 @@ export default function Profile({ user }) {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   // Button to add a friend
-                  endDecorator={<Button>Add</Button>}
+                  endDecorator={
+                    <Button type="submit">
+                      Add
+                    </Button>
+                  }
                 />
-              </FormControl> */}
-
-              <form
-                onSubmit={handleAddFriend}
-              >
-                <Input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-                <Button type="submit">Add</Button>
               </form>
 
               {/* Render the matching users */}
@@ -282,6 +332,19 @@ export default function Profile({ user }) {
 
               {/* TabPanel for User's friends list */}
               <TabPanel value={1} sx={{ p: 2 }}>
+                <div>
+                  <h1>List of Friends</h1>
+                  {friendsList.length > 0 ? (
+                    <ul>
+                      {friendsList.map((friend) => (
+                        <li key={friend.uid}>{friend.name}</li>
+                      ))} 
+                    </ul>
+                  ) : (
+                    <p>No friends found.</p>
+                  )}
+                </div>
+
                 {/* <div>
                   <h1>List of Friends</h1>
                   <ul>
@@ -323,91 +386,85 @@ export default function Profile({ user }) {
                   </Button>
                 </Box>
 
-            {/* Liked Place (need to route to list of places) */}
-
-            {/* Stack to create rows */}
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="center"
-              spacing={{ xs: 0, sm: "10%", md: "10%", lg: "10%" }}
-              sx={{ flexWrap: "wrap" }}
-            >
-              {/* Stack to create the first column */}
-              <Stack
-                direction="column"
-                justifyContent="space-evenly"
-                alignItems="flex-start"
-                spacing={"10%"}
-              >
-                {/* Top Left Card */}
-                <Card
-                  sx={{
-                    "--Card-radius": "20px",
-                    mb: 3,
-                    width: 250,
-                    height: 200,
-                    bgcolor: "#EFF7FD",
-                  }}
+                {/* Liked Place (need to route to list of places) */}
+                {/* Stack to create rows */}
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="center"
+                  spacing={{ xs: 0, sm: "10%", md: "10%", lg: "10%" }}
+                  sx={{ flexWrap: "wrap" }}
                 >
-                  <CardCover>
-                    {/* Add rest of Card */}
-                    <Typography textColor="#5F7CEC" component="h1">
-                      Restaurant
-                    </Typography>
-                  </CardCover>
-                  <CardContent>
-                    {/* Add rest of Card */}
-                    <Image
-                      src="/images/blue_folder.png"
-                      alt="Blue folder image"
-                      width={100}
-                      height={100}
-                      style={{
-                        position: "absolute",
-                        top: 3,
-                        left: 5,
-                        // width: "100px", // Adjust the width as desired
-                        // height: "auto", // Maintain the aspect ratio of the image
+                  {/* Stack to create the first column */}
+                  <Stack
+                    direction="column"
+                    justifyContent="space-evenly"
+                    alignItems="flex-start"
+                    spacing={"10%"}
+                  >
+                    {/* Top Left Card */}
+                    <Card
+                      sx={{
+                        "--Card-radius": "20px",
+                        mb: 3,
+                        width: 250,
+                        height: 200,
+                        bgcolor: "#EFF7FD",
                       }}
-                    />
-                    {/* <Typography textColor="#5F7CEC">Test2</Typography> */}
-                  </CardContent>
+                    >
+                      <CardCover>
+                        <Typography textColor="#5F7CEC" component="h1">
+                          Restaurant
+                        </Typography>
+                      </CardCover>
+                      <CardContent>
+                        <Image
+                          src="/images/blue_folder.png"
+                          alt="Blue folder image"
+                          width={100}
+                          height={100}
+                          style={{
+                            position: "absolute",
+                            top: 3,
+                            left: 5,
+                            // width: "100px", // Adjust the width as desired
+                            // height: "auto", // Maintain the aspect ratio of the image
+                          }}
+                        />
+                      </CardContent>
 
-                  {/* Bottom Left Card */}
-                </Card>
-                <Card
-                  sx={{
-                    "--Card-radius": "20px",
-                    width: 250,
-                    height: 200,
-                    bgcolor: "#FBEEEE",
-                  }}
-                >
-                  <CardCover>
-                    {/* Add rest of card */}
-                    <Typography component="h1" textColor="#E2615C">
-                      Liked places
-                    </Typography>
-                  </CardCover>
-                  <CardContent>
-                    {/* Add rest of Card */}
-                    <Image
-                      src="/images/red_folder.png"
-                      alt="Red folder image"
-                      width={100}
-                      height={100}
-                      style={{
-                        position: "absolute",
-                        top: 3,
-                        left: 5,
-                        // width: "100px", // Adjust the width as desired
-                        // height: "auto", // Maintain the aspect ratio of the image
+                      {/* Bottom Left Card */}
+                    </Card>
+                    <Card
+                      sx={{
+                        "--Card-radius": "20px",
+                        width: 250,
+                        height: 200,
+                        bgcolor: "#FBEEEE",
                       }}
-                    />
-                  </CardContent>
-                </Card>
-              </Stack>
+                    >
+                      <CardCover>
+                        <Typography component="h1" textColor="#E2615C">
+                          Liked places
+                        </Typography>
+                      </CardCover>
+                      <CardContent>
+                        <Image
+                          src="/images/red_folder.png"
+                          alt="Red folder image"
+                          width={100}
+                          height={100}
+                          style={{
+                            position: "absolute",
+                            top: 3,
+                            left: 5,
+                            // width: "100px", // Adjust the width as desired
+                            // height: "auto", // Maintain the aspect ratio of the image
+                          }}
+                        />
+                      </CardContent>
+                    </Card>
+                  </Stack>
 
                   {/* Stack for Second Column */}
                   <Stack
