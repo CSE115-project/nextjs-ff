@@ -78,8 +78,6 @@ export default function Profile({ user }) {
     }
   };
 
-  
-
   console.log("p/profile userData:", userData);
 
   // Adding search friends functionality ----------------------------------------------------------
@@ -111,43 +109,43 @@ export default function Profile({ user }) {
       console.log("fr:", friendId, "doc:", doc.id);
       setFriendId(doc.id);
     });
+
     if (friendId) {
       await updateDoc(docRef, { friends: arrayUnion(friendId) });
       console.log("Friend added");
     }
-
-    // Clear input field
   };
 
   // List friends ----------------------------------------------------------
-  const friendsList = [];
 
   // loop through userdata.friends and getdoc for each friend
   // store each friend in friendsList
 
   // getFriend from friend list of logged in user
-  // const getFriend = async (db, friendId) => {
-  //   const friendUserRef = doc(db, "users", friendId);
-  //   const friendUserDoc = await getDoc(friendUserRef);
-  //   console.log("friend user doc", friendUserDoc.data());
-  //   return friendUserDoc.data();
-  // };
-  // const createFriendList = async () => {
-  //   const db = getFirestore();
-  //   const { friends } = userData;
+  const getFriend = async (db, friendId) => {
+    const friendUserRef = doc(db, "users", friendId);
+    const friendUserDoc = await getDoc(friendUserRef);
+    return friendUserDoc.data().email;
+  };
 
-  //   console.log("createFriendsList", friends);
+  const createFriendList = async () => {
+    const db = getFirestore();
+    const { friends } = userData;
 
-  //   const promises = friends.map((friendId) => getFriend(db, friendId));
+    try {
+      const promises = friends.map((friendId) => getFriend(db, friendId));
+      const friendData = await Promise.all(promises);
+      const list = [...friendData];
+      // friendsList.push(...friendData);
+      // setFriendsList(list);
+      console.log("friend list:", list);
+      // TODO: save list to global list, and map the results in the friends list tab
+    } catch (error) {
+      console.log("Error retrieving friend data:", error);
+    }
+  };
 
-  //   try {
-  //     const friendData = await Promise.all(promises);
-  //     friendsList.push(...friendData);
-  //     console.log("this is friend list", friendsList);
-  //   } catch (error) {
-  //     console.log("Error retrieving friend data:", error);
-  //   }
-  // };
+  createFriendList();
 
   if (!userData) {
     return (
@@ -158,6 +156,7 @@ export default function Profile({ user }) {
   } else {
     console.log("Loading Profile...");
 
+    console.log("friendsList:", friendsList);
     return (
       <div className="userProfile">
         {/* <meta name="viewport" content="initial-scale=1, width=device-width" /> */}
@@ -306,20 +305,14 @@ export default function Profile({ user }) {
                   )}
                 </div>
 
-                {/* <div>
+                <div>
                   <h1>List of Friends</h1>
                   <ul>
-                    {friendsList.length > 0 ? (
-                      {
-                        friendsList.map((friend) => (
-                          <li key={friend.uid}>{friend.email}</li>
-                        ))
-                      }
-                    ) : (
-                      <p>No friends found.</p>
-                    )}
+                    {friendsList.map((friend) => {
+                      return <li key={friend}>{friend}</li>;
+                    })}
                   </ul>
-                </div> */}
+                </div>
               </TabPanel>
 
               {/* TabPanel for User's past review */}
