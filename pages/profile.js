@@ -24,10 +24,8 @@ import CardContent from "@mui/joy/CardContent";
 import Image from "next/image";
 import FormControl from "@mui/joy/FormControl";
 import Input from "@mui/joy/Input";
-import Tabs from '@mui/joy/Tabs';
-import TabList from '@mui/joy/TabList';
-import Tab, { tabClasses } from '@mui/joy/Tab';
-import Chip, { chipClasses } from '@mui/joy/Chip';
+
+
 
 /*
 const userObj = {
@@ -89,7 +87,7 @@ export default function Profile({ user }) {
     const snapshot = await getDocs(searchQueryRef);
     const matchingUsersData = snapshot.docs.map((doc) => doc.data());
     setMatchingUsers(matchingUsersData);
-    console.log("matching user", matchingUsers);
+    // console.log("matching user", matchingUsers);  for testing
 
     if (matchingUsers.length >= 1) {
       const currentUserRef = doc(db, "users", user.uid);
@@ -110,6 +108,7 @@ export default function Profile({ user }) {
   const handleSearch = () => {
     searchFriends();
   };
+
 
   // Adding search friends functionality ----------------------------------------------------------
 
@@ -157,20 +156,10 @@ export default function Profile({ user }) {
               Home
             </Button>
 
-            <div style={{ display: "flex", marginLeft: "auto" }}>
-              {/* Friend Profile Button */}
-              <Button
-                onClick={handleFriendProfile}
-                sx={{ width: "auto", mt: 1 }}
-              >
-                Friends Profile
-              </Button>
-
-              {/* Edit Profile Button */}
-              <Button onClick={handleEditProfile} sx={{ mt: 1 }}>
-                Edit Profile
-              </Button>
-            </div>
+            {/* Edit Profile Button */}
+            <Button onClick={handleEditProfile} sx={{ marginLeft: "auto" }}>
+              Edit Profile
+            </Button>
           </Stack>
 
           <Sheet
@@ -235,10 +224,7 @@ export default function Profile({ user }) {
               sx={{ flexWrap: "wrap" }}
             >
               {/* Form for inputting friend's email */}
-              <FormControl
-                // onSubmit={handleAddFriend}
-                sx={{ display: { xs: "contents", sm: "flex" } }}
-              >
+              {/* <FormControl sx={{ display: { xs: "contents", sm: "flex" } }}>
                 <Input
                   type="email"
                   placeholder="email"
@@ -246,40 +232,96 @@ export default function Profile({ user }) {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   // Button to add a friend
-                  endDecorator={
-                    <Button onClick={handleAddFriend} type="submit">
-                      Add
-                    </Button>
-                  }
+                  endDecorator={<Button>Add</Button>}
                 />
-              </FormControl>
+              </FormControl> */}
 
-              {/* <form
+              <form
                 onSubmit={handleAddFriend}
               >
                 <Input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
                 <Button type="submit">Add</Button>
-              </form> */}
+              </form>
 
               {/* Render the matching users */}
             </Stack>
 
-            <Box
-              sx={{
-                pt: 3,
-                pb: 3,
-                display: "flex",
-              }}
-            >
-              <Typography component="h6" sx={{ color: "black" }}>
-                My Folders
-              </Typography>
+            <Tabs aria-label="tabs" defaultValue={0}>
+              <TabList
+                variant="plain"
+                sx={{
+                  '--List-padding': '0px',
+                  '--List-radius': '0px',
+                  '--ListItem-minHeight': '48px',
+                  [`& .${tabClasses.root}`]: {
+                    boxShadow: 'none',
+                    fontWeight: 'md',
+                    [`&.${tabClasses.selected}::before`]: {
+                      content: '""',
+                      display: 'block',
+                      position: 'absolute',
+                      left: 'var(--ListItem-paddingLeft)', // change to `0` to stretch to the edge.
+                      right: 'var(--ListItem-paddingRight)', // change to `0` to stretch to the edge.
+                      bottom: 0,
+                      height: 3,
+                      bgcolor: 'primary.400',
+                    },
+                  },
+                }}
+              >
+                <Tab>Like Places</Tab>
+                <Tab>Friends</Tab>
+                <Tab>Review</Tab>
+                <Tab>My Folders</Tab>
+              </TabList>
 
-              {/* Button to add new list */}
-              <Button variant="plain" sx={{ marginLeft: "auto" }}>
-                +
-              </Button>
-            </Box>
+              {/* TabPanel for User's like places */}
+              <TabPanel value={0} sx={{ p: 2 }}>
+                Like Places tab panel
+              </TabPanel>
+
+              {/* TabPanel for User's friends list */}
+              <TabPanel value={1} sx={{ p: 2 }}>
+                {/* <div>
+                  <h1>List of Friends</h1>
+                  <ul>
+                    {friendsList.length > 0 ? (
+                      {
+                        friendsList.map((friend) => (
+                          <li key={friend.uid}>{friend.email}</li>
+                        ))
+                      }
+                    ) : (
+                      <p>No friends found.</p>
+                    )}
+                  </ul>
+                </div> */}
+              </TabPanel>
+
+              {/* TabPanel for User's past review */}
+              <TabPanel value={2} sx={{ p: 2 }}>
+                Review tab panel
+              </TabPanel>
+
+
+              {/* TabPanel for My Folders */}
+              <TabPanel value={3} sx={{ p: 2 }}>
+                <Box
+                  sx={{
+                    pt: 3,
+                    pb: 3,
+                    display: "flex",
+                  }}
+                >
+                  <Typography component="h6" sx={{ color: "black" }}>
+                    My Folders
+                  </Typography>
+
+                  {/* Button to add new list */}
+                  <Button variant="plain" sx={{ marginLeft: "auto" }}>
+                    +
+                  </Button>
+                </Box>
 
             {/* Liked Place (need to route to list of places) */}
 
@@ -309,11 +351,13 @@ export default function Profile({ user }) {
                   }}
                 >
                   <CardCover>
+                    {/* Add rest of Card */}
                     <Typography textColor="#5F7CEC" component="h1">
                       Restaurant
                     </Typography>
                   </CardCover>
                   <CardContent>
+                    {/* Add rest of Card */}
                     <Image
                       src="/images/blue_folder.png"
                       alt="Blue folder image"
@@ -327,6 +371,7 @@ export default function Profile({ user }) {
                         // height: "auto", // Maintain the aspect ratio of the image
                       }}
                     />
+                    {/* <Typography textColor="#5F7CEC">Test2</Typography> */}
                   </CardContent>
 
                   {/* Bottom Left Card */}
@@ -340,11 +385,13 @@ export default function Profile({ user }) {
                   }}
                 >
                   <CardCover>
+                    {/* Add rest of card */}
                     <Typography component="h1" textColor="#E2615C">
                       Liked places
                     </Typography>
                   </CardCover>
                   <CardContent>
+                    {/* Add rest of Card */}
                     <Image
                       src="/images/red_folder.png"
                       alt="Red folder image"
@@ -362,77 +409,79 @@ export default function Profile({ user }) {
                 </Card>
               </Stack>
 
-              {/* Stack for Second Column */}
-              <Stack
-                direction="column"
-                justifyContent="space-evenly"
-                alignItems="flex-start"
-                spacing={"10%"}
-              >
-                {/* Top Right Card */}
-                <Card
-                  sx={{
-                    "--Card-radius": "20px",
-                    mb: 3,
-                    width: 250,
-                    height: 200,
-                    bgcolor: "#FEFBED",
-                  }}
-                >
-                  <CardCover>
-                    <Typography textColor="#F4BA4F" component="h1">
-                      Fun
-                    </Typography>
-                  </CardCover>
-                  <CardContent>
-                    <Image
-                      src="/images/yellow_folder.png"
-                      alt="Yellow folder image"
-                      width={100}
-                      height={100}
-                      style={{
-                        position: "absolute",
-                        top: 3,
-                        left: 5,
-                        // width: "100px", // Adjust the width as desired
-                        // height: "auto", // Maintain the aspect ratio of the image
+                  {/* Stack for Second Column */}
+                  <Stack
+                    direction="column"
+                    justifyContent="space-evenly"
+                    alignItems="flex-start"
+                    spacing={"10%"}
+                  >
+                    {/* Top Right Card */}
+                    <Card
+                      sx={{
+                        "--Card-radius": "20px",
+                        mb: 3,
+                        width: 250,
+                        height: 200,
+                        bgcolor: "#FEFBED",
                       }}
-                    />
-                  </CardContent>
+                    >
+                      <CardCover>
+                        <Typography textColor="#F4BA4F" component="h1">
+                          Fun
+                        </Typography>
+                      </CardCover>
+                      <CardContent>
+                        <Image
+                          src="/images/yellow_folder.png"
+                          alt="Yellow folder image"
+                          width={100}
+                          height={100}
+                          style={{
+                            position: "absolute",
+                            top: 3,
+                            left: 5,
+                            // width: "100px", // Adjust the width as desired
+                            // height: "auto", // Maintain the aspect ratio of the image
+                          }}
+                        />
+                      </CardContent>
 
-                  {/* Bottom Right Card */}
-                </Card>
-                <Card
-                  sx={{
-                    "--Card-radius": "20px",
-                    width: 250,
-                    height: 200,
-                    bgcolor: "#b7e8c2",
-                  }}
-                >
-                  <CardCover>
-                    <Typography textColor="#6b8771" component="h1">
-                      Viewpoint
-                    </Typography>
-                  </CardCover>
-                  <CardContent>
-                    <Image
-                      src="/images/green_folder.png"
-                      alt="Green folder image"
-                      width={100}
-                      height={100}
-                      style={{
-                        position: "absolute",
-                        top: 3,
-                        left: 5,
-                        // width: "100px", // Adjust the width as desired
-                        // height: "auto", // Maintain the aspect ratio of the image
+                      {/* Bottom Right Card */}
+                    </Card>
+                    <Card
+                      sx={{
+                        "--Card-radius": "20px",
+                        width: 250,
+                        height: 200,
+                        bgcolor: "#b7e8c2",
                       }}
-                    />
-                  </CardContent>
-                </Card>
-              </Stack>
-            </Stack>
+                    >
+                      <CardCover>
+                        <Typography textColor="#6b8771" component="h1">
+                          Viewpoint
+                        </Typography>
+                      </CardCover>
+                      <CardContent>
+                        <Image
+                          src="/images/green_folder.png"
+                          alt="Green folder image"
+                          width={100}
+                          height={100}
+                          style={{
+                            position: "absolute",
+                            top: 3,
+                            left: 5,
+                            // width: "100px", // Adjust the width as desired
+                            // height: "auto", // Maintain the aspect ratio of the image
+                          }}
+                        />
+                      </CardContent>
+                    </Card>
+                  </Stack>
+                </Stack>
+              </TabPanel>
+            </Tabs>
           </Sheet>
         </Sheet>
       </div>
