@@ -44,30 +44,6 @@ export default function Profile({ user }) {
   const db = getFirestore(firebase);
   const [userData, setUserData] = useState({});
 
-  // function to retrieve the user's data from the database
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const docRef = doc(db, "users", user.uid);
-        const docRes = await getDoc(docRef);
-
-        if (docRes.exists()) {
-          const data = docRes.data();
-          setUserData(data);
-        } else {
-          console.error("User Not Found");
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-    fetchData();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  console.log("p/profile userData:", userData);
-
   // Routes -------------------------------------------------
   // initialize all fields and their according set methods
   const handleHome = (event) => {
@@ -80,6 +56,32 @@ export default function Profile({ user }) {
     router.push("/edit-profile");
   };
 
+  // function to retrieve the UserData from the database
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const docRef = doc(db, "users", user.uid);
+      const docRes = await getDoc(docRef);
+
+      if (docRes.exists()) {
+        const data = docRes.data();
+        setUserData(data);
+      } else {
+        console.error("User Not Found");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  
+
+  console.log("p/profile userData:", userData);
+
   // Adding search friends functionality ----------------------------------------------------------
 
   // Handle search query input and button click
@@ -91,7 +93,7 @@ export default function Profile({ user }) {
     if (event.cancelable) event.preventDefault();
 
     // Search and Get User with email matching the search.
-    // Since only one email is associated with each user, 
+    // Since only one email is associated with each user,
     // the return doc should only contain one entry
     const db = getFirestore();
     const q = query(collection(db, "users"), where("email", "==", searchQuery));
@@ -105,16 +107,21 @@ export default function Profile({ user }) {
 
     // Update Friends list of User by appending new_friend_id
     const docRef = doc(db, "users", user.uid);
-    qSnap.forEach((doc) => setFriendId(doc.id));
-    await updateDoc(docRef, { friends: arrayUnion(friendId) });
+    qSnap.forEach((doc) => {
+      console.log("fr:", friendId, "doc:", doc.id);
+      setFriendId(doc.id);
+    });
+    if (friendId) {
+      await updateDoc(docRef, { friends: arrayUnion(friendId) });
+      console.log("Friend added");
+    }
 
     // Clear input field
-    setSearchQuery("");
-    console.log("Friend added");
   };
 
   // List friends ----------------------------------------------------------
   const friendsList = [];
+
   // loop through userdata.friends and getdoc for each friend
   // store each friend in friendsList
 
