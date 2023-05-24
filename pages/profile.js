@@ -155,8 +155,6 @@ export default function Profile({ user }) {
     );
   } else {
     console.log("Loading Profile...");
-
-    console.log("friendsList:", friendsList);
     return (
       <div className="userProfile">
         {/* <meta name="viewport" content="initial-scale=1, width=device-width" /> */}
@@ -294,24 +292,7 @@ export default function Profile({ user }) {
               <TabPanel value={1} sx={{ p: 2 }}>
                 <div>
                   <h1>List of Friends</h1>
-                  {friendsList.length > 0 ? (
-                    <ul>
-                      {friendsList.map((friend) => (
-                        <li key={friend.uid}>{friend.name}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>No friends found.</p>
-                  )}
-                </div>
-
-                <div>
-                  <h1>List of Friends</h1>
-                  <ul>
-                    {friendsList.map((friend) => {
-                      return <li key={friend}>{friend}</li>;
-                    })}
-                  </ul>
+                  {/* TODO */}
                 </div>
               </TabPanel>
 
