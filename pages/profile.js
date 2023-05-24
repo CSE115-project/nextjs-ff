@@ -111,39 +111,59 @@ export default function Profile({ user }) {
     searchFriends();
   };
 
-  // List friends ----------------------------------------------------------
-  const [friendList, setFriendList] = useState([]);
+  // List friends ---------------------------------------------------------- 
+  const friendsList = [];
+  // loop through userdata.friends and getdoc for each friend
+  // store each friend in friendsList
 
-  useEffect(() => {
-    const fetchFriends = async () => {
-      const db = getFirestore();
-      const currentUserRef = doc(db, 'users', user.uid);
-      const currentUserDoc = await getDoc(currentUserRef);
+  console.log("this is friend id:", userData.friends);
 
-      if (currentUserDoc.exists()) {
-        const currentUserData = currentUserDoc.data();
-        const friendIds = currentUserData.friendList || [];
+  // getFriend from friend list of logged in user
+  const getFriend = async (db, friendId) => {
+    const friendUserRef = doc(db, 'users', friendId);
+    const friendUserDoc = await getDoc(friendUserRef);
+    console.log("friend user doc", friendUserDoc.data());
+    return friendUserDoc.data();
+  }
+  const createFriendList = async () => {
+    const db = getFirestore();
+    const { friends } = userData;
+    const promises = friends.map((friendId) => getFriend(db, friendId));
 
-        const friendDetails = await Promise.all(
-          friendIds.map(async (friendId) => {
-            const friendUserRef = doc(db, 'users', friendId);
-            const friendUserDoc = await getDoc(friendUserRef);
-            return { id: friendId, ...friendUserDoc.data() };
-          })
-        );
-
-        setFriendList(friendDetails);
-      }
-    };
-
-    fetchFriends();
-  }, [user.uid]);
-
-
-  const handleFriendProfile = (event) => {
-    if (event.cancelable) event.preventDefault();
-    router.push("/friends-profile");
+    try {
+      const friendData = await Promise.all(promises);
+      friendsList.push(...friendData);
+      console.log("this is friend list", friendsList);
+    } catch (error) {
+      console.log("Error retrieving friend data:", error);
+    }
   };
+
+  // if userData is loaded, create friend list of related user 
+  if (userData) {
+    createFriendList();
+    // const db = getFirestore();
+    // const { friends } = userData;
+    // const promises = friends.map((friendId) => getFriend(db, friendId));
+    // const friendData = await Promise.all(promises);
+
+    // for (let i in friends) {
+    //   console.log("this is friend id:", friends[i]);
+    //   const friend = getFriend(db, friends[i]);
+    //   friendsList.push(friend);
+    // }
+    console.log("this is friend list", friendsList);
+
+  }
+
+
+
+  // --------------------------------------
+
+  // const handleFriendProfile = (event) => {
+  //   if (event.cancelable) event.preventDefault();
+  //   router.push("/friends-profile");
+  // };
 
   // function to retrieve the user's data from the database
   useEffect(() => {
@@ -312,18 +332,20 @@ export default function Profile({ user }) {
 
               {/* TabPanel for User's friends list */}
               <TabPanel value={1} sx={{ p: 2 }}>
-                <div>
+                {/* <div>
                   <h1>List of Friends</h1>
-                  {friendList.length > 0 ? (
-                    <ul>
-                      {friendList.map((friend) => (
-                        <li key={friend.uid}>{friend.name}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>No friends found.</p>
-                  )}
-                </div>
+                  <ul>
+                    {friendsList.length > 0 ? (
+                      {
+                        friendsList.map((friend) => (
+                          <li key={friend.uid}>{friend.email}</li>
+                        ))
+                      }
+                    ) : (
+                      <p>No friends found.</p>
+                    )}
+                  </ul>
+                </div> */}
               </TabPanel>
 
               {/* TabPanel for User's past review */}
