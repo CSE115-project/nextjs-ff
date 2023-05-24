@@ -3,19 +3,19 @@ import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
 import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
-import { Tab,Tabs, TabList, tabClasses, TabPanel } from "@mui/joy";
+import { Tab, Tabs, TabList, tabClasses, TabPanel } from "@mui/joy";
 import Typography from "@mui/joy/Typography";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { firebase } from "../firebase";
 import {
   getDoc,
+  getDocs,
   getFirestore,
   doc,
-  collection,
   query,
+  collection,
   where,
-  getDocs,
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
@@ -25,10 +25,6 @@ import CardContent from "@mui/joy/CardContent";
 import Image from "next/image";
 import FormControl from "@mui/joy/FormControl";
 import Input from "@mui/joy/Input";
-import Tabs from '@mui/joy/Tabs';
-import TabList from '@mui/joy/TabList';
-import Tab, { tabClasses } from '@mui/joy/Tab';
-import TabPanel from '@mui/joy/TabPanel';
 
 /*
 const userObj = {
@@ -47,124 +43,6 @@ export default function Profile({ user }) {
   const router = useRouter();
   const db = getFirestore(firebase);
   const [userData, setUserData] = useState({});
-
-  // initialize all fields and their according set methods
-  const handleHome = (event) => {
-    if (event.cancelable) event.preventDefault();
-    router.push("/");
-  };
-
-  const handleEditProfile = (event) => {
-    if (event.cancelable) event.preventDefault();
-    router.push("/edit-profile");
-  };
-
-  // Adding search friends functionality ----------------------------------------------------------
-
-  // Handle search query input and button click
-  const [searchQuery, setSearchQuery] = useState("");
-  const [matchingUsers, setMatchingUsers] = useState([]);
-
-  const searchFriends = async () => {
-    const db = getFirestore();
-    const usersCollectionRef = collection(db, "users");
-    const searchQueryRef = query(
-      usersCollectionRef,
-      where("email", "==", searchQuery)
-    );
-    const snapshot = await getDocs(searchQueryRef);
-    const matchingUsersData = snapshot.docs.map((doc) => doc.data());
-    setMatchingUsers(matchingUsersData);
-
-    // Process matchingUsers or update state with the search results
-  };
-
-  const handleAddFriend = async (event) => {
-    if (event.cancelable) event.preventDefault();
-    const db = getFirestore();
-    const usersCollectionRef = collection(db, "users");
-    const searchQueryRef = query(
-      usersCollectionRef,
-      where("email", "==", searchQuery)
-    );
-    const snapshot = await getDocs(searchQueryRef);
-    const matchingUsersData = snapshot.docs.map((doc) => doc.data());
-    setMatchingUsers(matchingUsersData);
-    // console.log("matching user", matchingUsers);  for testing
-
-    if (matchingUsers.length >= 1) {
-      const currentUserRef = doc(db, "users", user.uid);
-      const friendUserRef = doc(db, "users", matchingUsers[0].uid);
-
-      await updateDoc(currentUserRef, {
-        friends: arrayUnion(matchingUsers[0].uid),
-      });
-
-      await updateDoc(friendUserRef, {
-        friends: arrayUnion(user.uid),
-      });
-    }
-
-    // Handle success or update state accordingly
-  };
-
-  const handleSearch = () => {
-    searchFriends();
-  };
-
-  // List friends ---------------------------------------------------------- 
-  const friendsList = [];
-  // loop through userdata.friends and getdoc for each friend
-  // store each friend in friendsList
-
-  console.log("this is friend id:", userData.friends);
-
-  // getFriend from friend list of logged in user
-  const getFriend = async (db, friendId) => {
-    const friendUserRef = doc(db, 'users', friendId);
-    const friendUserDoc = await getDoc(friendUserRef);
-    console.log("friend user doc", friendUserDoc.data());
-    return friendUserDoc.data();
-  }
-  const createFriendList = async () => {
-    const db = getFirestore();
-    const { friends } = userData;
-    const promises = friends.map((friendId) => getFriend(db, friendId));
-
-    try {
-      const friendData = await Promise.all(promises);
-      friendsList.push(...friendData);
-      console.log("this is friend list", friendsList);
-    } catch (error) {
-      console.log("Error retrieving friend data:", error);
-    }
-  };
-
-  // if userData is loaded, create friend list of related user 
-  if (userData) {
-    createFriendList();
-    // const db = getFirestore();
-    // const { friends } = userData;
-    // const promises = friends.map((friendId) => getFriend(db, friendId));
-    // const friendData = await Promise.all(promises);
-
-    // for (let i in friends) {
-    //   console.log("this is friend id:", friends[i]);
-    //   const friend = getFriend(db, friends[i]);
-    //   friendsList.push(friend);
-    // }
-    console.log("this is friend list", friendsList);
-
-  }
-
-
-
-  // --------------------------------------
-
-  // const handleFriendProfile = (event) => {
-  //   if (event.cancelable) event.preventDefault();
-  //   router.push("/friends-profile");
-  // };
 
   // function to retrieve the user's data from the database
   useEffect(() => {
@@ -190,10 +68,89 @@ export default function Profile({ user }) {
 
   console.log("p/profile userData:", userData);
 
+  // Routes -------------------------------------------------
+  // initialize all fields and their according set methods
+  const handleHome = (event) => {
+    if (event.cancelable) event.preventDefault();
+    router.push("/");
+  };
+
+  const handleEditProfile = (event) => {
+    if (event.cancelable) event.preventDefault();
+    router.push("/edit-profile");
+  };
+
+  // Adding search friends functionality ----------------------------------------------------------
+
+  // Handle search query input and button click
+  const [searchQuery, setSearchQuery] = useState("");
+  const [friendId, setFriendId] = useState("");
+
+  const handleAddFriend = async (event) => {
+    // prevent reload on click
+    if (event.cancelable) event.preventDefault();
+
+    // Search and Get User with email matching the search.
+    // Since only one email is associated with each user, 
+    // the return doc should only contain one entry
+    const db = getFirestore();
+    const q = query(collection(db, "users"), where("email", "==", searchQuery));
+    const qSnap = await getDocs(q);
+
+    // If empty, there are no users with that email
+    if (qSnap.size < 1) {
+      console.error("No User email matches");
+      return;
+    }
+
+    // Update Friends list of User by appending new_friend_id
+    const docRef = doc(db, "users", user.uid);
+    qSnap.forEach((doc) => setFriendId(doc.id));
+    await updateDoc(docRef, { friends: arrayUnion(friendId) });
+
+    // Clear input field
+    setSearchQuery("");
+    console.log("Friend added");
+  };
+
+  // List friends ----------------------------------------------------------
+  const friendsList = [];
+  // loop through userdata.friends and getdoc for each friend
+  // store each friend in friendsList
+
+  // getFriend from friend list of logged in user
+  // const getFriend = async (db, friendId) => {
+  //   const friendUserRef = doc(db, "users", friendId);
+  //   const friendUserDoc = await getDoc(friendUserRef);
+  //   console.log("friend user doc", friendUserDoc.data());
+  //   return friendUserDoc.data();
+  // };
+  // const createFriendList = async () => {
+  //   const db = getFirestore();
+  //   const { friends } = userData;
+
+  //   console.log("createFriendsList", friends);
+
+  //   const promises = friends.map((friendId) => getFriend(db, friendId));
+
+  //   try {
+  //     const friendData = await Promise.all(promises);
+  //     friendsList.push(...friendData);
+  //     console.log("this is friend list", friendsList);
+  //   } catch (error) {
+  //     console.log("Error retrieving friend data:", error);
+  //   }
+  // };
+
   if (!userData) {
-    return <div>Loading...</div>;
+    return (
+      <Button loading loadingPosition="start">
+        Loading...
+      </Button>
+    );
   } else {
     console.log("Loading Profile...");
+
     return (
       <div className="userProfile">
         {/* <meta name="viewport" content="initial-scale=1, width=device-width" /> */}
@@ -286,11 +243,7 @@ export default function Profile({ user }) {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   // Button to add a friend
-                  endDecorator={
-                    <Button type="submit">
-                      Add
-                    </Button>
-                  }
+                  endDecorator={<Button type="submit">Add</Button>}
                 />
               </form>
 
@@ -301,21 +254,21 @@ export default function Profile({ user }) {
               <TabList
                 variant="plain"
                 sx={{
-                  '--List-padding': '0px',
-                  '--List-radius': '0px',
-                  '--ListItem-minHeight': '48px',
+                  "--List-padding": "0px",
+                  "--List-radius": "0px",
+                  "--ListItem-minHeight": "48px",
                   [`& .${tabClasses.root}`]: {
-                    boxShadow: 'none',
-                    fontWeight: 'md',
+                    boxShadow: "none",
+                    fontWeight: "md",
                     [`&.${tabClasses.selected}::before`]: {
                       content: '""',
-                      display: 'block',
-                      position: 'absolute',
-                      left: 'var(--ListItem-paddingLeft)', // change to `0` to stretch to the edge.
-                      right: 'var(--ListItem-paddingRight)', // change to `0` to stretch to the edge.
+                      display: "block",
+                      position: "absolute",
+                      left: "var(--ListItem-paddingLeft)", // change to `0` to stretch to the edge.
+                      right: "var(--ListItem-paddingRight)", // change to `0` to stretch to the edge.
                       bottom: 0,
                       height: 3,
-                      bgcolor: 'primary.400',
+                      bgcolor: "primary.400",
                     },
                   },
                 }}
@@ -339,7 +292,7 @@ export default function Profile({ user }) {
                     <ul>
                       {friendsList.map((friend) => (
                         <li key={friend.uid}>{friend.name}</li>
-                      ))} 
+                      ))}
                     </ul>
                   ) : (
                     <p>No friends found.</p>
@@ -366,7 +319,6 @@ export default function Profile({ user }) {
               <TabPanel value={2} sx={{ p: 2 }}>
                 Review tab panel
               </TabPanel>
-
 
               {/* TabPanel for My Folders */}
               <TabPanel value={3} sx={{ p: 2 }}>
