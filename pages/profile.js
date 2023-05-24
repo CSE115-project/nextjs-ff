@@ -3,6 +3,7 @@ import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
 import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
+import { Tab,Tabs, TabList, tabClasses, TabPanel } from "@mui/joy";
 import Typography from "@mui/joy/Typography";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
