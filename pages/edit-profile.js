@@ -219,7 +219,7 @@ export default function Component({ user }) {
 
             {/* Image Upload */}
             <Input
-              style={{ border: "none", outline: "none", width: "100%" }}
+              style={{ border: "none", outline: "none", width: "100%", "--Input-focusedHighlight": "transparent" }}
               type="file"
               onChange={handleFileChange}
             />
