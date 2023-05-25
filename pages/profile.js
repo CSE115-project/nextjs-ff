@@ -52,10 +52,12 @@ export default function Profile({ user }) {
   };
 
   // function to retrieve the UserData from the database
+  
   useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (userData && userData.friends) {
+      createFriendList(userData.friends);
+    }
+  }, [userData]);
 
   const fetchData = async () => {
     try {
@@ -65,6 +67,7 @@ export default function Profile({ user }) {
       if (docRes.exists()) {
         const data = docRes.data();
         setUserData(data);
+        // createFriendList(data.friends);
       } else {
         console.error("User Not Found");
       }
@@ -80,6 +83,7 @@ export default function Profile({ user }) {
   // Handle search query input and button click
   const [searchQuery, setSearchQuery] = useState("");
   const [friendId, setFriendId] = useState("");
+  const [friendsList, setFriendsList] = useState([]);
 
   const handleAddFriend = async (event) => {
     // prevent reload on click
@@ -98,16 +102,18 @@ export default function Profile({ user }) {
       return;
     }
 
+    // Get the new friend's ID
+    const newFriendId = qSnap.docs[0].id;
+
     // Update Friends list of User by appending new_friend_id
     const docRef = doc(db, "users", user.uid);
-    qSnap.forEach((doc) => {
-      console.log("fr:", friendId, "doc:", doc.id);
-      setFriendId(doc.id);
-    });
 
-    if (friendId) {
-      await updateDoc(docRef, { friends: arrayUnion(friendId) });
+
+    if (newFriendId) {
+      await updateDoc(docRef, { friends: arrayUnion(newFriendId) });
       console.log("Friend added");
+      await fetchData();
+      await createFriendList();
     }
   };
 
@@ -116,7 +122,6 @@ export default function Profile({ user }) {
   // loop through userdata.friends and getdoc for each friend
   // store each friend in friendsList
 
-  // getFriend from friend list of logged in user
   const getFriend = async (db, friendId) => {
     const friendUserRef = doc(db, "users", friendId);
     const friendUserDoc = await getDoc(friendUserRef);
@@ -125,23 +130,30 @@ export default function Profile({ user }) {
 
   const createFriendList = async () => {
     const db = getFirestore();
-    const { friends } = userData;
+    // const { friends } = userData;
 
     try {
-      const promises = friends.map((friendId) => getFriend(db, friendId));
+      const promises = userData.friends ? userData.friends.map((friendId) => getFriend(db, friendId)) : [];
+      
       const friendData = await Promise.all(promises);
-      const list = [...friendData];
+      // const list = [...friendData];
       // friendsList.push(...friendData);
-      // setFriendsList(list);
-      console.log("friend list:", list);
+      setFriendsList(friendData);
+      console.log("friend list:", friendData);
       // TODO: save list to global list, and map the results in the friends list tab
     } catch (error) {
       console.log("Error retrieving friend data:", error);
     }
   };
 
-  createFriendList();
 
+  useEffect(() => {
+    fetchData();
+    createFriendList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // getFriend from friend list of logged in user
   if (!userData) {
     return (
       <Button loading loadingPosition="start">
@@ -285,6 +297,7 @@ export default function Profile({ user }) {
               <TabPanel value={1} sx={{ p: 2 }}>
                 <div>
                   <h1>List of Friends</h1>
+                  {friendsList.map((friend, index) => (<p key = {index}> {friend} </p>))}
                   {/* TODO */}
                 </div>
               </TabPanel>
