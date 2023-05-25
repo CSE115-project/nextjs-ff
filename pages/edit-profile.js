@@ -224,8 +224,10 @@ export default function Component({ user }) {
               onChange={handleFileChange}
             />
 
-            <Button onClick={handleUpload}>Click to upload</Button>
-            {uploadProgress > 0 && <p>Upload progress: {uploadProgress}%</p>}
+            {uploadProgress > 0 && uploadProgress < 100 ?
+              (<Button loadingPosition="end">....{Math.round(uploadProgress)}%</Button>)
+              : (<Button onClick={handleUpload}>Upload</Button>)
+            }
           </Box>
 
           <Divider role="presentation" />
