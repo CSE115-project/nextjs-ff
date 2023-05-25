@@ -19,11 +19,6 @@ import {
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
-import Card from "@mui/joy/Card";
-import CardCover from "@mui/joy/CardCover";
-import CardContent from "@mui/joy/CardContent";
-import Image from "next/image";
-import FormControl from "@mui/joy/FormControl";
 import Input from "@mui/joy/Input";
 
 /*
@@ -236,14 +231,16 @@ export default function Profile({ user }) {
               sx={{ flexWrap: "wrap" }}
             >
               {/* Form for inputting friend's email */}
-              <form
-                onSubmit={handleAddFriend}
-                sx={{ display: { xs: "contents", sm: "flex" } }}
-              >
+              <form onSubmit={handleAddFriend}>
                 <Input
                   type="email"
                   placeholder="email"
-                  sx={{ width: 500 }}
+                  outline="none"
+                  
+                  sx={{
+                    width: {xs: "100%", sm: 400},
+                    display: { xs: "block flex", sm: "flex" },
+                  }}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   // Button to add a friend

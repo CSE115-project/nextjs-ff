@@ -144,7 +144,7 @@ export default function Component({ user }) {
             display: "grid",
             gridTemplateColumns: {
               xs: "100%",
-              sm: "minmax(120px, 100%) 1fr",
+              sm: "minmax(120px, 30%) 1fr",
               lg: "280px 1fr minmax(120px, 208px)",
             },
             columnGap: { xs: 2, sm: 3, md: 4 },
