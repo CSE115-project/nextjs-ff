@@ -101,7 +101,10 @@ export default function GoogleMap() {
         data: data,
       });
 
+      // Set heatmap overlay
       heatmap.setMap(mapRef.current);
+
+      // change color and intensity of heatmap
       const gradient = [
         "rgba(0, 255, 255, 0)",
         "rgba(0, 255, 255, 1)",
@@ -118,7 +121,6 @@ export default function GoogleMap() {
         "rgba(191, 0, 31, 1)",
         "rgba(255, 0, 0, 1)",
       ];
-      
       heatmap.set("gradient", gradient);
       heatmap.set("radius", 35);
     }

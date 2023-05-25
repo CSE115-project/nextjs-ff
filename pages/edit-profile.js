@@ -219,15 +219,23 @@ export default function Component({ user }) {
 
             {/* Image Upload */}
             <Input
-              style={{ border: "none", outline: "none", width: "100%", "--Input-focusedHighlight": "transparent" }}
+              style={{
+                border: "none",
+                outline: "none",
+                width: "100%",
+                "--Input-focusedHighlight": "transparent",
+              }}
               type="file"
               onChange={handleFileChange}
             />
 
-            {uploadProgress > 0 && uploadProgress < 100 ?
-              (<Button loadingPosition="end">....{Math.round(uploadProgress)}%</Button>)
-              : (<Button onClick={handleUpload}>Upload</Button>)
-            }
+            {uploadProgress > 0 && uploadProgress < 100 ? (
+              <Button loadingPosition="end">
+                ....{Math.round(uploadProgress)}%
+              </Button>
+            ) : (
+              <Button onClick={handleUpload}>Upload</Button>
+            )}
           </Box>
 
           <Divider role="presentation" />
