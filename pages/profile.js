@@ -52,13 +52,6 @@ export default function Profile({ user }) {
   };
 
   // function to retrieve the UserData from the database
-  
-  useEffect(() => {
-    if (userData && userData.friends) {
-      createFriendList(userData.friends);
-    }
-  }, [userData]);
-
   const fetchData = async () => {
     try {
       const docRef = doc(db, "users", user.uid);
@@ -122,6 +115,7 @@ export default function Profile({ user }) {
   // loop through userdata.friends and getdoc for each friend
   // store each friend in friendsList
 
+  // getFriend from friend list of logged in user
   const getFriend = async (db, friendId) => {
     const friendUserRef = doc(db, "users", friendId);
     const friendUserDoc = await getDoc(friendUserRef);
@@ -146,6 +140,12 @@ export default function Profile({ user }) {
     }
   };
 
+  useEffect(() => {
+    if (userData && userData.friends) {
+      createFriendList(userData.friends);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userData]);
 
   useEffect(() => {
     fetchData();
@@ -153,7 +153,6 @@ export default function Profile({ user }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // getFriend from friend list of logged in user
   if (!userData) {
     return (
       <Button loading loadingPosition="start">
