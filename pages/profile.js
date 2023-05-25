@@ -235,10 +235,8 @@ export default function Profile({ user }) {
                 <Input
                   type="email"
                   placeholder="email"
-                  outline="none"
-                  
                   sx={{
-                    width: {xs: "100%", sm: 400},
+                    width: { xs: "100%", sm: 400 },
                     display: { xs: "block flex", sm: "flex" },
                   }}
                   value={searchQuery}
