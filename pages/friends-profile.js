@@ -19,11 +19,6 @@ import {
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
-import Card from "@mui/joy/Card";
-import CardCover from "@mui/joy/CardCover";
-import CardContent from "@mui/joy/CardContent";
-import Image from "next/image";
-import FormControl from "@mui/joy/FormControl";
 import Input from "@mui/joy/Input";
 
 /*
@@ -79,42 +74,6 @@ export default function Profile({ user }) {
   };
 
   console.log("p/profile userData:", userData);
-
-  // Adding search friends functionality ----------------------------------------------------------
-
-  // Handle search query input and button click
-  const [searchQuery, setSearchQuery] = useState("");
-  const [friendId, setFriendId] = useState("");
-
-  const handleAddFriend = async (event) => {
-    // prevent reload on click
-    if (event.cancelable) event.preventDefault();
-
-    // Search and Get User with email matching the search.
-    // Since only one email is associated with each user,
-    // the return doc should only contain one entry
-    const db = getFirestore();
-    const q = query(collection(db, "users"), where("email", "==", searchQuery));
-    const qSnap = await getDocs(q);
-
-    // If empty, there are no users with that email
-    if (qSnap.size < 1) {
-      console.error("No User email matches");
-      return;
-    }
-
-    // Update Friends list of User by appending new_friend_id
-    const docRef = doc(db, "users", user.uid);
-    qSnap.forEach((doc) => {
-      console.log("fr:", friendId, "doc:", doc.id);
-      setFriendId(doc.id);
-    });
-
-    if (friendId) {
-      await updateDoc(docRef, { friends: arrayUnion(friendId) });
-      console.log("Friend added");
-    }
-  };
 
   // List friends ----------------------------------------------------------
 
@@ -222,38 +181,6 @@ export default function Profile({ user }) {
                 {userData.bio || "Bio.."}
               </Typography>
             </Box>
-
-            <Typography component="h4" sx={{ py: 1, margin: "auto" }}>
-              Add Friend
-            </Typography>
-
-            {/* stack for formatting purposes */}
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="center"
-              spacing={1}
-              sx={{ flexWrap: "wrap" }}
-            >
-              {/* Form for inputting friend's email */}
-              <form
-                onSubmit={handleAddFriend}
-                sx={{ display: { xs: "contents", sm: "flex" } }}
-              >
-                <Input
-                  type="email"
-                  placeholder="email"
-                  sx={{ width: 500 }}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  // Button to add a friend
-                  endDecorator={<Button type="submit">Add</Button>}
-                />
-              </form>
-
-              {/* Render the matching users */}
-            </Stack>
-
             <Tabs aria-label="tabs" defaultValue={0}>
               <TabList
                 variant="plain"
