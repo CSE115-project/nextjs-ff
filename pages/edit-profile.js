@@ -20,6 +20,7 @@ import { useState, useEffect } from "react";
 import { doc, setDoc, getDoc, getFirestore } from "firebase/firestore";
 import { db } from "../firebase";
 import { useRouter } from "next/router";
+import InputBase from "@mui/material/InputBase"
 
 export default function Component({ user }) {
   const [userData, setUserData] = useState(null);
@@ -218,7 +219,7 @@ export default function Component({ user }) {
             />
 
             {/* Image Upload */}
-            <Input
+            <InputBase
               style={{ border: "none", outline: "none", width: "100%" }}
               type="file"
               onChange={handleFileChange}
