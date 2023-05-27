@@ -5,13 +5,13 @@ import { Button } from "@mui/joy";
 export default function GoogleMap() {
   // Google Maps
   const mapRef = useRef(null);
-
+  
   // default: San Francisco
   const defLocation = {
     lat: 37.7749,
     lng: -122.4194,
   };
-
+  
   useEffect(() => {
     // Google Map
     const loader = new Loader({
@@ -19,11 +19,11 @@ export default function GoogleMap() {
       version: "weekly",
       libraries: ["places", "visualization"],
     });
-
+    
     loader.load().then(async () => {
       const { google } = window;
       const { Map } = await google.maps.importLibrary("maps");
-
+      
       // Get the user's current location
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -77,14 +77,21 @@ export default function GoogleMap() {
     }
   }
 
+  
   // Create marker for place
   function createMarker(place) {
     new google.maps.Marker({
       position: place.geometry.location,
       map: mapRef.current,
+      title: "dhdhd",
       icon: {
-        url: place.icon,
-        scaledSize: new google.maps.Size(30, 30),
+        path: google.maps.SymbolPath.CIRCLE,
+        fillColor: "#f58540",
+        fillOpacity: 1,
+        strokeColor: "#FFFFFF",
+        strokeOpacity: 1,
+        strokeWeight: 2,
+        scale: 5,
       },
     });
   }
