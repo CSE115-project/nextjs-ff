@@ -28,7 +28,7 @@ export default function GoogleMap() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
           const currentLocation = {
-          lat: position.coords.latitude,
+            lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
 
@@ -48,7 +48,8 @@ export default function GoogleMap() {
           const request = {
             location: currentLocation,
             radius: "8000",
-            keyword: "restaurants, food, attractions, night life nearby open now",
+            keyword:
+              "restaurants, food, attractions, night life nearby open now",
           };
 
           let service = new google.maps.places.PlacesService(mapRef.current);
@@ -81,6 +82,10 @@ export default function GoogleMap() {
     new google.maps.Marker({
       position: place.geometry.location,
       map: mapRef.current,
+      icon: {
+        url: place.icon,
+        scaledSize: new google.maps.Size(30, 30),
+      },
     });
   }
 
@@ -90,10 +95,10 @@ export default function GoogleMap() {
       const lat = result.geometry.location.lat();
       const lng = result.geometry.location.lng();
 
-      return ({ 
-        location: new google.maps.LatLng(lat,lng),
+      return {
+        location: new google.maps.LatLng(lat, lng),
         weight: Math.random() * 10, // You can set the weight based on your data
-      })
+      };
     });
 
     if (mapRef.current) {
@@ -106,19 +111,13 @@ export default function GoogleMap() {
 
       // change color and intensity of heatmap
       const gradient = [
-        "rgba(0, 255, 255, 0)",
-        "rgba(0, 255, 255, 1)",
-        "rgba(0, 191, 255, 1)",
-        "rgba(0, 127, 255, 1)",
-        "rgba(0, 63, 255, 1)",
-        "rgba(0, 0, 255, 1)",
-        "rgba(0, 0, 223, 1)",
-        "rgba(0, 0, 191, 1)",
-        "rgba(0, 0, 159, 1)",
-        "rgba(0, 0, 127, 1)",
-        "rgba(63, 0, 91, 1)",
-        "rgba(127, 0, 63, 1)",
-        "rgba(191, 0, 31, 1)",
+        "rgba(0, 0, 255, 0)",
+        "rgba(30, 144, 255, 1)",
+        "rgba(70, 130, 180, 1)",
+        "rgba(119, 136, 153, 1)",
+        "rgba(169, 121, 126, 1)",
+        "rgba(219, 107, 102, 1)",
+        "rgba(239, 89, 89, 1)",
         "rgba(255, 0, 0, 1)",
       ];
       heatmap.set("gradient", gradient);
