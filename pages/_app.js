@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { firebase } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { CssVarsProvider } from "@mui/joy/styles";
+import Head from "next/head";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -28,5 +30,9 @@ export default function App({ Component, pageProps }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
 
-  return <Component {...pageProps} router={router} user={user} />;
+  return (
+    <CssVarsProvider>
+      <Component {...pageProps} router={router} user={user} />;
+    </CssVarsProvider>
+  );
 }

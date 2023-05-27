@@ -1,17 +1,18 @@
 import { Loader } from "@googlemaps/js-api-loader";
 import { useEffect, useRef } from "react";
 import { Button } from "@mui/joy";
+import ReactDOMServer from "react-dom/server";
 
 export default function GoogleMap() {
   // Google Maps
   const mapRef = useRef(null);
-  
+
   // default: San Francisco
   const defLocation = {
     lat: 37.7749,
     lng: -122.4194,
   };
-  
+
   useEffect(() => {
     // Google Map
     const loader = new Loader({
@@ -19,11 +20,11 @@ export default function GoogleMap() {
       version: "weekly",
       libraries: ["places", "visualization"],
     });
-    
+
     loader.load().then(async () => {
       const { google } = window;
       const { Map } = await google.maps.importLibrary("maps");
-      
+
       // Get the user's current location
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -77,23 +78,60 @@ export default function GoogleMap() {
     }
   }
 
-  
+  // Info Window for each Place
+  function createInfoWindow(place) {
+    const contentString = (
+      <div key={place.place_id}>
+        <p>{place.name}</p>
+        <p>{place.vicinity}</p>
+        <p>rating: {place.rating}</p>
+        <Button>&#9829;</Button>
+      </div>
+    );
+
+    const infowindow = new google.maps.InfoWindow({
+      content: ReactDOMServer.renderToString(contentString),
+      ariaLabel: place.name,
+    });
+
+    return infowindow;
+  }
+
   // Create marker for place
   function createMarker(place) {
-    new google.maps.Marker({
+    const customIcon = {
+      path: google.maps.SymbolPath.CIRCLE,
+      fillColor: "#f58540",
+      fillOpacity: 1,
+      strokeColor: "#FFFFFF",
+      strokeOpacity: 1,
+      strokeWeight: 2,
+      scale: 5,
+    };
+
+    const marker = new google.maps.Marker({
       position: place.geometry.location,
       map: mapRef.current,
-      title: "dhdhd",
-      icon: {
-        path: google.maps.SymbolPath.CIRCLE,
-        fillColor: "#f58540",
-        fillOpacity: 1,
-        strokeColor: "#FFFFFF",
-        strokeOpacity: 1,
-        strokeWeight: 2,
-        scale: 5,
-      },
+      icon: customIcon,
+      title: place.name,
     });
+
+    // InfoWindow: Details of Place
+    const infoWindow = createInfoWindow(place);
+
+    marker.addListener("click", () => {
+      infoWindow.open({
+        map: mapRef.current,
+        anchor: marker,
+      });
+    });
+
+    // Close the info window when map is clicked
+    mapRef.current.addListener("click", () => {
+      infoWindow.close();
+    });
+
+    return marker;
   }
 
   // Add Nearby Results locations for heatmap
