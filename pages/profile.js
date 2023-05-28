@@ -3,7 +3,7 @@ import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
 import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
-import { Tab, Tabs, TabList, tabClasses, TabPanel } from "@mui/joy";
+import { Tab, Tabs, TabList, tabClasses, TabPanel, Divider } from "@mui/joy";
 import Typography from "@mui/joy/Typography";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -20,6 +20,12 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 import Input from "@mui/joy/Input";
+import * as React from 'react';
+import List from '@mui/joy/List';
+import ListDivider from '@mui/joy/ListDivider';
+import ListItem from '@mui/joy/ListItem';
+import ListItemDecorator from '@mui/joy/ListItemDecorator';
+
 
 /*
 const userObj = {
@@ -128,7 +134,7 @@ export default function Profile({ user }) {
 
     try {
       const promises = userData.friends ? userData.friends.map((friendId) => getFriend(db, friendId)) : [];
-      
+
       const friendData = await Promise.all(promises);
       // const list = [...friendData];
       // friendsList.push(...friendData);
@@ -204,7 +210,7 @@ export default function Profile({ user }) {
                 borderRadius: "20px",
               }}
             >
-              {/* need to test with real avatar */}
+              {/* User's Avatar */}
               <Avatar
                 sx={{ height: "128px", width: "128px", margin: "auto" }}
                 src={userData.image || ""}
@@ -296,8 +302,59 @@ export default function Profile({ user }) {
               <TabPanel value={1} sx={{ p: 2 }}>
                 <div>
                   <h1>List of Friends</h1>
-                  {friendsList.map((friend, index) => (<p key = {index}> {friend} </p>))}
-                  {/* TODO */}
+                  {/* <ListItem>
+                    {friendsList.map((friend, index) => (<p key={index}> {friend} </p>))}
+                  </ListItem> */}
+
+
+                  {/* <List
+                    variant="outlined"
+                    sx={{
+                      bgcolor: 'background.body',
+                      minWidth: 240,
+                      borderRadius: 'sm',
+                      boxShadow: 'sm',
+                      '--ListItemDecorator-size': '48px',
+                      '--ListItem-paddingLeft': '1.5rem',
+                      '--ListItem-paddingRight': '1rem',
+                    }}
+                  >
+                    {friendsList.map((friend, index) => (
+                    <ListItem key={index}>
+                        <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
+                        <Avatar size="sm" src="/static/images/avatar/1.jpg" />
+                        </ListItemDecorator>
+                      {friend} 
+                      </ListItem>
+                      ))}
+                  </List> */}
+
+                  <List
+                    variant="outlined"
+                    sx={{
+                      bgcolor: 'background.body',
+                      minWidth: 240,
+                      borderRadius: 'sm',
+                      boxShadow: 'sm',
+                      '--ListItemDecorator-size': '48px',
+                      '--ListItem-paddingLeft': '1.5rem',
+                      '--ListItem-paddingRight': '1rem',
+                    }}
+                  >
+                    {friendsList.map((friend, index) => (
+                      <React.Fragment key={index}>
+                        <ListItem key={index}>
+                          <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
+                            <Avatar size="sm" src="/static/images/avatar/1.jpg" />
+                          </ListItemDecorator>
+                          {friend}
+                        </ListItem>
+                        {index !== friendsList.length - 1 && <Divider />}
+                      </React.Fragment> 
+                    ))}
+                  </List>
+
+
                 </div>
               </TabPanel>
             </Tabs>
