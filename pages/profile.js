@@ -315,14 +315,21 @@ export default function Profile({ user }) {
                   >
                     {friendsList.map((friend, index) => (
                       <React.Fragment key={index}>
-                        <ListItem key={index}>
-                          <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
-                            <Avatar size="sm" src="/static/images/avatar/1.jpg" />
-                          </ListItemDecorator>
-                          {friend}
-                        </ListItem>
+                        <Button variant="plain"
+                          sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}
+                          component="li"
+                          disableRipple>
+                          <ListItem key={index}>
+                            <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
+                              <Avatar size="sm" src="/static/images/avatar/1.jpg" />
+                            </ListItemDecorator>
+                            <Typography color="black" sx={{ fontWeight: 'normal', marginLeft: '0.5rem' }}>
+                              {friend}
+                            </Typography>
+                          </ListItem>
+                        </Button>
                         {index !== friendsList.length - 1 && <Divider />}
-                      </React.Fragment> 
+                      </React.Fragment>
                     ))}
                   </List>
                 </div>
@@ -330,7 +337,7 @@ export default function Profile({ user }) {
             </Tabs>
           </Sheet>
         </Sheet>
-      </div>
+      </div >
     );
   }
 }
