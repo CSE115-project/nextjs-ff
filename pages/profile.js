@@ -301,34 +301,6 @@ export default function Profile({ user }) {
               {/* TabPanel for User's friends list */}
               <TabPanel value={1} sx={{ p: 2 }}>
                 <div>
-                  <h1>List of Friends</h1>
-                  {/* <ListItem>
-                    {friendsList.map((friend, index) => (<p key={index}> {friend} </p>))}
-                  </ListItem> */}
-
-
-                  {/* <List
-                    variant="outlined"
-                    sx={{
-                      bgcolor: 'background.body',
-                      minWidth: 240,
-                      borderRadius: 'sm',
-                      boxShadow: 'sm',
-                      '--ListItemDecorator-size': '48px',
-                      '--ListItem-paddingLeft': '1.5rem',
-                      '--ListItem-paddingRight': '1rem',
-                    }}
-                  >
-                    {friendsList.map((friend, index) => (
-                    <ListItem key={index}>
-                        <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
-                        <Avatar size="sm" src="/static/images/avatar/1.jpg" />
-                        </ListItemDecorator>
-                      {friend} 
-                      </ListItem>
-                      ))}
-                  </List> */}
-
                   <List
                     variant="outlined"
                     sx={{
@@ -353,8 +325,6 @@ export default function Profile({ user }) {
                       </React.Fragment> 
                     ))}
                   </List>
-
-
                 </div>
               </TabPanel>
             </Tabs>
