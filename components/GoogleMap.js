@@ -2,6 +2,7 @@ import { Loader } from "@googlemaps/js-api-loader";
 import { useEffect, useRef } from "react";
 import { Button } from "@mui/joy";
 import ReactDOMServer from "react-dom/server";
+import InfoWindow from "./InfoWindow";
 
 export default function GoogleMap() {
   // Google Maps
@@ -87,21 +88,10 @@ export default function GoogleMap() {
 
   // Info Window for each Place
   function createInfoWindow(place) {
-    const contentString = (
-      <div key={place.place_id}>
-        <p>{place.name}</p>
-        <p>{place.vicinity}</p>
-        <p>rating: {place.rating}</p>
-        <Button>&#9829;</Button>
-      </div>
-    );
-
-    const infowindow = new google.maps.InfoWindow({
-      content: ReactDOMServer.renderToString(contentString),
+    return new google.maps.InfoWindow({
+      content: ReactDOMServer.renderToString(<InfoWindow place={place} />),
       ariaLabel: place.name,
     });
-
-    return infowindow;
   }
 
   // Create marker for place
