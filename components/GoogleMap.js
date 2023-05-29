@@ -68,12 +68,19 @@ export default function GoogleMap() {
   }, []);
 
   // Nearby results: place markers, heatmap
-  function nearbyResults(results, status) {
+  function nearbyResults(results, status, pagination) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       console.log("Results:", results);
+
       getHeatmapData(results);
       for (let result of results) {
         createMarker(result);
+      }
+
+      // Check if more results are available
+      if (pagination.hasNextPage) {
+        // Fetch the next page of results
+        pagination.nextPage();
       }
     }
   }
