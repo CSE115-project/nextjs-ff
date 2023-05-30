@@ -42,7 +42,7 @@ const Homepage = ({user}) => {
         </Button>
       </Stack>
 
-      <GoogleMap />
+      <GoogleMap user={user}/>
     </div>
   );
 };

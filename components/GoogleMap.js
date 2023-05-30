@@ -1,12 +1,14 @@
 import { Loader } from "@googlemaps/js-api-loader";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@mui/joy";
-import ReactDOMServer from "react-dom/server";
-import InfoWindow from "./InfoWindow";
+import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import InfoCard from "./InfoCard";
 
-export default function GoogleMap() {
+export default function GoogleMap({ user }) {
+  console.log("Google Map User:", user);
   // Google Maps
   const mapRef = useRef(null);
+  const [selectedPlace, setSelectedPlace] = useState(null);
 
   // default: San Francisco
   const defLocation = {
@@ -37,7 +39,7 @@ export default function GoogleMap() {
           // Create a new map centered on the user's current location
           mapRef.current = new Map(mapRef.current, {
             center: currentLocation,
-            zoom: 13,
+            zoom: 12,
           });
 
           // Add a marker for the user's current location
@@ -86,15 +88,7 @@ export default function GoogleMap() {
     }
   }
 
-  // Info Window for each Place
-  function createInfoWindow(place) {
-    return new google.maps.InfoWindow({
-      content: ReactDOMServer.renderToString(<InfoWindow place={place} />),
-      ariaLabel: place.name,
-    });
-  }
-
-  // Create marker for place
+  // Create [marker, infowindow] for place
   function createMarker(place) {
     const customIcon = {
       path: google.maps.SymbolPath.CIRCLE,
@@ -113,19 +107,18 @@ export default function GoogleMap() {
       title: place.name,
     });
 
-    // InfoWindow: Details of Place
-    const infoWindow = createInfoWindow(place);
-
+    // InfoCard: Details of Place
+    // Open InfoCard of Place
     marker.addListener("click", () => {
-      infoWindow.open({
-        map: mapRef.current,
-        anchor: marker,
-      });
+      setSelectedPlace(place);
+
+      // Set the clicked place as the new map center
+      mapRef.current.panTo(place.geometry.location);
     });
 
-    // Close the info window when map is clicked
+    // Close the InfoCard when map is clicked
     mapRef.current.addListener("click", () => {
-      infoWindow.close();
+      setSelectedPlace(null);
     });
 
     return marker;
@@ -168,10 +161,40 @@ export default function GoogleMap() {
   }
 
   return (
-    <div ref={mapRef} style={{ height: "90%", width: "100%" }}>
-      <Button loading loadingPosition="start">
-        Loading...
-      </Button>
+    <div style={{ position: "relative", height: "90vh" }}>
+      <div
+        ref={mapRef}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          height: "100%",
+          width: "100%",
+        }}
+      >
+        <Button loading loadingPosition="start">
+          Loading...
+        </Button>
+      </div>
+      {selectedPlace ? (
+        <div
+          style={{
+            position: "absolute",
+            bottom: "20px",
+            left: "20px",
+            width: "300px",
+          }}
+        >
+          <InfoCard user={user} place={selectedPlace} />
+        </div>
+      ) : (
+        <div />
+      )}
     </div>
+    // <div ref={mapRef} style={{ height: "90%", width: "100%" }}>
+    //   <Button loading loadingPosition="start">
+    //     Loading...
+    //   </Button>
+    // </div>
   );
 }
