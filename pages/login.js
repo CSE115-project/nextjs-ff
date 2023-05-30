@@ -47,7 +47,10 @@ export default function Component() {
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
       console.log("p/login user:", user);
-      router.push("/");
+      router.push({
+        pathname: '/',
+        query: { user: JSON.stringify(user) },
+      });
     } catch (error) {
       console.error(error);
       alert("Incorrect Email or Password");

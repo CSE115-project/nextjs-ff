@@ -22,7 +22,6 @@ import {
 import Input from "@mui/joy/Input";
 import * as React from 'react';
 import List from '@mui/joy/List';
-import ListDivider from '@mui/joy/ListDivider';
 import ListItem from '@mui/joy/ListItem';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
 
@@ -81,7 +80,6 @@ export default function Profile({ user }) {
 
   // Handle search query input and button click
   const [searchQuery, setSearchQuery] = useState("");
-  const [friendId, setFriendId] = useState("");
   const [friendsList, setFriendsList] = useState([]);
 
   const handleAddFriend = async (event) => {

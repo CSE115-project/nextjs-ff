@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { firebase } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { CssVarsProvider } from "@mui/joy/styles";
-import Head from "next/head";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -16,7 +15,7 @@ export default function App({ Component, pageProps }) {
     const unsubscribe = onAuthStateChanged(auth, (authUser) => {
       // if (user) => '/', else => '/login'
       if (authUser) {
-        setUser(authUser);
+        setUser(Object.assign({}, authUser));
         router.push("/");
       } else {
         setUser(null);

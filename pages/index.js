@@ -8,7 +8,7 @@ const inter = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
 });
 
-export default function index() {
+export default function index({user}) {
   return (
     <>
       <Head>
@@ -18,7 +18,7 @@ export default function index() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <HomePage />
+        <HomePage user={user}/>
       </main>
     </>
   );
