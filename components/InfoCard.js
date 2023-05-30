@@ -1,72 +1,73 @@
-import AspectRatio from '@mui/joy/AspectRatio';
-import Card from '@mui/joy/Card';
-import CardOverflow from '@mui/joy/CardOverflow';
-import Divider from '@mui/joy/Divider';
-import Typography from '@mui/joy/Typography';
-import IconButton from '@mui/joy/IconButton';
-import Link from '@mui/joy/Link';
-import Favorite from '@mui/icons-material/Favorite';
+import AspectRatio from "@mui/joy/AspectRatio";
+import { Card, Button } from "@mui/joy";
+import Typography from "@mui/joy/Typography";
+import Link from "@mui/joy/Link";
+import Image from "next/image";
+import { useState } from "react";
 
-export default function InfoCard({user, place}) {
-    const handleLikeClick = () => {
-        console.log("infocard user:", user.uid, "\nPlace:", place);
-    }
+export default function InfoCard({ user, place }) {
+  const [liked, setLiked] = useState("");
+
+  const handleLikeClick = () => {
+    console.log("infocard user:", user.uid, "\nPlace:", place);
+  };
 
   return (
-    <Card variant="outlined" sx={{ width: 320 }}>
-      <CardOverflow>
-        <AspectRatio ratio="2">
-          {/* <img
-            src="https://images.unsplash.com/photo-1532614338840-ab30cf10ed36?auto=format&fit=crop&w=318"
-            srcSet="https://images.unsplash.com/photo-1532614338840-ab30cf10ed36?auto=format&fit=crop&w=318&dpr=2 2x"
-            loading="lazy"
-            alt=""
-          /> */}
-        </AspectRatio>
-        <IconButton
-          aria-label="Like minimal photography"
-          size="md"
-          variant="solid"
-          color="danger"
-          sx={{
-            position: 'absolute',
-            zIndex: 2,
-            borderRadius: '50%',
-            right: '1rem',
-            bottom: 0,
-            transform: 'translateY(50%)',
-          }}
-        >
-          <Favorite onClick={handleLikeClick}/>
-        </IconButton>
-      </CardOverflow>
-      <Typography level="h2" sx={{ fontSize: 'md', mt: 2 }}>
-        <Link href="#multiple-actions" overlay underline="none">
+    <Card
+      variant="outlined"
+      orientation="horizontal"
+      sx={{
+        width: 240,
+        gap: 2,
+        "&:hover": {
+          boxShadow: "md",
+          borderColor: "neutral.outlinedHoverBorder",
+        },
+      }}
+    >
+      {/* <AspectRatio ratio="1" sx={{ width: 90 }}>
+        <Image
+          // src={place.icon}
+          loading="lazy"
+          alt=""
+        />
+      </AspectRatio> */}
+      <div style={{width: '100%'}}>
+        <Typography level="h2" fontSize="lg" id="card-description" mb={0.5}>
           {place.name}
-        </Link>
-      </Typography>
-      <Typography level="body2" sx={{ mt: 0.5, mb: 2 }}>
-        <Link href="#multiple-actions">California</Link>
-      </Typography>
-      <Divider inset="context" />
-      <CardOverflow
-        variant="soft"
-        sx={{
-          display: 'flex',
-          gap: 1.5,
-          py: 1.5,
-          px: 'var(--Card-padding)',
-          bgcolor: 'background.level1',
-        }}
-      >
-        <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }}>
-          6.3k views
         </Typography>
-        <Divider orientation="vertical" />
-        <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }}>
-          1 hour ago
+
+        <Typography fontSize="sm" aria-describedby="card-description" mb={1}>
+          <Link
+            overlay
+            underline="none"
+            href="#interactive-card"
+            sx={{ color: "text.tertiary" }}
+          >
+            {place.vicinity}
+          </Link>
         </Typography>
-      </CardOverflow>
+        <div style={{display: "flex", justifyContent: "space-between"}}>
+          <Typography fontSize="sm" aria-describedby="card-description" mb={1} >
+            <Link
+              overlay
+              underline="none"
+              href="#interactive-card"
+              sx={{ color: "text.tertiary", paddingTop: "10px" }}
+            >
+              {place.rating} / 5 &#9734;
+            </Link>
+          </Typography>
+          <Button
+            variant="outlined"
+            color="primary"
+            size="sm"
+            onClick={handleLikeClick}
+          >
+            {liked ? "\u2665" :  "\u2661"}
+          </Button>
+        </div>
+      </div>
     </Card>
   );
 }

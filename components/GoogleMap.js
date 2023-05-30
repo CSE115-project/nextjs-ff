@@ -1,7 +1,6 @@
 import { Loader } from "@googlemaps/js-api-loader";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@mui/joy";
-import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import InfoCard from "./InfoCard";
 
 export default function GoogleMap({ user }) {
@@ -191,10 +190,5 @@ export default function GoogleMap({ user }) {
         <div />
       )}
     </div>
-    // <div ref={mapRef} style={{ height: "90%", width: "100%" }}>
-    //   <Button loading loadingPosition="start">
-    //     Loading...
-    //   </Button>
-    // </div>
   );
 }
