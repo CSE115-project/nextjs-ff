@@ -72,27 +72,31 @@ const Homepage = ({ user }) => {
           </form>
         </div>
 
+        {/* Dropdown menu for account related options */}
         <div style={{ display: "flex", marginleft: "auto" }}>
           <Button
-            aria-controls={open ? "basic-menu" : undefined}
+            id="account-button"
+            aria-controls={open ? "account-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
-            endDecorator={<ArrowDropDown />} 
+            endDecorator={<ArrowDropDown />}
           >
             Account
           </Button>
           <Menu
+            id="account-menu"
             anchorEl={anchorEl}
             open={open}
             onClose={handleClose}
-            aria-labelledby="basic-demo-button"
+            aria-labelledby="account-button"
           >
             <MenuItem onClick={handleProfile}>Profile</MenuItem>
             <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
           </Menu>
         </div>
       </Stack>
+
       <GoogleMap />
     </div>
   );
