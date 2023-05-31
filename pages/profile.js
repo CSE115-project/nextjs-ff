@@ -46,14 +46,23 @@ export default function Profile({ user }) {
 
   // Routes -------------------------------------------------
   // initialize all fields and their according set methods
+  
+  // set route to go back to home from profile page
   const handleHome = (event) => {
     if (event.cancelable) event.preventDefault();
     router.push("/");
   };
 
+  // set route to go to edit-profile from profile page
   const handleEditProfile = (event) => {
     if (event.cancelable) event.preventDefault();
     router.push("/edit-profile");
+  };
+
+  // set route to go to friends-profile from profile page
+  const handleFriendProfile = (event) => {
+    if (event.cancelable) event.preventDefault();
+    router.push("/friends-profile");
   };
 
   // function to retrieve the UserData from the database
@@ -314,9 +323,11 @@ export default function Profile({ user }) {
                     {friendsList.map((friend, index) => (
                       <React.Fragment key={index}>
                         <Button variant="plain"
-                          sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}
+                          sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%', padding: 0 }}
                           component="li"
-                          disableRipple>
+                          disableRipple
+                          // route to friends-profile page
+                          onClick={handleFriendProfile}>
                           <ListItem key={index}>
                             <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
                               <Avatar size="sm" src="/static/images/avatar/1.jpg" />

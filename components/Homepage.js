@@ -8,7 +8,7 @@ import Input from "@mui/joy/Input";
 import { useState } from "react";
 import Menu from "@mui/joy/Menu";
 import MenuItem from "@mui/joy/MenuItem";
-import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
+// import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
 
 const Homepage = ({ user }) => {
   const router = useRouter();
@@ -80,7 +80,7 @@ const Homepage = ({ user }) => {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
-            endDecorator={<ArrowDropDown />}
+            // endDecorator={<ArrowDropDown />}
           >
             Account
           </Button>
@@ -97,7 +97,7 @@ const Homepage = ({ user }) => {
         </div>
       </Stack>
 
-      <GoogleMap user={user}/>
+      <GoogleMap />
     </div>
   );
 };
