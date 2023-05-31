@@ -20,6 +20,11 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 import Input from "@mui/joy/Input";
+import ReportIcon from '@mui/icons-material/Report';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Alert from '@mui/joy/Alert';
+import IconButton from '@mui/joy/IconButton';
+import { ColorPaletteProp } from '@mui/joy/styles';
 
 /*
 const userObj = {
@@ -92,8 +97,11 @@ export default function Profile({ user }) {
     // If empty, there are no users with that email
     if (qSnap.size < 1) {
       console.error("No User email matches");
+      // set the state to alert that add friend failed
       return;
     }
+
+    // else set the state to alert that add friend passed
 
     // Get the new friend's ID
     const newFriendId = qSnap.docs[0].id;
