@@ -72,44 +72,6 @@ export default function Profile({ user }) {
 
   console.log("p/profile userData:", userData);
 
-  // Adding search friends functionality ----------------------------------------------------------
-
-  // Handle search query input and button click
-  const [searchQuery, setSearchQuery] = useState("");
-  const [friendsList, setFriendsList] = useState([]);
-
-  const handleAddFriend = async (event) => {
-    // prevent reload on click
-    if (event.cancelable) event.preventDefault();
-
-    // Search and Get User with email matching the search.
-    // Since only one email is associated with each user,
-    // the return doc should only contain one entry
-    const db = getFirestore();
-    const q = query(collection(db, "users"), where("email", "==", searchQuery));
-    const qSnap = await getDocs(q);
-
-    // If empty, there are no users with that email
-    if (qSnap.size < 1) {
-      console.error("No User email matches");
-      return;
-    }
-
-    // Get the new friend's ID
-    const newFriendId = qSnap.docs[0].id;
-
-    // Update Friends list of User by appending new_friend_id
-    const docRef = doc(db, "users", user.uid);
-
-
-    if (newFriendId) {
-      await updateDoc(docRef, { friends: arrayUnion(newFriendId) });
-      console.log("Friend added");
-      await fetchData();
-      await createFriendList();
-    }
-  };
-
   // List friends ----------------------------------------------------------
 
   // loop through userdata.friends and getdoc for each friend
