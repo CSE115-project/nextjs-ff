@@ -26,19 +26,6 @@ import ListItem from '@mui/joy/ListItem';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
 
 
-/*
-const userObj = {
-        uid: user.uid,
-        email: user.email, // user's email
-        displayName: user.displayName || "" ,
-        image: user.photoURL || "", // user's picture link
-        bio: `Hey, I'm new here!`, // user's bio
-        favorites: [], // list of favorite places (places id)
-        wantToGo: [], // list of want to go places (places id)
-        friends: [], // list of friends (favorite places can be linked by friend id)
-      };
-*/
-
 export default function Profile({ user }) {
   const router = useRouter();
   const db = getFirestore(firebase);
@@ -241,37 +228,6 @@ export default function Profile({ user }) {
                 {userData.bio || "Bio.."}
               </Typography>
             </Box>
-
-            <Typography component="h4" sx={{ py: 1, margin: "auto" }}>
-              Add Friend
-            </Typography>
-
-            {/* stack for formatting purposes */}
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="center"
-              spacing={1}
-              sx={{ flexWrap: "wrap" }}
-            >
-              {/* Form for inputting friend's email */}
-              <form onSubmit={handleAddFriend}>
-                <Input
-                  type="email"
-                  placeholder="email"
-                  sx={{
-                    width: { xs: "100%", sm: 400 },
-                    display: { xs: "block flex", sm: "flex" },
-                  }}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  // Button to add a friend
-                  endDecorator={<Button type="submit">Add</Button>}
-                />
-              </form>
-
-              {/* Render the matching users */}
-            </Stack>
 
             <Tabs aria-label="tabs" defaultValue={0}>
               <TabList
