@@ -270,6 +270,13 @@ export default function Profile({ user }) {
 
               {/* Render the matching users */}
             </Stack>
+            {alertMessage && (
+              <Box sx={{ display: 'flex', gap: 2, width: '100%', flexDirection: 'column' }}>
+                <Alert variant="solid" size="md" color={alertStatus}>
+                  {alertMessage}
+                </Alert>
+              </Box>
+            )}
 
             <Tabs aria-label="tabs" defaultValue={0}>
               <TabList
@@ -312,13 +319,6 @@ export default function Profile({ user }) {
                 </div>
               </TabPanel>
             </Tabs>
-            {alertMessage && (
-              <Box sx={{ display: 'flex', gap: 2, width: '100%', flexDirection: 'column' }}>
-                <Alert variant="solid" size="md" color={alertStatus}>
-                  {alertMessage}
-                </Alert>
-              </Box>
-            )}
           </Sheet>
         </Sheet>
       </div>
