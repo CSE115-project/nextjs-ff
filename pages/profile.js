@@ -20,6 +20,7 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 import Input from "@mui/joy/Input";
+import Alert from '@mui/joy/Alert';
 import * as React from 'react';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
@@ -90,6 +91,8 @@ export default function Profile({ user }) {
   // Handle search query input and button click
   const [searchQuery, setSearchQuery] = useState("");
   const [friendsList, setFriendsList] = useState([]);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertStatus, setAlertStatus] = useState("");
 
   const handleAddFriend = async (event) => {
     // prevent reload on click
@@ -105,8 +108,13 @@ export default function Profile({ user }) {
     // If empty, there are no users with that email
     if (qSnap.size < 1) {
       console.error("No User email matches");
+      // set the state to alert that add friend failed
+      setAlertMessage("User does not exist.");
+      setAlertStatus("danger");
       return;
     }
+
+    // else set the state to alert that add friend passed
 
     // Get the new friend's ID
     const newFriendId = qSnap.docs[0].id;
@@ -120,6 +128,9 @@ export default function Profile({ user }) {
       console.log("Friend added");
       await fetchData();
       await createFriendList();
+      setAlertMessage("Successfully added friend.");
+      setAlertStatus("success");
+      return;
     }
   };
 
@@ -272,6 +283,13 @@ export default function Profile({ user }) {
 
               {/* Render the matching users */}
             </Stack>
+            {alertMessage && (
+              <Box sx={{ display: 'flex', gap: 2, width: '100%', flexDirection: 'column' }}>
+                <Alert variant="solid" size="md" color={alertStatus}>
+                  {alertMessage}
+                </Alert>
+              </Box>
+            )}
 
             <Tabs aria-label="tabs" defaultValue={0}>
               <TabList
