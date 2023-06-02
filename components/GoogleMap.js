@@ -88,9 +88,19 @@ export default function GoogleMap({ user }) {
 
   // Create Marker for current location
   function createCurrentMarker(location) {
+    const currIcon = {
+      path: google.maps.SymbolPath.CIRCLE,
+      fillColor: "#73B504",
+      fillOpacity: 1,
+      strokeColor: "#FFFFFF",
+      strokeOpacity: 1,
+      strokeWeight: 2,
+      scale: 10,
+    };
     return new google.maps.Marker({
       position: location,
       map: mapRef.current,
+      icon: currIcon
     });
   }
 

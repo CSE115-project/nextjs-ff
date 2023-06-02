@@ -1,8 +1,6 @@
-import AspectRatio from "@mui/joy/AspectRatio";
 import { Card, Button } from "@mui/joy";
 import Typography from "@mui/joy/Typography";
 import Link from "@mui/joy/Link";
-import Image from "next/image";
 import { useState } from "react";
 
 export default function InfoCard({ user, place }) {
