@@ -8,6 +8,10 @@ import { useState } from "react";
 export default function InfoCard({ user, place }) {
   const [liked, setLiked] = useState("");
 
+  // check if place is in Favorites list
+    // if it is: then change to "liked"
+    // else: set to unliked
+
   const handleLikeClick = () => {
     console.log("infocard user:", user.uid, "\nPlace:", place);
   };
