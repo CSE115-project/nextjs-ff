@@ -8,7 +8,6 @@ import Input from "@mui/joy/Input";
 import { useState } from "react";
 import Menu from "@mui/joy/Menu";
 import MenuItem from "@mui/joy/MenuItem";
-// import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
 
 const Homepage = ({ user }) => {
   const router = useRouter();
@@ -51,6 +50,8 @@ const Homepage = ({ user }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  console.log("Homepage user:", user);
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
@@ -97,7 +98,7 @@ const Homepage = ({ user }) => {
         </div>
       </Stack>
 
-      <GoogleMap />
+      <GoogleMap user={user} />
     </div>
   );
 };

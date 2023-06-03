@@ -116,7 +116,6 @@ export default function GoogleMap({ user }) {
       scale: 5,
     };
 
-    console.log("SelectedPlace:", selectedPlace, "place:", place);
     const marker = new google.maps.Marker({
       position: place.geometry.location,
       map: mapRef.current,
