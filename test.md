@@ -17,6 +17,28 @@ Friend's profile
 - User not found
 - Error fetching user data
 - Error retrieving friend's data
-- No matching email address
-- User not found
+- No matching email address 
+
+# Manual testing (results):
+
+Login Test:
+Able to login with correct email address (pass)
+
+Button Test:
+
+Buttons is able to direct to a new page
+- Home (pass)
+- Edit Profile (pass)
+- Cancel (pass)
+
+Able to upload new profile picture (pass)
+Able to add friend (pass)
+Friend's email should display in my friend's list (pass)
+
+Personal information in Firebase should be overwritten when user enter new information (pass)
+
+
+Browser Test:
+App is able to run with Google Chrome (pass)
+App is able to run with Safari (pass)
 
