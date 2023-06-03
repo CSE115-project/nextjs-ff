@@ -31,14 +31,14 @@ Buttons is able to direct to a new page
 - Edit Profile (pass)
 - Cancel (pass)
 
-Able to upload new profile picture (pass)
-Able to add friend (pass)
-Friend's email should display in my friend's list (pass)
+Able to upload new profile picture (pass)  
+Able to add friend (pass)  
+Friend's email should display in my friend's list (pass)  
 
 Personal information in Firebase should be overwritten when user enter new information (pass)
 
 
 Browser Test:
-App is able to run with Google Chrome (pass)
-App is able to run with Safari (pass)
+App is able to run with Google Chrome (pass)  
+App is able to run with Safari (pass)  
 
