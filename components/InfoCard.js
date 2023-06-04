@@ -1,19 +1,26 @@
 import { Card, Button } from "@mui/joy";
 import Typography from "@mui/joy/Typography";
 import Link from "@mui/joy/Link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function InfoCard({ user, place }) {
   const [liked, setLiked] = useState("");
 
   // check if place is in Favorites list
+  const isLiked = (user, place) => {
+    console.log("infocard isLiked user:", user.uid, "\nPlace:", place);
     // if it is: then change to "liked"
+
     // else: set to unliked
-
+  }
+  
   const handleLikeClick = () => {
-    console.log("infocard user:", user.uid, "\nPlace:", place);
+    console.log("infocard likedBtn user:", user.uid, "\nPlace:", place);
   };
-
+  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => isLiked(user, place), []);
   return (
     <Card
       variant="outlined"
