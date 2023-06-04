@@ -26,11 +26,12 @@ Able to login with correct email address (pass)
 
 Button Test:
 
-Buttons is able to direct to a new page
-- Home (pass)
-- Edit Profile (pass)
-- Cancel (pass)
+- Buttons is able to direct to a new page
+    - Home button (pass)
+    - Edit Profile button (pass)
+    - Cancel button(pass)
 
+Upload functionaliy test:
 Able to upload new profile picture (pass) 
 
 Friend Test:
@@ -43,8 +44,14 @@ Save functionality test:
 - User Biography (pass)
 - Personal information in Firebase should be overwritten when user enter new information (pass)
 
+Load functionality test:
+- User name (pass)
+- User Email (pass)
+- User Biography (pass)
+
+Mobile responsive test:
+- Able to resize profile page to the necessary specifications (pass)
 
 Browser Test:  
-App is able to run with Google Chrome (pass)  
-App is able to run with Safari (pass)  
-
+- App is able to run with Google Chrome (pass)  
+- App is able to run with Safari (pass)  
