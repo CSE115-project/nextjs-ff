@@ -21,18 +21,28 @@ Friend's profile
 
 # Manual testing (results):
 
+Login page:
+Able to toggle between light and dark mode (pass)
+
 Login Test:
-Able to login with correct email address (pass)
+Able to succesfully login with email address (pass)
+
+Signout Test:
+Able to successfully sign out (pass)
 
 Button Test:
 
 - Buttons is able to direct to a new page
     - Home button (pass)
+    - Account button (pass) 
     - Edit Profile button (pass)
-    - Cancel button(pass)
-
+    - Cancel button (pass)
+    
 Upload functionaliy test:
 Able to upload new profile picture (pass) 
+
+Profile test:
+- Able to switch tabs between "liked places and friend list"
 
 Friend Test:
 - Able to add friend (pass)  
@@ -51,6 +61,15 @@ Load functionality test:
 
 Mobile responsive test:
 - Able to resize profile page to the necessary specifications (pass)
+
+Map test:
+- Able to load Google Maps API (pass)
+- Able to go to full screen mode (pass)
+- Able to see my current location (pass)
+- Able to see heatmap under markers (pass)
+- Able to display a pop up with location information - name (pass)
+- Able to display a pop up with location information - address (pass)
+- Able to display a pop up with location information - ratings (pass)
 
 Browser Test:  
 - App is able to run with Google Chrome (pass)  
