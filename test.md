@@ -22,55 +22,55 @@ Friend's profile
 # Manual testing (results):
 
 Login page:
-Able to toggle between light and dark mode (pass)
+Able to toggle between light and dark mode (pass/fail: pass)
 
 Login Test:
-Able to succesfully login with email address (pass)
+Able to succesfully login with email address (pass/fail: pass)
 
 Signout Test:
-Able to successfully sign out (pass)
+Able to successfully sign out (pass/fail: pass)
 
 Button Test:
 
 - Buttons is able to direct to a new page
-    - Home button (pass)
-    - Account button (pass) 
-    - Edit Profile button (pass)
-    - Cancel button (pass)
+    - Home button (pass/fail: pass)
+    - Account button (pass/fail: pass) 
+    - Edit Profile button (pass/fail: pass)
+    - Cancel button (pass/fail: pass)
     
-Upload functionaliy test:
-Able to upload new profile picture (pass) 
+Upload functionaliy test:  
+Able to upload new profile picture (pass/fail: pass) 
 
-Profile test:
-- Able to switch tabs between "liked places and friend list"
+Profile test:  
+Able to switch tabs between "liked places" and "friend list"
 
 Friend Test:
-- Able to add friend (pass)  
-- Friend's email should display in the user friend's list (pass)  
+- Able to add friend (pass/fail: pass)  
+- Friend's email should display in the user friend's list (pass/fail: pass)  
 
 Save functionality test:
-- User name (pass)
-- User Email (pass)
-- User Biography (pass)
-- Personal information in Firebase should be overwritten when user enter new information (pass)
+- User name (pass/fail: pass)
+- User Email (pass/fail: pass)
+- User Biography (pass/fail: pass)
+- Personal information in Firebase should be overwritten when user enter new information (pass/fail: pass)
 
 Load functionality test:
-- User name (pass)
-- User Email (pass)
-- User Biography (pass)
+- User name (pass/fail: pass)
+- User Email (pass/fail: pass)
+- User Biography (pass/fail: pass)
 
-Mobile responsive test:
-- Able to resize profile page to the necessary specifications (pass)
+Mobile responsive test:  
+Able to resize profile page to the necessary specifications (pass/fail: pass)
 
 Map test:
-- Able to load Google Maps API (pass)
-- Able to go to full screen mode (pass)
-- Able to see my current location (pass)
-- Able to see heatmap under markers (pass)
-- Able to display a pop up with location information - name (pass)
-- Able to display a pop up with location information - address (pass)
-- Able to display a pop up with location information - ratings (pass)
+- Able to load Google Maps API (pass/fail: pass)
+- Able to go to full screen mode (pass/fail: pass)
+- Able to see my current location (pass/fail: pass)
+- Able to see heatmap under markers (pass/fail: pass)
+- Able to display a pop up with location information - name (pass/fail: pass)
+- Able to display a pop up with location information - address (pass/fail: pass)
+- Able to display a pop up with location information - ratings (pass/fail: pass)
 
 Browser Test:  
-- App is able to run with Google Chrome (pass)  
-- App is able to run with Safari (pass)  
+- App is able to run with Google Chrome (pass/fail: pass)  
+- App is able to run with Safari (pass/fail: pass)  
