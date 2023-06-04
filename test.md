@@ -25,7 +25,9 @@ Login page:
 Able to toggle between light and dark mode (Pass/Fail: Pass)
 
 Login Test:
-Able to succesfully login with email address (Pass/Fail: Pass)
+- Able to succesfully login with email address (Pass/Fail: Pass)
+- Unable to login with incorrect email address (Pass/Fail: Pass)
+- Unable to login with incorrect password (Pass/Fail: Pass)
 
 Signout Test:
 Able to successfully sign out (Pass/Fail: Pass)
