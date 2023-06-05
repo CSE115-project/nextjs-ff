@@ -42,6 +42,12 @@ export default function Profile({ user }) {
     router.push("/");
   };
 
+    // set route to go to back to profile page from friend-profile
+    const handleBack = (event) => {
+      if (event.cancelable) event.preventDefault();
+      router.push("/profile");
+    };
+
   // function to retrieve the UserData from the database
   const fetchData = async () => {
     try {
@@ -193,6 +199,13 @@ export default function Profile({ user }) {
             <Button onClick={handleHome} sx={{ mt: 1 }}>
               Home
             </Button>
+
+            <div style={{ display: "flex", marginLeft: "auto" }}>
+              {/* Edit Profile Button */}
+              <Button onClick={handleBack} sx={{ mt: 1 }}>
+                Back
+              </Button>
+            </div>
           </Stack>
 
           <Sheet
