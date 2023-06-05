@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.10.6",
     "@fontsource/public-sans": "^4.5.12",
     "@googlemaps/js-api-loader": "^1.15.1",
+    "@mui/icons-material": "^5.11.16",
     "@mui/joy": "^5.0.0-alpha.76",
     "@react-google-maps/api": "^2.18.1",
     "eslint": "8.39.0",

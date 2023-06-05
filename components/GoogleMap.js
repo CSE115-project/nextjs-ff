@@ -39,13 +39,12 @@ export default function GoogleMap({ user }) {
           mapRef.current = new Map(mapRef.current, {
             center: currentLocation,
             zoom: 12,
+            mapTypeControl: false,
+            fullscreenControl: false
           });
 
           // Add a marker for the user's current location
-          new google.maps.Marker({
-            position: currentLocation,
-            map: mapRef.current,
-          });
+          createCurrentMarker(currentLocation);
 
           // Create Heatmap overlay in nearby area
           const request = {
@@ -76,7 +75,7 @@ export default function GoogleMap({ user }) {
 
       getHeatmapData(results);
       for (let result of results) {
-        createMarker(result);
+        createResultsMarker(result);
       }
 
       // Check if more results are available
@@ -87,8 +86,26 @@ export default function GoogleMap({ user }) {
     }
   }
 
-  // Create [marker, infowindow] for place
-  function createMarker(place) {
+  // Create Marker for current location
+  function createCurrentMarker(location) {
+    const currIcon = {
+      path: google.maps.SymbolPath.CIRCLE,
+      fillColor: "#73B504",
+      fillOpacity: 1,
+      strokeColor: "#FFFFFF",
+      strokeOpacity: 1,
+      strokeWeight: 2,
+      scale: 10,
+    };
+    return new google.maps.Marker({
+      position: location,
+      map: mapRef.current,
+      icon: currIcon
+    });
+  }
+
+  // Create Marker for Place
+  function createResultsMarker(place) {
     const customIcon = {
       path: google.maps.SymbolPath.CIRCLE,
       fillColor: "#f58540",
@@ -113,10 +130,11 @@ export default function GoogleMap({ user }) {
 
       // Set the clicked place as the new map center
       mapRef.current.panTo(place.geometry.location);
+      console.log("InfoCard Click");
     });
 
     // Close the InfoCard when map is clicked
-    mapRef.current.addListener("click", () => {
+    mapRef.current?.addListener("click", () => {
       setSelectedPlace(null);
     });
 
