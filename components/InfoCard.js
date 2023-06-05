@@ -24,10 +24,8 @@ export default function InfoCard({ user, place }) {
       // check if place is in favorites
       if (favorites.includes(place.place_id)) {
         setLiked(true);
-        console.log("liked place");
       } else {
         setLiked(false);
-        console.log("unliked place");
       }
     } else {
       // docSnap.data() will be undefined in this case
@@ -42,14 +40,12 @@ export default function InfoCard({ user, place }) {
       await updateDoc(docRef, {
         favorites: arrayRemove(place.place_id),
       });
-      console.log("place removed from favorites");
       setLiked(false);
     } else {
       // Atomically add a new favorite to the "favorites" array field.
       await updateDoc(docRef, {
         favorites: arrayUnion(place.place_id),
       });
-      console.log("place added to favorites");
       setLiked(true);
     }
   };
