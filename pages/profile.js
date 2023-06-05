@@ -7,11 +7,9 @@ import { Tab, Tabs, TabList, tabClasses, TabPanel, Divider } from "@mui/joy";
 import Typography from "@mui/joy/Typography";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { firebase } from "../firebase";
 import {
   getDoc,
   getDocs,
-  getFirestore,
   doc,
   query,
   collection,
@@ -19,6 +17,7 @@ import {
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
+import {db} from '../firebase';
 import Input from "@mui/joy/Input";
 import Alert from '@mui/joy/Alert';
 import * as React from 'react';
@@ -42,7 +41,6 @@ const userObj = {
 
 export default function Profile({ user }) {
   const router = useRouter();
-  const db = getFirestore(firebase);
   const [userData, setUserData] = useState({});
 
   // Routes -------------------------------------------------
@@ -101,7 +99,6 @@ export default function Profile({ user }) {
     // Search and Get User with email matching the search.
     // Since only one email is associated with each user,
     // the return doc should only contain one entry
-    const db = getFirestore();
     const q = query(collection(db, "users"), where("email", "==", searchQuery));
     const qSnap = await getDocs(q);
 
@@ -147,15 +144,10 @@ export default function Profile({ user }) {
   };
 
   const createFriendList = async () => {
-    const db = getFirestore();
-    // const { friends } = userData;
-
     try {
       const promises = userData.friends ? userData.friends.map((friendId) => getFriend(db, friendId)) : [];
 
       const friendData = await Promise.all(promises);
-      // const list = [...friendData];
-      // friendsList.push(...friendData);
       setFriendsList(friendData);
       console.log("friend list:", friendData);
       // TODO: save list to global list, and map the results in the friends list tab
@@ -187,8 +179,6 @@ export default function Profile({ user }) {
     console.log("Loading Profile...");
     return (
       <div className="userProfile">
-        {/* <meta name="viewport" content="initial-scale=1, width=device-width" /> */}
-
         <Sheet>
           <Stack direction="row" alignItems="center" spacing={0}>
             {/* Home Button */}

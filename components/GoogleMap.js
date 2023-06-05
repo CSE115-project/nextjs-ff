@@ -134,7 +134,7 @@ export default function GoogleMap({ user }) {
     });
 
     // Close the InfoCard when map is clicked
-    mapRef.current.addListener("click", () => {
+    mapRef.current?.addListener("click", () => {
       setSelectedPlace(null);
     });
 
