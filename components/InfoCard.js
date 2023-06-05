@@ -3,14 +3,48 @@ import Typography from "@mui/joy/Typography";
 import Link from "@mui/joy/Link";
 import { useState, useEffect } from "react";
 import { doc, getDoc } from "firebase/firestore";
+import {db} from "../firebase";
 
 export default function InfoCard({ user, place }) {
   const [liked, setLiked] = useState("");
+  // const [favorites, setFavorites] = useState(null);
+
+  // get info from db for favorites
+  const getUserData = async () => {
+    const docRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data().favorites);
+      const favorites = docSnap.data().favorites;
+      // check if place is in favorites
+      if (favorites.includes(place)) {
+        setLiked(true);
+        console.log("liked place");
+      } else {
+        setLiked(false);
+        console.log("unliked place");
+      }
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  }
   
   const handleLikeClick = () => {
     console.log("infocard likedBtn user:", user.uid, "\nPlace:", place);
+    if (liked) {
+
+    }
   };
   
+  useEffect(() => {
+    getUserData();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  console.log("InfoCard - user:", user, "place:", place);
+  console.log("render info card");
   return (
     <Card
       variant="outlined"

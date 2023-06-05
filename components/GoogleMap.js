@@ -130,6 +130,7 @@ export default function GoogleMap({ user }) {
 
       // Set the clicked place as the new map center
       mapRef.current.panTo(place.geometry.location);
+      console.log("InfoCard Click");
     });
 
     // Close the InfoCard when map is clicked
