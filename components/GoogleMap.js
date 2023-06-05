@@ -40,7 +40,7 @@ export default function GoogleMap({ user }) {
             center: currentLocation,
             zoom: 12,
             mapTypeControl: false,
-            fullscreenControl: false
+            fullscreenControl: false,
           });
 
           // Add a marker for the user's current location
@@ -100,7 +100,7 @@ export default function GoogleMap({ user }) {
     return new google.maps.Marker({
       position: location,
       map: mapRef.current,
-      icon: currIcon
+      icon: currIcon,
     });
   }
 
