@@ -13,7 +13,6 @@ import { db } from "../firebase";
 
 export default function InfoCard({ user, place }) {
   const [liked, setLiked] = useState("");
-  // const [favorites, setFavorites] = useState(null);
 
   // get info from db for favorites
   const getUserData = async () => {
@@ -58,7 +57,7 @@ export default function InfoCard({ user, place }) {
   useEffect(() => {
     getUserData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [liked]);
+  }, [place]);
 
   return (
     <Card
