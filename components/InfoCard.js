@@ -2,8 +2,14 @@ import { Card, Button } from "@mui/joy";
 import Typography from "@mui/joy/Typography";
 import Link from "@mui/joy/Link";
 import { useState, useEffect } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import {db} from "../firebase";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
+import { db } from "../firebase";
 
 export default function InfoCard({ user, place }) {
   const [liked, setLiked] = useState("");
@@ -18,7 +24,7 @@ export default function InfoCard({ user, place }) {
       console.log("Document data:", docSnap.data().favorites);
       const favorites = docSnap.data().favorites;
       // check if place is in favorites
-      if (favorites.includes(place)) {
+      if (favorites.includes(place.place_id)) {
         setLiked(true);
         console.log("liked place");
       } else {
@@ -29,22 +35,32 @@ export default function InfoCard({ user, place }) {
       // docSnap.data() will be undefined in this case
       console.log("No such document!");
     }
-  }
-  
-  const handleLikeClick = () => {
-    console.log("infocard likedBtn user:", user.uid, "\nPlace:", place);
-    if (liked) {
+  };
 
+  const handleLikeClick = async () => {
+    const docRef = doc(db, "users", user.uid);
+    if (liked) {
+      // Atomically remove a region from the "regions" array field.
+      await updateDoc(docRef, {
+        favorites: arrayRemove(place.place_id),
+      });
+      console.log("place removed from favorites");
+      setLiked(false);
+    } else {
+      // Atomically add a new favorite to the "favorites" array field.
+      await updateDoc(docRef, {
+        favorites: arrayUnion(place.place_id),
+      });
+      console.log("place added to favorites");
+      setLiked(true);
     }
   };
-  
+
   useEffect(() => {
     getUserData();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  console.log("InfoCard - user:", user, "place:", place);
-  console.log("render info card");
+  }, [liked]);
+
   return (
     <Card
       variant="outlined"
@@ -65,7 +81,7 @@ export default function InfoCard({ user, place }) {
           alt=""
         />
       </AspectRatio> */}
-      <div style={{width: '100%'}}>
+      <div style={{ width: "100%" }}>
         <Typography level="h2" fontSize="lg" id="card-description" mb={0.5}>
           {place.name}
         </Typography>
@@ -80,8 +96,8 @@ export default function InfoCard({ user, place }) {
             {place.vicinity}
           </Link>
         </Typography>
-        <div style={{display: "flex", justifyContent: "space-between"}}>
-          <Typography fontSize="sm" aria-describedby="card-description" mb={1} >
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography fontSize="sm" aria-describedby="card-description" mb={1}>
             <Link
               overlay
               underline="none"
@@ -97,7 +113,7 @@ export default function InfoCard({ user, place }) {
             size="sm"
             onClick={handleLikeClick}
           >
-            {liked ? "\u2665" :  "\u2661"}
+            {liked ? "\u2665" : "\u2661"}
           </Button>
         </div>
       </div>
