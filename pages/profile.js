@@ -338,7 +338,7 @@ export default function Profile({ user }) {
                           onClick={handleFriendProfile}>
                           <ListItem key={index}>
                             <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
-                              <Avatar size="sm" src="/static/images/avatar/1.jpg" />
+                              <Avatar size="sm" src="" />
                             </ListItemDecorator>
                             <Typography color="black" sx={{ fontWeight: 'normal', marginLeft: '0.5rem' }}>
                               {friend}

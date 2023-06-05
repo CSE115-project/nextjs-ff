@@ -31,7 +31,7 @@ export default function App({ Component, pageProps }) {
 
   return (
     <CssVarsProvider>
-      <Component {...pageProps} router={router} user={user} />;
+      <Component {...pageProps} router={router} user={user} />
     </CssVarsProvider>
   );
 }

@@ -44,6 +44,7 @@ const Homepage = ({ user }) => {
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
+    if (event.cancelable) event.preventDefault();
     setAnchorEl(event.currentTarget);
   };
 
@@ -55,48 +56,32 @@ const Homepage = ({ user }) => {
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
-      <Stack direction="row" alignItems="center">
-        <Button>List</Button>
+        <Stack direction="row" alignItems="center" style={{display: "flex", justifyContent: "space-between"}}>
+          <Button>List</Button>
 
-        <div style={{ display: "flex", margin: "auto" }}>
-          {/* Search Bar */}
-          <form onSubmit={handleSearch}>
-            <Input
-              placeholder="Search"
-              sx={{
-                width: { xs: "100%", sm: "400px" },
-                mt: 1,
-                display: "flex",
-              }}
-              onChange={onChangeHandlerSearch}
-            />
-          </form>
-        </div>
-
-        {/* Dropdown menu for account related options */}
-        <div style={{ display: "flex", marginleft: "auto" }}>
-          <Button
-            id="account-button"
-            aria-controls={open ? "account-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            onClick={handleClick}
-            // endDecorator={<ArrowDropDown />}
-          >
-            Account
-          </Button>
-          <Menu
-            id="account-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="account-button"
-          >
-            <MenuItem onClick={handleProfile}>Profile</MenuItem>
-            <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
-          </Menu>
-        </div>
-      </Stack>
+          {/* Dropdown menu for account related options */}
+          <div style={{ display: "flex", marginleft: "auto" }}>
+            <Button
+              id="account-button"
+              aria-controls={open ? "account-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+            >
+              Account
+            </Button>
+            <Menu
+              id="account-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="account-button"
+            >
+              <MenuItem onClick={handleProfile}>Profile</MenuItem>
+              <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
+            </Menu>
+          </div>
+        </Stack>
 
       <GoogleMap user={user} />
     </div>
