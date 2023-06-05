@@ -8,65 +8,14 @@ export default function GoogleMap({ user }) {
   // Google Maps
   const mapRef = useRef(null);
   const [selectedPlace, setSelectedPlace] = useState(null);
+  const [showSearchButton, setShowSearchButton] = useState(false);
+  const [searchButtonLoading, setSearchButtonLoading] = useState(false);
 
   // default: San Francisco
   const defLocation = {
     lat: 37.7749,
     lng: -122.4194,
   };
-
-  useEffect(() => {
-    // Google Map
-    const loader = new Loader({
-      apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API,
-      version: "weekly",
-      libraries: ["places", "visualization"],
-    });
-
-    loader.load().then(async () => {
-      const { google } = window;
-      const { Map } = await google.maps.importLibrary("maps");
-
-      // Get the user's current location
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const currentLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-
-          // Create a new map centered on the user's current location
-          mapRef.current = new Map(mapRef.current, {
-            center: currentLocation,
-            zoom: 12,
-            mapTypeControl: false,
-            fullscreenControl: false,
-          });
-
-          // Add a marker for the user's current location
-          createCurrentMarker(currentLocation);
-
-          // Create Heatmap overlay in nearby area
-          const request = {
-            location: currentLocation,
-            radius: "8000",
-            keyword:
-              "restaurants, food, attractions, night life nearby open now",
-          };
-
-          let service = new google.maps.places.PlacesService(mapRef.current);
-          service.nearbySearch(request, nearbyResults);
-        });
-      } else {
-        // Create a new map centered on the default location
-        mapRef.current = new Map(mapRef.current, {
-          center: { lat: defLocation.lat, lng: defLocation.lng },
-          zoom: 13,
-        });
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // Nearby results: place markers, heatmap
   function nearbyResults(results, status, pagination) {
@@ -177,8 +126,101 @@ export default function GoogleMap({ user }) {
     }
   }
 
+  // "Search This Area" button
+  function handleSearchThisArea() {
+    setSearchButtonLoading(true);
+
+    // Get the bounds of the current visible area on the map
+    const bounds = mapRef.current.getBounds();
+    const ne = bounds.getNorthEast();
+    const sw = bounds.getSouthWest();
+    const location = mapRef.current.getCenter();
+
+    // Create a new request with the bounds and location
+    const request = {
+      bounds: bounds,
+      location: location,
+      keyword: "restaurants, food, attractions, nightlife, open now",
+    };
+
+    // Perform the search request
+    let service = new google.maps.places.PlacesService(mapRef.current);
+    service.nearbySearch(request, (results, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        console.log("Results:", results);
+        getHeatmapData(results);
+        // Handle the results
+      }
+      setSearchButtonLoading(false);
+    });
+  }
+
+  useEffect(() => {
+    // Google Map
+    const loader = new Loader({
+      apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API,
+      version: "weekly",
+      libraries: ["places", "visualization"],
+    });
+
+    loader.load().then(async () => {
+      const { google } = window;
+      const { Map } = await google.maps.importLibrary("maps");
+
+      // Get the user's current location
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const currentLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+
+          // Create a new map centered on the user's current location
+          mapRef.current = new Map(mapRef.current, {
+            center: currentLocation,
+            zoom: 12,
+            mapTypeControl: false,
+            fullscreenControl: false,
+          });
+
+          // Add event listeners for map drag events
+          mapRef.current.addListener("dragstart", () =>
+            setShowSearchButton(false)
+          );
+          mapRef.current.addListener("dragend", () =>
+            setShowSearchButton(true)
+          );
+
+          // Add a marker for the user's current location
+          createCurrentMarker(currentLocation);
+
+          // Create Heatmap overlay in nearby area
+          const request = {
+            location: currentLocation,
+            radius: "8000",
+            keyword:
+              "restaurants, food, attractions, night life nearby open now",
+          };
+
+          let service = new google.maps.places.PlacesService(mapRef.current);
+          service.nearbySearch(request, nearbyResults);
+        });
+      } else {
+        // Create a new map centered on the default location
+        mapRef.current = new Map(mapRef.current, {
+          center: { lat: defLocation.lat, lng: defLocation.lng },
+          zoom: 13,
+        });
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div style={{ position: "relative", height: "90vh" }}>
+      <Button loading loadingPosition="start">
+        Loading...
+      </Button>
       <div
         ref={mapRef}
         style={{
@@ -189,9 +231,24 @@ export default function GoogleMap({ user }) {
           width: "100%",
         }}
       >
-        <Button loading loadingPosition="start">
-          Loading...
-        </Button>
+        {showSearchButton && (
+          <div
+            style={{
+              position: "absolute",
+              top: "10px",
+              left: "10px",
+              zIndex: 1,
+            }}
+          >
+            <Button
+              onClick={handleSearchThisArea}
+              disabled={searchButtonLoading}
+              loading={searchButtonLoading}
+            >
+              Search This Area
+            </Button>
+          </div>
+        )}
       </div>
       {selectedPlace ? (
         <div

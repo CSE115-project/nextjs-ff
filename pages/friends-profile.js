@@ -71,6 +71,7 @@ export default function Profile({ user }) {
   // anytime the passed UID is changed, fetch the new user's data
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [passedUID]);
 
   console.log("p/profile userData:", userData);
