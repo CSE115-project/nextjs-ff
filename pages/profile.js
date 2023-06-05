@@ -171,14 +171,12 @@ export default function Profile({ user }) {
     //   version: "weekly",
     //   libraries: ["places"],
     // });
-
     // // Load the Google Maps API and fetch place details
     // loader.load().then(() => {
     //   const { google } = window;
     //   const service = new google.maps.places.PlacesService(
     //     document.createElement("div")
     //   );
-
     //   // Fetch the place details using the place_id
     //   service.getDetails({ place_id }, (placeResult, status) => {
     //     if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -223,18 +221,25 @@ export default function Profile({ user }) {
     return (
       <div className="userProfile">
         <Sheet>
-          <Stack direction="row" alignItems="center" spacing={0}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={0}
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
             {/* Home Button */}
-            <Button onClick={handleHome} sx={{ mt: 1 }}>
+            <Button onClick={handleHome} sx={{ mt: 1 }} style={{ margin: "0" }}>
               Home
             </Button>
 
-            <div style={{ display: "flex", marginLeft: "auto" }}>
-              {/* Edit Profile Button */}
-              <Button onClick={handleEditProfile} sx={{ mt: 1 }}>
-                Edit Profile
-              </Button>
-            </div>
+            {/* Edit Profile Button */}
+            <Button
+              onClick={handleEditProfile}
+              sx={{ mt: 1 }}
+              style={{ margin: "0" }}
+            >
+              Edit
+            </Button>
           </Stack>
 
           <Sheet

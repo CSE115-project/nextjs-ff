@@ -4,10 +4,10 @@ import GoogleMap from "./GoogleMap";
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 import Stack from "@mui/joy/Stack";
-import Input from "@mui/joy/Input";
 import { useState } from "react";
 import Menu from "@mui/joy/Menu";
 import MenuItem from "@mui/joy/MenuItem";
+import Person from '@mui/icons-material/Person';
 
 const Homepage = ({ user }) => {
   const router = useRouter();
@@ -68,7 +68,7 @@ const Homepage = ({ user }) => {
               aria-expanded={open ? "true" : undefined}
               onClick={handleClick}
             >
-              Account
+              <Person />
             </Button>
             <Menu
               id="account-menu"
