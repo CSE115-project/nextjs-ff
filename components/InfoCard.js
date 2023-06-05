@@ -21,7 +21,6 @@ export default function InfoCard({ user, place }) {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data().favorites);
       const favorites = docSnap.data().favorites;
       // check if place is in favorites
       if (favorites.includes(place.place_id)) {
