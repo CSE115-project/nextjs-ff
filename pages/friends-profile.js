@@ -29,7 +29,9 @@ import ListItemDecorator from '@mui/joy/ListItemDecorator';
 export default function Profile({ user }) {
   const router = useRouter();
   const db = getFirestore(firebase);
+  const { passedUID } = router.query;
   const [userData, setUserData] = useState({});
+  console.log("PASSED UID IS:", passedUID);
 
   // Routes -------------------------------------------------
   // initialize all fields and their according set methods
@@ -40,22 +42,11 @@ export default function Profile({ user }) {
     router.push("/");
   };
 
-  // set route to go to edit-profile from profile page
-  const handleEditProfile = (event) => {
-    if (event.cancelable) event.preventDefault();
-    router.push("/edit-profile");
-  };
-
-  // set route to go to friends-profile from profile page
-  const handleFriendProfile = (event) => {
-    if (event.cancelable) event.preventDefault();
-    router.push("/friends-profile");
-  };
-
   // function to retrieve the UserData from the database
   const fetchData = async () => {
     try {
-      const docRef = doc(db, "users", user.uid);
+      console.log("UID BEING PASSED IN FETCHDATA IS:", passedUID)
+      const docRef = doc(db, "users", passedUID);
       const docRes = await getDoc(docRef);
 
       if (docRes.exists()) {
@@ -69,6 +60,12 @@ export default function Profile({ user }) {
       console.error("Error fetching user data:", error);
     }
   };
+
+
+  // anytime the passed UID is changed, fetch the new user's data
+  useEffect(() => {
+    fetchData();
+  }, [passedUID]);
 
   console.log("p/profile userData:", userData);
 
@@ -99,7 +96,7 @@ export default function Profile({ user }) {
     const newFriendId = qSnap.docs[0].id;
 
     // Update Friends list of User by appending new_friend_id
-    const docRef = doc(db, "users", user.uid);
+    const docRef = doc(db, "users", passedUID);
 
 
     if (newFriendId) {
@@ -140,6 +137,31 @@ export default function Profile({ user }) {
     }
   };
 
+  // set route to go to friends-profile from profile page
+  const handleFriendProfile = (friend) => async (event) => {
+    if (event.cancelable) event.preventDefault();
+    // Search and Get User with email matching the search.
+    // Since only one email is associated with each user,
+    // the return doc should only contain one entry
+    const db = getFirestore();
+    const q = query(collection(db, "users"), where("email", "==", friend));
+    const qSnap = await getDocs(q);
+    // Get the friend's UID
+    const friendsUID = qSnap.docs[0].id;
+
+    console.log("FRIENDS UID BEING PASSED IS:",friendsUID)
+
+    await fetchData();
+
+    console.log("fetched data")
+
+    router.push({
+      pathname: "/friends-profile",
+      query: { passedUID: friendsUID },
+    });
+
+  };
+
   useEffect(() => {
     if (userData && userData.friends) {
       createFriendList(userData.friends);
@@ -171,13 +193,6 @@ export default function Profile({ user }) {
             <Button onClick={handleHome} sx={{ mt: 1 }}>
               Home
             </Button>
-
-            <div style={{ display: "flex", marginLeft: "auto" }}>
-              {/* Edit Profile Button */}
-              <Button onClick={handleEditProfile} sx={{ mt: 1 }}>
-                Edit Profile
-              </Button>
-            </div>
           </Stack>
 
           <Sheet
@@ -280,7 +295,8 @@ export default function Profile({ user }) {
                           component="li"
                           disableRipple
                           // route to friends-profile page
-                          onClick={handleFriendProfile}>
+                          onClick={handleFriendProfile(friend)}
+                          >
                           <ListItem key={index}>
                             <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
                               <Avatar size="sm" src="/static/images/avatar/1.jpg" />

@@ -25,6 +25,7 @@ import * as React from 'react';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import { async } from "@firebase/util";
 
 
 /*
@@ -58,12 +59,6 @@ export default function Profile({ user }) {
   const handleEditProfile = (event) => {
     if (event.cancelable) event.preventDefault();
     router.push("/edit-profile");
-  };
-
-  // set route to go to friends-profile from profile page
-  const handleFriendProfile = (event) => {
-    if (event.cancelable) event.preventDefault();
-    router.push("/friends-profile");
   };
 
   // function to retrieve the UserData from the database
@@ -132,6 +127,26 @@ export default function Profile({ user }) {
       setAlertStatus("success");
       return;
     }
+  };
+
+  // set route to go to friends-profile from profile page
+  const handleFriendProfile = (friend) => async (event) => {
+    if (event.cancelable) event.preventDefault();
+    // Search and Get User with email matching the search.
+    // Since only one email is associated with each user,
+    // the return doc should only contain one entry
+    const db = getFirestore();
+    const q = query(collection(db, "users"), where("email", "==", friend));
+    const qSnap = await getDocs(q);
+    // Get the friend's UID
+    const friendsUID = qSnap.docs[0].id;
+
+    console.log("FRIENDS UID BEING PASSED IS:",friendsUID)
+    
+    router.push({
+      pathname: "/friends-profile",
+      query: { passedUID: friendsUID },
+    });
   };
 
   // List friends ----------------------------------------------------------
@@ -345,7 +360,8 @@ export default function Profile({ user }) {
                           component="li"
                           disableRipple
                           // route to friends-profile page
-                          onClick={handleFriendProfile}>
+                          onClick={handleFriendProfile(friend)}
+                          >
                           <ListItem key={index}>
                             <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
                               <Avatar size="sm" src="/static/images/avatar/1.jpg" />
