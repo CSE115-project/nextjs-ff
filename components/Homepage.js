@@ -7,18 +7,24 @@ import Stack from "@mui/joy/Stack";
 import { useState } from "react";
 import Menu from "@mui/joy/Menu";
 import MenuItem from "@mui/joy/MenuItem";
-import Person from '@mui/icons-material/Person';
+import Person from "@mui/icons-material/Person";
 
 const Homepage = ({ user }) => {
   const router = useRouter();
   const auth = getAuth();
-  const [search, setSearch] = useState("");
 
   // Authentication
   const handleSignOut = (event) => {
     if (event.cancelable) event.preventDefault();
-    console.log("Signed Out.");
     signOut(auth);
+
+    // Clear user session data from the browser
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem("firebaseAuth"); // Clear localStorage
+      window.sessionStorage.removeItem("firebaseAuth"); // Clear sessionStorage
+    }
+    
+    console.log("Signed Out.");
     router.push("/login");
   };
 
@@ -28,16 +34,6 @@ const Homepage = ({ user }) => {
       pathname: "/profile",
       query: { user: JSON.stringify(user) },
     });
-  };
-
-  const handleSearch = (event) => {
-    event.preventDefault();
-    // TODO: handle the search
-    console.log("search:", search);
-  };
-
-  const onChangeHandlerSearch = (e) => {
-    setSearch(e.target.value);
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -56,32 +52,36 @@ const Homepage = ({ user }) => {
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
-        <Stack direction="row" alignItems="center" style={{display: "flex", justifyContent: "space-between"}}>
-          <Button>List</Button>
+      <Stack
+        direction="row"
+        alignItems="center"
+        style={{ display: "flex", justifyContent: "space-between" }}
+      >
+        <Button>List</Button>
 
-          {/* Dropdown menu for account related options */}
-          <div style={{ display: "flex", marginleft: "auto" }}>
-            <Button
-              id="account-button"
-              aria-controls={open ? "account-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-            >
-              <Person />
-            </Button>
-            <Menu
-              id="account-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="account-button"
-            >
-              <MenuItem onClick={handleProfile}>Profile</MenuItem>
-              <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
-            </Menu>
-          </div>
-        </Stack>
+        {/* Dropdown menu for account related options */}
+        <div style={{ display: "flex", marginleft: "auto" }}>
+          <Button
+            id="account-button"
+            aria-controls={open ? "account-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
+          >
+            <Person />
+          </Button>
+          <Menu
+            id="account-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="account-button"
+          >
+            <MenuItem onClick={handleProfile}>Profile</MenuItem>
+            <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
+          </Menu>
+        </div>
+      </Stack>
 
       <GoogleMap user={user} />
     </div>

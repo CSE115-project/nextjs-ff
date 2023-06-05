@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }) {
     const unsubscribe = onAuthStateChanged(auth, (authUser) => {
       // if (user) => '/', else => '/login'
       if (authUser) {
-        setUser(Object.assign({}, authUser));
+        setUser(authUser);
         router.push("/");
       } else {
         setUser(null);
@@ -25,9 +25,9 @@ export default function App({ Component, pageProps }) {
 
     console.log("AuthStateChanged");
 
-    return unsubscribe();
+    return () => unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth]);
+  }, []);
 
   return (
     <CssVarsProvider>
