@@ -1,19 +1,25 @@
 import * as React from "react";
-import Button from "@mui/joy/Button";
 import GoogleMap from "./GoogleMap";
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
-import Stack from "@mui/joy/Stack";
-import { useState } from "react";
-import Menu from "@mui/joy/Menu";
-import MenuItem from "@mui/joy/MenuItem";
+import Image from 'next/image';
 import Person from "@mui/icons-material/Person";
+import Menu from "@mui/joy/Menu";
+import Stack from "@mui/joy/Stack";
+import MenuItem from "@mui/joy/MenuItem";
+import Button from "@mui/joy/Button";
+import { Typography } from "@mui/joy";
 
 const Homepage = ({ user }) => {
   const router = useRouter();
   const auth = getAuth();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
 
-  // Authentication
+  /**
+   * Sign out user
+   * @param {*} event 
+   */
   const handleSignOut = (event) => {
     if (event.cancelable) event.preventDefault();
     signOut(auth);
@@ -28,6 +34,10 @@ const Homepage = ({ user }) => {
     router.push("/login");
   };
 
+  /**
+   * Redirect to '/profile'
+   * @param {*} event 
+   */
   const handleProfile = (event) => {
     if (event.cancelable) event.preventDefault();
     router.push({
@@ -36,19 +46,21 @@ const Homepage = ({ user }) => {
     });
   };
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event) => {
+  /**
+   * Open drop down menu for profile and signout
+   * @param {*} event 
+   */
+  const handleOpenDropdown = (event) => {
     if (event.cancelable) event.preventDefault();
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  /**
+   * Close drop down menu
+   */
+  const handleCloseDropdown = () => {
     setAnchorEl(null);
   };
-
-  console.log("Homepage user:", user);
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
@@ -57,7 +69,8 @@ const Homepage = ({ user }) => {
         alignItems="center"
         style={{ display: "flex", justifyContent: "space-between" }}
       >
-        <Button>List</Button>
+        {/* <Button>List</Button> */}
+        <Image src="/../public/images/ff-logo.png" alt="Logo" width={70} height={35} />
 
         {/* Dropdown menu for account related options */}
         <div style={{ display: "flex", marginleft: "auto" }}>
@@ -66,7 +79,7 @@ const Homepage = ({ user }) => {
             aria-controls={open ? "account-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
-            onClick={handleClick}
+            onClick={handleOpenDropdown}
           >
             <Person />
           </Button>
@@ -74,7 +87,7 @@ const Homepage = ({ user }) => {
             id="account-menu"
             anchorEl={anchorEl}
             open={open}
-            onClose={handleClose}
+            onClose={handleCloseDropdown}
             aria-labelledby="account-button"
           >
             <MenuItem onClick={handleProfile}>Profile</MenuItem>

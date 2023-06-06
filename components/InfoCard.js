@@ -14,7 +14,9 @@ import { db } from "../firebase";
 export default function InfoCard({ user, place }) {
   const [liked, setLiked] = useState("");
 
-  // get info from db for favorites
+  /**
+   * get info from db for favorites
+   */
   const getUserData = async () => {
     const docRef = doc(db, "users", user.uid);
     const docSnap = await getDoc(docRef);
@@ -33,6 +35,9 @@ export default function InfoCard({ user, place }) {
     }
   };
 
+  /**
+   * Add and Removes places from Favorites list in User data
+   */
   const handleLikeClick = async () => {
     const docRef = doc(db, "users", user.uid);
     if (liked) {
@@ -68,13 +73,6 @@ export default function InfoCard({ user, place }) {
         },
       }}
     >
-      {/* <AspectRatio ratio="1" sx={{ width: 90 }}>
-        <Image
-          // src={place.icon}
-          loading="lazy"
-          alt=""
-        />
-      </AspectRatio> */}
       <div style={{ width: "100%" }}>
         <Typography level="h2" fontSize="lg" id="card-description" mb={0.5}>
           {place.name}

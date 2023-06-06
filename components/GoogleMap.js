@@ -4,8 +4,6 @@ import { Button } from "@mui/joy";
 import InfoCard from "./InfoCard";
 
 export default function GoogleMap({ user }) {
-  console.log("Google Map User:", user);
-  // Google Maps
   const mapRef = useRef(null);
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [showSearchButton, setShowSearchButton] = useState(false);
@@ -17,7 +15,12 @@ export default function GoogleMap({ user }) {
     lng: -122.4194,
   };
 
-  // Nearby results: place markers, heatmap
+  /**
+   * Nearby results: place markers, heatmap
+   * @param {*} results 
+   * @param {*} status 
+   * @param {*} pagination 
+   */
   function nearbyResults(results, status, pagination) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       console.log("Results:", results);
@@ -35,25 +38,23 @@ export default function GoogleMap({ user }) {
     }
   }
 
-  // Create Marker for current location
+  /**
+   * Create Marker for current location
+   * @param {*} location 
+   * @returns 
+   */
   function createCurrentMarker(location) {
-    const currIcon = {
-      path: google.maps.SymbolPath.CIRCLE,
-      fillColor: "#73B504",
-      fillOpacity: 1,
-      strokeColor: "#FFFFFF",
-      strokeOpacity: 1,
-      strokeWeight: 2,
-      scale: 10,
-    };
     return new google.maps.Marker({
       position: location,
       map: mapRef.current,
-      icon: currIcon,
     });
   }
 
-  // Create Marker for Place
+  /**
+   * Create Marker for Place
+   * @param {*} place 
+   * @returns 
+   */
   function createResultsMarker(place) {
     const customIcon = {
       path: google.maps.SymbolPath.CIRCLE,
@@ -90,7 +91,10 @@ export default function GoogleMap({ user }) {
     return marker;
   }
 
-  // Add Nearby Results locations for heatmap
+  /**
+   * Add Nearby Results locations for heatmap
+   * @param {*} results 
+   */
   function getHeatmapData(results) {
     const data = results.map((result) => {
       const lat = result.geometry.location.lat();
@@ -126,7 +130,9 @@ export default function GoogleMap({ user }) {
     }
   }
 
-  // "Search This Area" button
+  /**
+   * "Search This Area" button
+   */
   function handleSearchThisArea() {
     setSearchButtonLoading(true);
 
@@ -213,7 +219,7 @@ export default function GoogleMap({ user }) {
         });
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

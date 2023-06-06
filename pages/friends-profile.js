@@ -16,17 +16,13 @@ import {
   query,
   collection,
   where,
-  updateDoc,
-  arrayUnion,
 } from "firebase/firestore";
-import Input from "@mui/joy/Input";
-import * as React from 'react';
-import List from '@mui/joy/List';
-import ListItem from '@mui/joy/ListItem';
-import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import * as React from "react";
+import List from "@mui/joy/List";
+import ListItem from "@mui/joy/ListItem";
+import ListItemDecorator from "@mui/joy/ListItemDecorator";
 
-
-export default function Profile({ user }) {
+export default function Component() {
   const router = useRouter();
   const db = getFirestore(firebase);
   const { passedUID } = router.query;
@@ -35,23 +31,31 @@ export default function Profile({ user }) {
 
   // Routes -------------------------------------------------
   // initialize all fields and their according set methods
-  
-  // set route to go back to home from profile page
+
+  /**
+   * set route to go back to home from profile page
+   * @param {*} event 
+   */
   const handleHome = (event) => {
     if (event.cancelable) event.preventDefault();
     router.push("/");
   };
 
-    // set route to go to back to profile page from friend-profile
-    const handleBack = (event) => {
-      if (event.cancelable) event.preventDefault();
-      router.push("/profile");
-    };
+  /**
+   * set route to go to back to profile page from friend-profile
+   * @param {*} event 
+   */
+  const handleBack = (event) => {
+    if (event.cancelable) event.preventDefault();
+    router.push("/profile");
+  };
 
-  // function to retrieve the UserData from the database
+  /**
+   * function to retrieve the UserData from the database
+   */
   const fetchData = async () => {
     try {
-      console.log("UID BEING PASSED IN FETCHDATA IS:", passedUID)
+      console.log("UID BEING PASSED IN FETCHDATA IS:", passedUID);
       const docRef = doc(db, "users", passedUID);
       const docRes = await getDoc(docRef);
 
@@ -67,8 +71,9 @@ export default function Profile({ user }) {
     }
   };
 
-
-  // anytime the passed UID is changed, fetch the new user's data
+  /**
+   * anytime the passed UID is changed, fetch the new user's data
+   */
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,60 +83,38 @@ export default function Profile({ user }) {
 
   // Adding search friends functionality ----------------------------------------------------------
 
-  // Handle search query input and button click
-  const [searchQuery, setSearchQuery] = useState("");
+  /**
+   * Handle search query input and button click
+   */
   const [friendsList, setFriendsList] = useState([]);
 
-  const handleAddFriend = async (event) => {
-    // prevent reload on click
-    if (event.cancelable) event.preventDefault();
-
-    // Search and Get User with email matching the search.
-    // Since only one email is associated with each user,
-    // the return doc should only contain one entry
-    const db = getFirestore();
-    const q = query(collection(db, "users"), where("email", "==", searchQuery));
-    const qSnap = await getDocs(q);
-
-    // If empty, there are no users with that email
-    if (qSnap.size < 1) {
-      console.error("No User email matches");
-      return;
-    }
-
-    // Get the new friend's ID
-    const newFriendId = qSnap.docs[0].id;
-
-    // Update Friends list of User by appending new_friend_id
-    const docRef = doc(db, "users", passedUID);
-
-
-    if (newFriendId) {
-      await updateDoc(docRef, { friends: arrayUnion(newFriendId) });
-      console.log("Friend added");
-      await fetchData();
-      await createFriendList();
-    }
-  };
-
   // List friends ----------------------------------------------------------
-
   // loop through userdata.friends and getdoc for each friend
   // store each friend in friendsList
 
-  // getFriend from friend list of logged in user
+  /**
+   * getFriend from friend list of logged in user
+   * @param {*} db 
+   * @param {*} friendId 
+   * @returns 
+   */
   const getFriend = async (db, friendId) => {
     const friendUserRef = doc(db, "users", friendId);
     const friendUserDoc = await getDoc(friendUserRef);
     return friendUserDoc.data().email;
   };
 
+  /**
+   * Display friends in list
+   */
   const createFriendList = async () => {
     const db = getFirestore();
     // const { friends } = userData;
 
     try {
-      const promises = userData.friends ? userData.friends.map((friendId) => getFriend(db, friendId)) : [];
+      const promises = userData.friends
+        ? userData.friends.map((friendId) => getFriend(db, friendId))
+        : [];
 
       const friendData = await Promise.all(promises);
       // const list = [...friendData];
@@ -144,7 +127,11 @@ export default function Profile({ user }) {
     }
   };
 
-  // set route to go to friends-profile from profile page
+  /**
+   * set route to go to friends-profile from profile page
+   * @param {*} friend 
+   * @returns 
+   */
   const handleFriendProfile = (friend) => async (event) => {
     if (event.cancelable) event.preventDefault();
     // Search and Get User with email matching the search.
@@ -156,17 +143,16 @@ export default function Profile({ user }) {
     // Get the friend's UID
     const friendsUID = qSnap.docs[0].id;
 
-    console.log("FRIENDS UID BEING PASSED IS:",friendsUID)
+    console.log("FRIENDS UID BEING PASSED IS:", friendsUID);
 
     await fetchData();
 
-    console.log("fetched data")
+    console.log("fetched data");
 
     router.push({
       pathname: "/friends-profile",
       query: { passedUID: friendsUID },
     });
-
   };
 
   useEffect(() => {
@@ -293,29 +279,44 @@ export default function Profile({ user }) {
                   <List
                     variant="outlined"
                     sx={{
-                      bgcolor: 'background.body',
+                      bgcolor: "background.body",
                       minWidth: 240,
-                      borderRadius: 'sm',
-                      boxShadow: 'sm',
-                      '--ListItemDecorator-size': '48px',
-                      '--ListItem-paddingLeft': '1.5rem',
-                      '--ListItem-paddingRight': '1rem',
+                      borderRadius: "sm",
+                      boxShadow: "sm",
+                      "--ListItemDecorator-size": "48px",
+                      "--ListItem-paddingLeft": "1.5rem",
+                      "--ListItem-paddingRight": "1rem",
                     }}
                   >
                     {friendsList.map((friend, index) => (
                       <React.Fragment key={index}>
-                        <Button variant="plain"
-                          sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%', padding: 0 }}
+                        <Button
+                          variant="plain"
+                          sx={{
+                            display: "flex",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                            width: "100%",
+                            padding: 0,
+                          }}
                           component="li"
-                          disableRipple
                           // route to friends-profile page
                           onClick={handleFriendProfile(friend)}
-                          >
+                        >
                           <ListItem key={index}>
-                            <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
-                              <Avatar size="sm" src="/static/images/avatar/1.jpg" />
+                            <ListItemDecorator sx={{ alignSelf: "flex-start" }}>
+                              <Avatar
+                                size="sm"
+                                src="/static/images/avatar/1.jpg"
+                              />
                             </ListItemDecorator>
-                            <Typography color="black" sx={{ fontWeight: 'normal', marginLeft: '0.5rem' }}>
+                            <Typography
+                              color="black"
+                              sx={{
+                                fontWeight: "normal",
+                                marginLeft: "0.5rem",
+                              }}
+                            >
                               {friend}
                             </Typography>
                           </ListItem>
@@ -329,7 +330,7 @@ export default function Profile({ user }) {
             </Tabs>
           </Sheet>
         </Sheet>
-      </div >
+      </div>
     );
   }
 }

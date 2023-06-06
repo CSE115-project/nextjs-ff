@@ -365,7 +365,6 @@ export default function Profile({ user }) {
                         <Button variant="plain"
                           sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%', padding: 0 }}
                           component="li"
-                          disableRipple
                           // route to friends-profile page
                           onClick={handleFriendProfile(friend)}
                           >

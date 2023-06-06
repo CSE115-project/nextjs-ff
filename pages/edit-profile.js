@@ -40,7 +40,9 @@ export default function Component({ user }) {
   // remaining characters
   const remainingChar = maxBioChar - updatedBio.length;
 
-  // fetch user from firestore
+  /**
+   * fetch user from firestore
+   */
   useEffect(() => {
     const fetchUserDataAsync = async () => {
       if (user) {
@@ -60,12 +62,19 @@ export default function Component({ user }) {
   if (!userData) return <div>Loading...</div>;
   console.log("edPro user", userData.uid);
 
-  // Upload new image for Avatar
+  /**
+   * Upload new image for Avatar
+   * @param {*} event 
+   */
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
   };
 
+  /**
+   * Upload image to Firebase
+   * @param {*} event 
+   */
   const handleUpload = async (event) => {
     event.preventDefault();
     const storage = getStorage();
@@ -89,7 +98,10 @@ export default function Component({ user }) {
     }
   };
 
-  // Checks changed values and save a new object data to 'users'
+  /**
+   * Checks changed values and save a new object data to 'users'
+   * @param {*} event 
+   */
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -111,13 +123,14 @@ export default function Component({ user }) {
     router.push("/profile");
   };
 
-  // Cancel, redirect to Profile page
+  /**
+   * Cancel, redirect to Profile page
+   * @param {*} event 
+   */
   const handleCancel = (event) => {
     event.preventDefault();
     router.push("/profile");
   };
-
-  console.log("EPro User:", userData);
 
   return (
     <Sheet
