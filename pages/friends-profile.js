@@ -183,13 +183,13 @@ export default function Component() {
         <Sheet>
           <Stack direction="row" alignItems="center" spacing={0}>
             {/* Home Button */}
-            <Button onClick={handleHome} sx={{ mt: 1 }}>
+            <Button onClick={handleHome} sx={{ mt: 1 }} style={{margin: "0 0 38px"}}>
               Home
             </Button>
 
             <div style={{ display: "flex", marginLeft: "auto" }}>
               {/* Edit Profile Button */}
-              <Button onClick={handleBack} sx={{ mt: 1 }}>
+              <Button onClick={handleBack} sx={{ mt: 1 }} style={{margin: "0 0 38px"}}>
                 Back
               </Button>
             </div>
