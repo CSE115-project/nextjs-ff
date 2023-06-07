@@ -24,7 +24,7 @@ export default function InfoCard({ user, place }) {
     if (docSnap.exists()) {
       const favorites = docSnap.data().favorites;
       // check if place is in favorites
-      if (favorites.includes(place.place_id)) {
+      if (favorites.includes(place.name)) {
         setLiked(true);
       } else {
         setLiked(false);
@@ -43,13 +43,13 @@ export default function InfoCard({ user, place }) {
     if (liked) {
       // Atomically remove a region from the "regions" array field.
       await updateDoc(docRef, {
-        favorites: arrayRemove(place.place_id),
+        favorites: arrayRemove(place.name),
       });
       setLiked(false);
     } else {
       // Atomically add a new favorite to the "favorites" array field.
       await updateDoc(docRef, {
-        favorites: arrayUnion(place.place_id),
+        favorites: arrayUnion(place.name),
       });
       setLiked(true);
     }
