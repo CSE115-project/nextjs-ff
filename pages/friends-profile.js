@@ -6,7 +6,7 @@ import Stack from "@mui/joy/Stack";
 import { Tab, Tabs, TabList, tabClasses, TabPanel, Divider } from "@mui/joy";
 import Typography from "@mui/joy/Typography";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { firebase } from "../firebase";
 import {
   getDoc,
@@ -270,7 +270,50 @@ export default function Component() {
 
               {/* TabPanel for User's like places */}
               <TabPanel value={0} sx={{ p: 2 }}>
-                Like Places tab panel
+              <div>
+                  <List
+                    variant="outlined"
+                    sx={{
+                      bgcolor: "background.body",
+                      minWidth: 240,
+                      borderRadius: "sm",
+                      boxShadow: "sm",
+                      "--ListItemDecorator-size": "48px",
+                      "--ListItem-paddingLeft": "1.5rem",
+                      "--ListItem-paddingRight": "1rem",
+                    }}
+                  >
+                    {userData.favorites?.map((place, index) => (
+                      <Fragment key={index}>
+                        <Button
+                          variant="plain"
+                          sx={{
+                            display: "flex",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                            width: "100%",
+                            padding: 0,
+                          }}
+                          component="li"
+                          // route to friends-profile page
+                        >
+                          <ListItem key={index}>
+                            <Typography
+                              color="black"
+                              sx={{
+                                fontWeight: "normal",
+                                marginLeft: "0.5rem",
+                              }}
+                            >
+                              {place}
+                            </Typography>
+                          </ListItem>
+                        </Button>
+                        {index !== userData.favorites?.length - 1 && <Divider />}
+                      </Fragment>
+                    ))}
+                  </List>
+                </div>
               </TabPanel>
 
               {/* TabPanel for User's friends list */}
