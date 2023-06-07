@@ -9,7 +9,7 @@ import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import firebase from "../firebase";
+import {firebase} from "../firebase";
 import { useRouter } from "next/router";
 
 const containerStyle = {

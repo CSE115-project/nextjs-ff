@@ -215,7 +215,7 @@ export default function GoogleMap({ user }) {
   }, []);
 
   return (
-    <div style={{ position: "relative", height: "90vh" }}>
+    <div style={{ position: "relative", height: "94vh" }}>
       <Button loading loadingPosition="start">
         Loading...
       </Button>
