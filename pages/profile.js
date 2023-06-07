@@ -173,6 +173,15 @@ export default function Profile({ user }) {
     }
   };
 
+  // Retrieve the avatar source for a friend
+  const getFriendAvatar = (friend) => {
+    // Assuming your userData contains an array of friend objects,
+    // where each friend object has a "avatar" property with the avatar URL.
+    const friendData = userData.friends.find((friendObj) => friendObj.email === friend);
+    // Return the avatar URL or an empty string if not found
+    return friendData ? friendData.avatar : "";
+  };
+
   useEffect(() => {
     if (userData && userData.friends) {
       createFriendList(userData.friends);
@@ -376,11 +385,10 @@ export default function Profile({ user }) {
                           onClick={handleFriendProfile(friend)}
                         >
                           <ListItem key={index}>
-                            <ListItemDecorator sx={{ alignSelf: "flex-start" }}>
-                              <Avatar
-                                size="sm"
-                                src="/static/images/avatar/1.jpg"
-                              />
+                            {/* Display the Avatar for each friend */}
+                            <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
+                              {/* Use the Avatar component and pass the appropriate src */}
+                              <Avatar size="sm" src={getFriendAvatar(friend)} />
                             </ListItemDecorator>
                             <Typography
                               color="black"
