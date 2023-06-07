@@ -187,16 +187,90 @@ Test case 19: Mobile responsive test
 - Location: Profile page
 - Test result: Pass
 
-Test case 20: Map test
-- Able to load Google Maps API (Pass/Fail: Pass)
-- Able to go to full screen mode (Pass/Fail: Pass)
-- Able to see my current location (Pass/Fail: Pass)
-- Able to see heatmap under markers (Pass/Fail: Pass)
-- Able to display a pop up with location information - Name (Pass/Fail: Pass)
-- Able to display a pop up with location information - Address (Pass/Fail: Pass)
-- Able to display a pop up with location information - Ratings (Pass/Fail: Pass)
+Test case 20: Map test - Load Google Maps API
+- Description: Loading Google Maps API
+- Preconditions: No preconditions
+- Expected result: Should be able to load Google Maps API
+- Actual result: Able to load Google Maps API
+- Location: Home page
+- Test result: Pass
 
-Browser Test:  
-- App is able to run with Google Chrome (Pass/Fail: Pass)
-- App is able to run with Firefox (Pass/Fail: Pass)
-- App is able to run with Safari (Pass/Fail: Pass)
+Test case 21: Map test - Full screen mode
+- Description: Map full screen mode
+- Preconditions: No preconditions
+- Expected result: Should be able to go to full screen mode
+- Actual result: Able to go to full screen mode
+- Location: Home page
+- Test result: Pass
+
+Test case 22: Map test - User current location
+- Description: Able to go to to user current location
+- Preconditions: No preconditions
+- Expected result: Should be able to see my current location
+- Actual result: Able to see my current location
+- Location: Home page
+- Test result: Pass
+
+Test case 23: Heatmap Test 
+- Description: Heatmap under markers
+- Preconditions: No preconditions
+- Expected result: Should be able to see heatmap under markers
+- Actual result: Able to see heatmap under markers
+- Location: Home page
+- Test result: Pass
+
+Test case 24: Location Information test 
+- Description: Location information 
+- Preconditions: User need to click on the location
+- Expected result: Should be able to see location pop-up information with location name, address and ratings
+- Actual result: Able to see to location pop-up information with location name, address and ratings
+- Location: Home page
+- Test result: Pass
+
+Test case 25: Liked Location functionality test 
+- Description: Like locations
+- Preconditions: User need to click on the location
+- Expected result: Should be able to like location
+- Actual result: Able to like location
+- Location: Home page
+- Test result: Pass
+
+Test case 26: Liked Location list test
+- Description: Like location list
+- Preconditions: User need to like a location
+- Expected result: Should be able to see lists of like locations
+- Actual result: Able to see list of like locations
+- Location: Profile page
+- Test result: Pass
+
+Test case 27: Friend profile page test
+- Description: Friend profile page
+- Preconditions: User needs to click on friend in friend's list
+- Expected result: Should be able to see friend's profile
+- Actual result: Able to see friend's profile
+- Location: Profile page
+- Test result: Pass
+
+Test case 28: Google Chrome browser compatibility test 
+- Description: Google Chrome browser compatiblilty 
+- Preconditions: user needs to install google chrome
+- Expected result: Should be able to run app on Google Chrome
+- Actual result: Able to run app on Google Chrome
+- Location: None
+- Test result: Pass
+
+Test case 29: Firefox browser compatibility test 
+- Description: Firefox browser compatiblilty 
+- Preconditions: user needs to install Firefox
+- Expected result: Should be able to run app on Firefox
+- Actual result: Able to run app on Firefox
+- Location: None
+- Test result: Pass
+
+Test case 30: Safari browser compatibility test 
+- Description: Safari browser compatiblilty 
+- Preconditions: user needs to install Safari
+- Expected result: Should be able to run app on Safari
+- Actual result: Able to run app on Safari
+- Location: None
+- Test result: Pass
