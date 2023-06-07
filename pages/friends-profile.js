@@ -27,7 +27,6 @@ export default function Component() {
   const db = getFirestore(firebase);
   const { passedUID } = router.query;
   const [userData, setUserData] = useState({});
-  console.log("PASSED UID IS:", passedUID);
 
   // Routes -------------------------------------------------
   // initialize all fields and their according set methods
@@ -55,7 +54,6 @@ export default function Component() {
    */
   const fetchData = async () => {
     try {
-      console.log("UID BEING PASSED IN FETCHDATA IS:", passedUID);
       const docRef = doc(db, "users", passedUID);
       const docRes = await getDoc(docRef);
 
@@ -78,8 +76,6 @@ export default function Component() {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [passedUID]);
-
-  console.log("p/profile userData:", userData);
 
   // Adding search friends functionality ----------------------------------------------------------
 
@@ -120,10 +116,9 @@ export default function Component() {
       // const list = [...friendData];
       // friendsList.push(...friendData);
       setFriendsList(friendData);
-      console.log("friend list:", friendData);
       // TODO: save list to global list, and map the results in the friends list tab
     } catch (error) {
-      console.log("Error retrieving friend data:", error);
+      console.error("Error retrieving friend data:", error);
     }
   };
 
@@ -143,11 +138,7 @@ export default function Component() {
     // Get the friend's UID
     const friendsUID = qSnap.docs[0].id;
 
-    console.log("FRIENDS UID BEING PASSED IS:", friendsUID);
-
     await fetchData();
-
-    console.log("fetched data");
 
     router.push({
       pathname: "/friends-profile",
@@ -175,7 +166,6 @@ export default function Component() {
       </Button>
     );
   } else {
-    console.log("Loading Profile...");
     return (
       <div className="userProfile">
         {/* <meta name="viewport" content="initial-scale=1, width=device-width" /> */}
