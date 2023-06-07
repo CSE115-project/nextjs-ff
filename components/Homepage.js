@@ -68,12 +68,12 @@ const Homepage = ({ user }) => {
         alignItems="center"
         style={{ display: "flex", justifyContent: "space-between" }}
       >
-        {/* <Button>List</Button> */}
         <Image
           src="/../public/images/ff-logo.png"
           alt="Logo"
           width={70}
           height={35}
+          priority={true}
         />
 
         {/* Dropdown menu for account related options */}
