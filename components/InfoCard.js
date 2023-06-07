@@ -1,6 +1,6 @@
 import { Card, Button } from "@mui/joy";
 import Typography from "@mui/joy/Typography";
-import Link from "@mui/joy/Link";
+import Link from 'next/link';
 import { useState, useEffect } from "react";
 import {
   doc,
@@ -74,16 +74,14 @@ export default function InfoCard({ user, place }) {
       }}
     >
       <div style={{ width: "100%" }}>
-        <Typography level="h2" fontSize="lg" id="card-description" mb={0.5}>
+        <Typography level="h2" fontSize="lg" id="card-description" mb={0.5} style={{cursor: "default"}}>
           {place.name}
         </Typography>
 
         <Typography fontSize="sm" aria-describedby="card-description" mb={1}>
           <Link
-            overlay
-            underline="none"
-            href="#interactive-card"
-            sx={{ color: "text.tertiary" }}
+            style={{textDecoration: "none", color: "gray"}}
+            href={`http://maps.google.com/?q=${place.vicinity}`}
           >
             {place.vicinity}
           </Link>
@@ -91,10 +89,8 @@ export default function InfoCard({ user, place }) {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Typography fontSize="sm" aria-describedby="card-description" mb={1}>
             <Link
-              overlay
-              underline="none"
-              href="#interactive-card"
-              sx={{ color: "text.tertiary", paddingTop: "10px" }}
+            style={{textDecoration: "none", color: "purple", cursor: "default"}}
+              href=""
             >
               &#9734; {place.rating} / 5
             </Link>

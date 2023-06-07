@@ -50,7 +50,9 @@ const Homepage = ({ user }) => {
    * @param {*} event
    */
   const handleOpenDropdown = (event) => {
-    if (event.cancelable) event.preventDefault();
+    if (event.cancelable) {
+      event.preventDefault();
+    }
     setAnchorEl(event.currentTarget);
   };
 

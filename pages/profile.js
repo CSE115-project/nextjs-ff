@@ -7,11 +7,10 @@ import { Tab, Tabs, TabList, tabClasses, TabPanel, Divider } from "@mui/joy";
 import Typography from "@mui/joy/Typography";
 import { useRouter } from "next/router";
 import { useEffect, useState, Fragment } from "react";
-import { firebase } from "../firebase";
+import { db } from "../firebase";
 import {
   getDoc,
   getDocs,
-  getFirestore,
   doc,
   query,
   collection,
@@ -41,7 +40,6 @@ const userObj = {
 
 export default function Profile({ user }) {
   const router = useRouter();
-  const db = getFirestore(firebase);
   const [userData, setUserData] = useState({});
 
   // Routes -------------------------------------------------
@@ -92,7 +90,7 @@ export default function Profile({ user }) {
     // Search and Get User with email matching the search.
     // Since only one email is associated with each user,
     // the return doc should only contain one entry
-    const db = getFirestore();
+    
     const q = query(collection(db, "users"), where("email", "==", searchQuery));
     const qSnap = await getDocs(q);
 
@@ -129,7 +127,7 @@ export default function Profile({ user }) {
     // Search and Get User with email matching the search.
     // Since only one email is associated with each user,
     // the return doc should only contain one entry
-    const db = getFirestore();
+    
     const q = query(collection(db, "users"), where("email", "==", friend));
     const qSnap = await getDocs(q);
     // Get the friend's UID
@@ -154,7 +152,7 @@ export default function Profile({ user }) {
   };
 
   const createFriendList = async () => {
-    const db = getFirestore();
+    
     // const { friends } = userData;
 
     try {
@@ -387,7 +385,7 @@ export default function Profile({ user }) {
                             {/* Display the Avatar for each friend */}
                             <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
                               {/* Use the Avatar component and pass the appropriate src */}
-                              <Avatar size="sm" src={getFriendAvatar(friend)} />
+                              <Avatar size="sm" src="" />
                             </ListItemDecorator>
                             <Typography
                               color="black"
