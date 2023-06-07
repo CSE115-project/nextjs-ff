@@ -199,7 +199,6 @@ export default function Profile({ user }) {
       </Button>
     );
   } else {
-    console.log("USERDATA:", userData.favorites)
     return (
       <div className="userProfile">
         {/* <meta name="viewport" content="initial-scale=1, width=device-width" /> */}
