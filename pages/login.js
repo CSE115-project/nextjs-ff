@@ -46,9 +46,8 @@ export default function Component() {
 
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
-      console.log("p/login user:", user);
       router.push({
-        pathname: '/',
+        pathname: "/",
         query: { user: JSON.stringify(user) },
       });
     } catch (error) {
@@ -61,7 +60,6 @@ export default function Component() {
   const handleSignUpRedirect = () => {
     router.push("/signup");
   };
-
 
   return (
     <CssVarsProvider>
@@ -113,7 +111,9 @@ export default function Component() {
   );
 }
 
-{/* Dark/Light mode for Login component */}
+{
+  /* Dark/Light mode for Login component */
+}
 function ModeToggle() {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);

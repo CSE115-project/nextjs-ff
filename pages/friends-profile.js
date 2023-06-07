@@ -34,7 +34,7 @@ export default function Component() {
 
   /**
    * set route to go back to home from profile page
-   * @param {*} event 
+   * @param {*} event
    */
   const handleHome = (event) => {
     if (event.cancelable) event.preventDefault();
@@ -43,7 +43,7 @@ export default function Component() {
 
   /**
    * set route to go to back to profile page from friend-profile
-   * @param {*} event 
+   * @param {*} event
    */
   const handleBack = (event) => {
     if (event.cancelable) event.preventDefault();
@@ -94,9 +94,9 @@ export default function Component() {
 
   /**
    * getFriend from friend list of logged in user
-   * @param {*} db 
-   * @param {*} friendId 
-   * @returns 
+   * @param {*} db
+   * @param {*} friendId
+   * @returns
    */
   const getFriend = async (db, friendId) => {
     const friendUserRef = doc(db, "users", friendId);
@@ -129,8 +129,8 @@ export default function Component() {
 
   /**
    * set route to go to friends-profile from profile page
-   * @param {*} friend 
-   * @returns 
+   * @param {*} friend
+   * @returns
    */
   const handleFriendProfile = (friend) => async (event) => {
     if (event.cancelable) event.preventDefault();

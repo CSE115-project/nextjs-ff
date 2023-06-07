@@ -17,5 +17,3 @@ export const firebase = initializeApp(firebaseConfig);
 export const auth = getAuth(firebase);
 export const db = getFirestore(firebase);
 export const storage = getStorage(firebase);
-
-console.log('loaded firebase.js');

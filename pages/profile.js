@@ -6,7 +6,7 @@ import Stack from "@mui/joy/Stack";
 import { Tab, Tabs, TabList, tabClasses, TabPanel, Divider } from "@mui/joy";
 import Typography from "@mui/joy/Typography";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { firebase } from "../firebase";
 import {
   getDoc,
@@ -20,13 +20,12 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 import Input from "@mui/joy/Input";
-import Alert from '@mui/joy/Alert';
-import * as React from 'react';
-import List from '@mui/joy/List';
-import ListItem from '@mui/joy/ListItem';
-import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import Alert from "@mui/joy/Alert";
+import * as React from "react";
+import List from "@mui/joy/List";
+import ListItem from "@mui/joy/ListItem";
+import ListItemDecorator from "@mui/joy/ListItemDecorator";
 import { async } from "@firebase/util";
-
 
 /*
 const userObj = {
@@ -48,7 +47,7 @@ export default function Profile({ user }) {
 
   // Routes -------------------------------------------------
   // initialize all fields and their according set methods
-  
+
   // set route to go back to home from profile page
   const handleHome = (event) => {
     if (event.cancelable) event.preventDefault();
@@ -78,8 +77,6 @@ export default function Profile({ user }) {
       console.error("Error fetching user data:", error);
     }
   };
-
-  console.log("p/profile userData:", userData);
 
   // Adding search friends functionality ----------------------------------------------------------
 
@@ -117,10 +114,8 @@ export default function Profile({ user }) {
     // Update Friends list of User by appending new_friend_id
     const docRef = doc(db, "users", user.uid);
 
-
     if (newFriendId) {
       await updateDoc(docRef, { friends: arrayUnion(newFriendId) });
-      console.log("Friend added");
       await fetchData();
       await createFriendList();
       setAlertMessage("Successfully added friend.");
@@ -141,8 +136,6 @@ export default function Profile({ user }) {
     // Get the friend's UID
     const friendsUID = qSnap.docs[0].id;
 
-    console.log("FRIENDS UID BEING PASSED IS:",friendsUID)
-    
     router.push({
       pathname: "/friends-profile",
       query: { passedUID: friendsUID },
@@ -166,16 +159,17 @@ export default function Profile({ user }) {
     // const { friends } = userData;
 
     try {
-      const promises = userData.friends ? userData.friends.map((friendId) => getFriend(db, friendId)) : [];
+      const promises = userData.friends
+        ? userData.friends.map((friendId) => getFriend(db, friendId))
+        : [];
 
       const friendData = await Promise.all(promises);
       // const list = [...friendData];
       // friendsList.push(...friendData);
       setFriendsList(friendData);
-      console.log("friend list:", friendData);
       // TODO: save list to global list, and map the results in the friends list tab
     } catch (error) {
-      console.log("Error retrieving friend data:", error);
+      console.error("Error retrieving friend data:", error);
     }
   };
 
@@ -199,7 +193,6 @@ export default function Profile({ user }) {
       </Button>
     );
   } else {
-    console.log("Loading Profile...");
     return (
       <div className="userProfile">
         {/* <meta name="viewport" content="initial-scale=1, width=device-width" /> */}
@@ -306,7 +299,14 @@ export default function Profile({ user }) {
               {/* Render the matching users */}
             </Stack>
             {alertMessage && (
-              <Box sx={{ display: 'flex', gap: 2, width: '100%', flexDirection: 'column' }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  width: "100%",
+                  flexDirection: "column",
+                }}
+              >
                 <Alert variant="solid" size="md" color={alertStatus}>
                   {alertMessage}
                 </Alert>
@@ -351,34 +351,50 @@ export default function Profile({ user }) {
                   <List
                     variant="outlined"
                     sx={{
-                      bgcolor: 'background.body',
+                      bgcolor: "background.body",
                       minWidth: 240,
-                      borderRadius: 'sm',
-                      boxShadow: 'sm',
-                      '--ListItemDecorator-size': '48px',
-                      '--ListItem-paddingLeft': '1.5rem',
-                      '--ListItem-paddingRight': '1rem',
+                      borderRadius: "sm",
+                      boxShadow: "sm",
+                      "--ListItemDecorator-size": "48px",
+                      "--ListItem-paddingLeft": "1.5rem",
+                      "--ListItem-paddingRight": "1rem",
                     }}
                   >
                     {friendsList.map((friend, index) => (
-                      <React.Fragment key={index}>
-                        <Button variant="plain"
-                          sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%', padding: 0 }}
+                      <Fragment key={index}>
+                        <Button
+                          variant="plain"
+                          sx={{
+                            display: "flex",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                            width: "100%",
+                            padding: 0,
+                          }}
                           component="li"
                           // route to friends-profile page
                           onClick={handleFriendProfile(friend)}
-                          >
+                        >
                           <ListItem key={index}>
-                            <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
-                              <Avatar size="sm" src="/static/images/avatar/1.jpg" />
+                            <ListItemDecorator sx={{ alignSelf: "flex-start" }}>
+                              <Avatar
+                                size="sm"
+                                src="/static/images/avatar/1.jpg"
+                              />
                             </ListItemDecorator>
-                            <Typography color="black" sx={{ fontWeight: 'normal', marginLeft: '0.5rem' }}>
+                            <Typography
+                              color="black"
+                              sx={{
+                                fontWeight: "normal",
+                                marginLeft: "0.5rem",
+                              }}
+                            >
                               {friend}
                             </Typography>
                           </ListItem>
                         </Button>
                         {index !== friendsList.length - 1 && <Divider />}
-                      </React.Fragment>
+                      </Fragment>
                     ))}
                   </List>
                 </div>
@@ -386,7 +402,7 @@ export default function Profile({ user }) {
             </Tabs>
           </Sheet>
         </Sheet>
-      </div >
+      </div>
     );
   }
 }

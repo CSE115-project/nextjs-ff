@@ -17,15 +17,16 @@ export default function GoogleMap({ user }) {
 
   /**
    * Nearby results: place markers, heatmap
-   * @param {*} results 
-   * @param {*} status 
-   * @param {*} pagination 
+   * @param {*} results
+   * @param {*} status
+   * @param {*} pagination
    */
   function nearbyResults(results, status, pagination) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
-      console.log("Results:", results);
-
+      // display heatmap
       getHeatmapData(results);
+
+      // display markers
       for (let result of results) {
         createResultsMarker(result);
       }
@@ -40,8 +41,8 @@ export default function GoogleMap({ user }) {
 
   /**
    * Create Marker for current location
-   * @param {*} location 
-   * @returns 
+   * @param {*} location
+   * @returns
    */
   function createCurrentMarker(location) {
     return new google.maps.Marker({
@@ -52,8 +53,8 @@ export default function GoogleMap({ user }) {
 
   /**
    * Create Marker for Place
-   * @param {*} place 
-   * @returns 
+   * @param {*} place
+   * @returns
    */
   function createResultsMarker(place) {
     const customIcon = {
@@ -76,11 +77,9 @@ export default function GoogleMap({ user }) {
     // InfoCard: Details of Place
     // Open InfoCard of Place
     marker.addListener("click", () => {
-      setSelectedPlace(place);
-
       // Set the clicked place as the new map center
+      setSelectedPlace(place);
       mapRef.current.panTo(place.geometry.location);
-      console.log("InfoCard Click");
     });
 
     // Close the InfoCard when map is clicked
@@ -93,7 +92,7 @@ export default function GoogleMap({ user }) {
 
   /**
    * Add Nearby Results locations for heatmap
-   * @param {*} results 
+   * @param {*} results
    */
   function getHeatmapData(results) {
     const data = results.map((result) => {
@@ -138,8 +137,6 @@ export default function GoogleMap({ user }) {
 
     // Get the bounds of the current visible area on the map
     const bounds = mapRef.current.getBounds();
-    const ne = bounds.getNorthEast();
-    const sw = bounds.getSouthWest();
     const location = mapRef.current.getCenter();
 
     // Create a new request with the bounds and location
@@ -151,14 +148,9 @@ export default function GoogleMap({ user }) {
 
     // Perform the search request
     let service = new google.maps.places.PlacesService(mapRef.current);
-    service.nearbySearch(request, (results, status) => {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        console.log("Results:", results);
-        getHeatmapData(results);
-        // Handle the results
-      }
-      setSearchButtonLoading(false);
-    });
+    service.nearbySearch(request, nearbyResults);
+    setSearchButtonLoading(false);
+    setShowSearchButton(false);
   }
 
   useEffect(() => {
@@ -219,7 +211,7 @@ export default function GoogleMap({ user }) {
         });
       }
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -60,11 +60,10 @@ export default function Component({ user }) {
 
   // Load Page when UserData is available
   if (!userData) return <div>Loading...</div>;
-  console.log("edPro user", userData.uid);
 
   /**
    * Upload new image for Avatar
-   * @param {*} event 
+   * @param {*} event
    */
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -73,7 +72,7 @@ export default function Component({ user }) {
 
   /**
    * Upload image to Firebase
-   * @param {*} event 
+   * @param {*} event
    */
   const handleUpload = async (event) => {
     event.preventDefault();
@@ -100,7 +99,7 @@ export default function Component({ user }) {
 
   /**
    * Checks changed values and save a new object data to 'users'
-   * @param {*} event 
+   * @param {*} event
    */
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -115,7 +114,6 @@ export default function Component({ user }) {
 
     try {
       await setDoc(doc(db, "users", userData.uid), userDetails);
-      console.log("Saved user details");
     } catch (error) {
       console.error("Error updating user document:", error);
     }
@@ -125,7 +123,7 @@ export default function Component({ user }) {
 
   /**
    * Cancel, redirect to Profile page
-   * @param {*} event 
+   * @param {*} event
    */
   const handleCancel = (event) => {
     event.preventDefault();

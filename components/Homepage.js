@@ -2,7 +2,7 @@ import * as React from "react";
 import GoogleMap from "./GoogleMap";
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
-import Image from 'next/image';
+import Image from "next/image";
 import Person from "@mui/icons-material/Person";
 import Menu from "@mui/joy/Menu";
 import Stack from "@mui/joy/Stack";
@@ -18,7 +18,7 @@ const Homepage = ({ user }) => {
 
   /**
    * Sign out user
-   * @param {*} event 
+   * @param {*} event
    */
   const handleSignOut = (event) => {
     if (event.cancelable) event.preventDefault();
@@ -29,14 +29,13 @@ const Homepage = ({ user }) => {
       window.localStorage.removeItem("firebaseAuth"); // Clear localStorage
       window.sessionStorage.removeItem("firebaseAuth"); // Clear sessionStorage
     }
-    
-    console.log("Signed Out.");
+
     router.push("/login");
   };
 
   /**
    * Redirect to '/profile'
-   * @param {*} event 
+   * @param {*} event
    */
   const handleProfile = (event) => {
     if (event.cancelable) event.preventDefault();
@@ -48,7 +47,7 @@ const Homepage = ({ user }) => {
 
   /**
    * Open drop down menu for profile and signout
-   * @param {*} event 
+   * @param {*} event
    */
   const handleOpenDropdown = (event) => {
     if (event.cancelable) event.preventDefault();
@@ -70,7 +69,12 @@ const Homepage = ({ user }) => {
         style={{ display: "flex", justifyContent: "space-between" }}
       >
         {/* <Button>List</Button> */}
-        <Image src="/../public/images/ff-logo.png" alt="Logo" width={70} height={35} />
+        <Image
+          src="/../public/images/ff-logo.png"
+          alt="Logo"
+          width={70}
+          height={35}
+        />
 
         {/* Dropdown menu for account related options */}
         <div style={{ display: "flex", marginleft: "auto" }}>

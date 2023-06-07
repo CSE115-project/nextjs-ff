@@ -31,7 +31,7 @@ export default function InfoCard({ user, place }) {
       }
     } else {
       // docSnap.data() will be undefined in this case
-      console.log("No such document!");
+      console.error("No such document!");
     }
   };
 
@@ -96,7 +96,7 @@ export default function InfoCard({ user, place }) {
               href="#interactive-card"
               sx={{ color: "text.tertiary", paddingTop: "10px" }}
             >
-              {place.rating} / 5 &#9734;
+              &#9734; {place.rating} / 5
             </Link>
           </Typography>
           <Button

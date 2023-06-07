@@ -22,9 +22,7 @@ export default function App({ Component, pageProps }) {
         router.push("/login");
       }
     });
-
-    console.log("AuthStateChanged");
-
+    
     return () => unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

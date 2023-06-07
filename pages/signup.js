@@ -50,13 +50,12 @@ export default function Component() {
         email,
         password
       );
-      console.log("p/signup user:", user.uid, user);
 
       // Create User object
       const userObj = {
         uid: user.uid,
         email: user.email, // user's email
-        displayName: user.displayName || "" ,
+        displayName: user.displayName || "",
         image: user.photoURL || "", // user's picture link
         bio: `Hey, I'm new here!`, // user's bio
         favorites: [], // list of favorite places (places id)
@@ -127,7 +126,9 @@ export default function Component() {
   );
 }
 
-{/* Dark/Light mode for Login component */}
+{
+  /* Dark/Light mode for Login component */
+}
 function ModeToggle() {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
